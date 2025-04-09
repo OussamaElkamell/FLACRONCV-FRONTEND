@@ -16,6 +16,13 @@ const ModernResumeTemplate: React.FC<ModernResumeTemplateProps> = ({
   return (
     <div className="font-sans p-5 max-w-[800px] mx-auto text-sm">
       <div className="flex flex-col md:flex-row justify-between items-center bg-blue-500 text-white rounded-lg p-4 mb-5">
+      {data.personalInfo.photo && (
+          <img 
+            src={data.personalInfo.photo} 
+            alt="Profile Picture" 
+            className="w-24 h-24 rounded-full object-cover mr-4" 
+          />
+        )}
         <div>
           <h1 
             className="text-2xl font-bold"

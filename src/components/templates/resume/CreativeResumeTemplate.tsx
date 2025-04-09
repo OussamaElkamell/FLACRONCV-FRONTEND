@@ -15,6 +15,13 @@ const CreativeResumeTemplate: React.FC<CreativeResumeTemplateProps> = ({
   return (
     <div className="font-sans p-8 max-w-[800px] mx-auto">
       <div className="bg-purple-500 text-white p-8 rounded-lg mb-8">
+      {data.personalInfo.photo && (
+          <img 
+            src={data.personalInfo.photo} 
+            alt="Profile Picture" 
+            className="w-24 h-24 rounded-full object-cover mr-4" 
+          />
+        )}
         <h1 
           className="text-4xl font-bold mb-2"
           data-field="name"
