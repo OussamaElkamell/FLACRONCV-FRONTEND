@@ -74,6 +74,7 @@ const UserSettingsPage = () => {
   const getPlanDescription = () => {
     if (!user?.subscription) return "";
     const plan = user.subscription.plan;
+    console.log("plan",plan);
     
     if (plan === 'basic') {
       return 'Access to basic templates and PDF downloads';

@@ -43,16 +43,27 @@ export const userService = {
               plan: product.name || price.id,
               cancel_at_period_end: sub.cancel_at_period_end,
             };
+  
+            // Update subscription data directly on Stripe
+            await stripe.subscriptions.update(sub.id, {
+              items: [
+                {
+                  id: sub.items.data[0].id,
+                  price: price.id, // Use the correct price ID from the current plan
+                },
+              ],
+            });
           }
         }
       }
   
-      // Update the profile with subscriptionData
+      // Prepare the updated profile data, including stripeCustomerId
       const updatedProfile = {
         displayName: profileData.displayName,
-        subscriptionData: subscriptionData, // Full subscription data
+        subscription: subscriptionData, // Full subscription data
         email: user.email,
         uid: user.uid,
+        stripeCustomerId: profileData.stripeCustomerId, // Include the stripeCustomerId in the profile
         updatedAt: new Date().toISOString(),
       };
   
@@ -71,6 +82,8 @@ export const userService = {
       };
     }
   },
+  
+  
   
   
   // Get user profile
@@ -101,6 +114,8 @@ export const userService = {
           status: 'active',
           limit: 1,
         });
+        console.log("profileData.stripeCustomerId",profileData.stripeCustomerId);
+        
         console.log("subscriptions", subscriptions);
   
         if (subscriptions.data.length > 0) {
