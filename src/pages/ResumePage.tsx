@@ -173,27 +173,7 @@ const ResumePage = () => {
     </Tabs>
   </div>
 
-  <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-  <div className="sm:max-h-[calc(100vh-160px)] overflow-y-auto pr-4">
-    <Tabs defaultValue="content">
-      <TabsList className="mb-6 sticky top-0 bg-background z-10">
-        <TabsTrigger value="content">Resume Content</TabsTrigger>
-        <TabsTrigger value="template">Choose Template</TabsTrigger>
-      </TabsList>
-      <TabsContent value="content" className="space-y-4">
-        <ResumeForm setResumeData={setResumeData} />
-      </TabsContent>
-      <TabsContent value="template">
-        <TemplateSelector 
-          selectedTemplate={selectedTemplate} 
-          setSelectedTemplate={setSelectedTemplate} 
-          type="resume" 
-        />
-      </TabsContent>
-    </Tabs>
-  </div>
-
-  <div className="sm:block lg:sticky lg:top-10 sm:mt-4 lg:mt-0 h-auto sm:h-[auto] sm:order-first lg:order-last">
+  <div className="sm:block sm:sticky sm:top-10 h-[calc(100vh-160px)]">
     <div className="bg-white rounded-lg shadow-sm border h-full flex flex-col">
       <h2 className="text-lg font-medium p-4 border-b">Preview</h2>
       <div className="flex-1 overflow-auto">
@@ -211,8 +191,6 @@ const ResumePage = () => {
       <ResumeToolbar resumeData={resumeData} setResumeData={setResumeData} />
     </div>
   </div>
-</div>
-
 </div>
 
         </div>
