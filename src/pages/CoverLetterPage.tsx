@@ -69,7 +69,7 @@ const CoverLetterPage = () => {
   
   // Check if user has subscription
   const hasSubscription = () => {
-    return user?.subscription?.plan && ['basic', 'pro'].includes(user.subscription.plan);
+    return user?.subscription?.plan && ['basic', 'pro'].includes(user?.subscription?.plan);
   };
   
   // Handle download PDF request
