@@ -104,7 +104,7 @@ const TemplateSelector: React.FC<TemplateSelectorProps> = ({
   const { user } = useFirebaseAuth();
   
   // Check if user has pro subscription
-  const hasPro = user?.subscription.plan === 'pro';
+  const hasPro = user?.subscription?.plan === 'pro';
   
   // Handle template selection
   const handleTemplateSelect = (templateId: string, requiresPro: boolean) => {
