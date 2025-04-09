@@ -103,10 +103,7 @@ const ResumePage = () => {
     mutationFn: async (data: ResumeData) => {
       const result = await resumeApi.generate(data);
       
-      if (result.success && user?.id) {
-        makeService.notifyResumeGenerated(data, user.id);
-      }
-      
+  
       return result;
     },
     onSuccess: (data) => {
