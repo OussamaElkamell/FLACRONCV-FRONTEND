@@ -19,20 +19,19 @@ const Hero = () => {
           <p className="mt-6 text-lg leading-8 text-muted-foreground">
             Our AI-powered resume builder helps you create professional resumes and cover letters optimized for applicant tracking systems.
           </p>
-          <div className="mt-10 flex items-center justify-center gap-x-6">
-            <Button asChild size="lg" className="bg-brand-500 hover:bg-brand-600">
-              <Link to="/resume">
-                <FileText className="mr-2 h-5 w-5" />
-                Create Your Resume
-              </Link>
-            </Button>
-            <Button asChild size="lg" variant="outline">
-              <Link to="/cover-letter">
-                <FileUp className="mr-2 h-5 w-5" />
-                Write Cover Letter
-              </Link>
-            </Button>
-          </div>
+          <div className="mt-10 flex flex-col sm:flex-row items-center justify-center ">
+  <Button asChild size="lg" className="bg-brand-500 hover:bg-brand-600">
+    <Link to="/resume">
+      Create Resume
+    </Link>
+  </Button>
+  <Button asChild variant="outline" size="lg" className="sm:mt-0 mt-4">
+    <Link to="/cover-letter">
+      Write Cover Letter
+    </Link>
+  </Button>
+</div>
+
         </div>
         
         <div className="mt-16 flow-root sm:mt-24">

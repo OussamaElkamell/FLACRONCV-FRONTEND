@@ -24,17 +24,18 @@ const Index = () => {
                 Our AI-powered platform will help you create a standout document.
               </p>
               <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-6">
-                <Button asChild size="lg" className="bg-brand-500 hover:bg-brand-600">
-                  <Link to="/resume">
-                    Create Resume
-                  </Link>
-                </Button>
-                <Button asChild variant="outline" size="lg" className="mt-4 sm:mt-0">
-                  <Link to="/cover-letter">
-                    Write Cover Letter
-                  </Link>
-                </Button>
-              </div>
+  <Button asChild size="lg" className="bg-brand-500 hover:bg-brand-600">
+    <Link to="/resume">
+      Create Resume
+    </Link>
+  </Button>
+  <Button asChild variant="outline" size="lg" className="sm:mt-0 mt-4">
+    <Link to="/cover-letter">
+      Write Cover Letter
+    </Link>
+  </Button>
+</div>
+
             </div>
           </div>
         </section>
