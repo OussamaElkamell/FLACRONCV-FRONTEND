@@ -217,9 +217,9 @@ const CoverLetterPage = () => {
                 <Button 
                   onClick={() => handleSubscribe('basic')} 
                   className="w-full mt-auto"
-                  disabled={user?.subscription.plan === 'basic' || user?.subscription.plan === 'pro'}
+                  disabled={user?.subscription?.plan === 'basic' || user?.subscription?.plan === 'pro'}
                 >
-                  {user?.subscription.plan === 'basic' || user?.subscription.plan === 'pro' ? 'Current Plan' : 'Choose Basic'}
+                  {user?.subscription?.plan === 'basic' || user?.subscription?.plan === 'pro' ? 'Current Plan' : 'Choose Basic'}
                 </Button>
               </div>
               
@@ -257,9 +257,9 @@ const CoverLetterPage = () => {
                   variant="default" 
                   onClick={() => handleSubscribe('pro')} 
                   className="w-full mt-auto"
-                  disabled={user?.subscription.plan === 'pro'}
+                  disabled={user?.subscription?.plan === 'pro'}
                 >
-                  {user?.subscription.plan === 'pro' ? 'Current Plan' : 'Choose Pro'}
+                  {user?.subscription?.plan === 'pro' ? 'Current Plan' : 'Choose Pro'}
                 </Button>
               </div>
             </div>
