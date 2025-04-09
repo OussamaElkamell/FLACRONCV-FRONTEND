@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
@@ -24,13 +23,13 @@ const Index = () => {
                 Get started now and have a professional resume ready in minutes.
                 Our AI-powered platform will help you create a standout document.
               </p>
-              <div className="mt-10 flex items-center justify-center gap-6">
+              <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-6">
                 <Button asChild size="lg" className="bg-brand-500 hover:bg-brand-600">
                   <Link to="/resume">
                     Create Resume
                   </Link>
                 </Button>
-                <Button asChild variant="outline" size="lg">
+                <Button asChild variant="outline" size="lg" className="mt-4 sm:mt-0">
                   <Link to="/cover-letter">
                     Write Cover Letter
                   </Link>
