@@ -3,12 +3,13 @@ import { realtimeDb, auth } from './firebase';
 import { ResumeData, CoverLetterData } from '@/types/documents';
 import { aiService } from './aiService';
 import Stripe from 'stripe';
+import { SubscriptionData } from '@/hooks/useFirebaseAuth';
 // User service for Firebase Realtime Database
 export const userService = {
   // Update user profile
  
 
-  updateProfile: async (profileData: { displayName: string; subscription: string; stripeCustomerId?: string }) => {
+  updateProfile: async (profileData: { displayName: string; subscriptionData: SubscriptionData; stripeCustomerId?: string }) => {
     try {
       const user = auth.currentUser;
       if (!user) {
@@ -19,8 +20,9 @@ export const userService = {
         apiVersion: '2025-03-31.basil',
       });
   
-      let subscription = profileData.subscription;
+      let subscriptionData: SubscriptionData = profileData.subscriptionData;
   
+      // If stripeCustomerId exists, update subscription data by checking Stripe
       if (profileData.stripeCustomerId) {
         const subscriptions = await stripe.subscriptions.list({
           customer: profileData.stripeCustomerId,
@@ -35,19 +37,26 @@ export const userService = {
           // Always use the product's name as the subscription name
           if (price && price.product) {
             const product = await stripe.products.retrieve(price.product as string);
-            subscription = product.name || price.id;
+            subscriptionData = {
+              id: sub.id,
+              status: sub.status,
+              plan: product.name || price.id,
+              cancel_at_period_end: sub.cancel_at_period_end,
+            };
           }
         }
       }
   
+      // Update the profile with subscriptionData
       const updatedProfile = {
-        ...profileData,
-        subscription,
+        displayName: profileData.displayName,
+        subscriptionData: subscriptionData, // Full subscription data
         email: user.email,
         uid: user.uid,
         updatedAt: new Date().toISOString(),
       };
   
+      // Store the updated profile in Firebase Realtime Database
       await set(ref(realtimeDb, `users/${user.uid}`), updatedProfile);
   
       return {

@@ -83,8 +83,13 @@ export const authApi = {
         stripeCustomerId = customer.id;
       }
   
-      // Determine subscription status and product name
-      let subscriptionName = 'free';
+      // Initialize subscriptionData with default values
+      let subscriptionData = {
+        id: null,
+        status: 'inactive',
+        plan: 'free',
+        cancel_at_period_end: false,
+      };
   
       if (stripeCustomerId) {
         const subscriptions = await stripe.subscriptions.list({
@@ -97,17 +102,23 @@ export const authApi = {
           const sub = subscriptions.data[0];
           const price = sub.items.data[0]?.price;
   
+          // Always use the product's name as the subscription name
           if (price?.product) {
             const product = await stripe.products.retrieve(price.product as string);
-            subscriptionName = product.name || price.id;
+            subscriptionData = {
+              id: sub.id,
+              status: sub.status,
+              plan: product.name || price.id,
+              cancel_at_period_end: sub.cancel_at_period_end,
+            };
           }
         }
       }
   
-      // Update the user profile in Firebase
+      // Update the user profile in Firebase with subscriptionData
       await userService.updateProfile({
         displayName: auth.currentUser?.displayName || '',
-        subscription: subscriptionName,
+        subscriptionData: subscriptionData,  // Pass the full subscriptionData
         stripeCustomerId: stripeCustomerId,
       });
   
@@ -118,6 +129,7 @@ export const authApi = {
             id: user.uid,
             email: user.email,
             stripeCustomerId: stripeCustomerId,
+            subscriptionData: subscriptionData,  // Return the subscription data
           },
         },
       };
