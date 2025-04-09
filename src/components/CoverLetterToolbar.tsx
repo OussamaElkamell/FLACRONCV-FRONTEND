@@ -21,9 +21,9 @@ const CoverLetterToolbar: React.FC<CoverLetterToolbarProps> = ({ coverLetterData
   const { user } = useFirebaseAuth();
   
   // Check if user has pro subscription
-  const hasPro = user?.subscription.plan === 'pro';
+  const hasPro = user?.subscription?.plan === 'pro';
   // Check if user has basic or pro subscription
-  const hasSubscription = user?.subscription.plan === 'basic' || user?.subscription.plan === 'pro';
+  const hasSubscription = user?.subscription?.plan === 'basic' || user?.subscription?.plan === 'pro';
   
   // This adapts cover letter data to the format expected by the LinkedIn optimization service
   const handleLinkedInOptimize = async () => {
@@ -80,9 +80,7 @@ const CoverLetterToolbar: React.FC<CoverLetterToolbarProps> = ({ coverLetterData
       } else {
         toast.error("Failed to enhance cover letter with AI");
       }
-      if (user?.id) {
-        makeService.notifyCoverLetterGenerated(coverLetterData, user.id);
-      }
+ 
     } catch (error) {
       console.error("AI enhancement error:", error);
       toast.error("An error occurred while enhancing with AI");

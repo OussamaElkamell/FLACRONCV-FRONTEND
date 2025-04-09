@@ -317,26 +317,7 @@ const CoverLetterForm = ({ setCoverLetterData }: { setCoverLetterData: React.Dis
         </CardContent>
       </Card>
 
-      <div className="flex flex-col sm:flex-row gap-4 justify-center">
-        <Button 
-          type="button"
-          onClick={handleGenerate}
-          className="w-full sm:w-auto bg-brand-500 hover:bg-brand-600"
-          disabled={isGenerating}
-        >
-          {isGenerating ? (
-            <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Generating...
-            </>
-          ) : (
-            <>
-              <Sparkles className="mr-2 h-4 w-4" />
-              Generate with AI
-            </>
-          )}
-        </Button>
-      </div>
+      
     </form>
   );
 };

@@ -154,25 +154,25 @@ const CoverLetterPage = () => {
               </Tabs>
             </div>
             
-            <div className="hidden lg:block lg:sticky lg:top-10 h-[calc(100vh-160px)]">
-              <div className="bg-white rounded-lg shadow-sm border h-full flex flex-col">
-                <h2 className="text-lg font-medium p-4 border-b">Preview</h2>
-                <div className="flex-1 overflow-auto">
-                  <DocumentPreview 
-                    type="coverLetter" 
-                    data={coverLetterData} 
-                    selectedTemplate={selectedTemplate}
-                    setData={handleUpdateCoverLetterData}
-                    onDownloadRequest={handleDownloadRequest}
-                  />
-                </div>
-              </div>
-              
-              {/* Add CoverLetterToolbar below the preview */}
-              <div className="mt-4">
-                <CoverLetterToolbar coverLetterData={coverLetterData} />
-              </div>
-            </div>
+            <div className="sm:block sm:sticky sm:top-10 h-[auto] sm:h-[calc(100vh-160px)] sm:order-first lg:order-last">
+  <div className="bg-white rounded-lg shadow-sm border h-full flex flex-col">
+    <h2 className="text-lg font-medium p-4 border-b">Preview</h2>
+    <div className="flex-1 overflow-auto">
+      <DocumentPreview 
+        type="coverLetter" 
+        data={coverLetterData} 
+        selectedTemplate={selectedTemplate}
+        setData={handleUpdateCoverLetterData}
+        onDownloadRequest={handleDownloadRequest}
+      />
+    </div>
+  </div>
+
+  <div className="mt-4">
+    <CoverLetterToolbar coverLetterData={coverLetterData} />
+  </div>
+</div>
+
           </div>
         </div>
       </main>
