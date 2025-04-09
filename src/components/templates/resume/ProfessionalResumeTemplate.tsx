@@ -19,6 +19,14 @@ const ProfessionalResumeTemplate: React.FC<ProfessionalResumeTemplateProps> = ({
   return (
     <div className="font-serif p-5 max-w-[800px] mx-auto text-sm">
       <div className="text-center mb-4">
+          {/* Profile Photo */}
+          {data.personalInfo.photo && (
+          <img 
+            src={data.personalInfo.photo} 
+            alt="Profile Photo" 
+            className="w-24 h-24 rounded-full mx-auto mb-2" 
+          />
+        )}
         <h1 
           className="text-xl font-bold mb-0.5" 
           data-field="name"
