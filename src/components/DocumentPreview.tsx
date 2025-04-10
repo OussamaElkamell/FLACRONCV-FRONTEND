@@ -21,6 +21,7 @@ import MinimalistCoverLetterTemplate from '@/components/templates/coverLetter/Mi
 import CreativeCoverLetterTemplate from '@/components/templates/coverLetter/CreativeCoverLetterTemplate';
 import ProfessionalCoverLetterTemplate from '@/components/templates/coverLetter/ProfessionalCoverLetterTemplate';
 import { makeService } from '@/services/makeService';
+import { getDatabase, ref, set } from 'firebase/database';
 
 interface DocumentPreviewProps {
   type: 'resume' | 'coverLetter';
@@ -142,11 +143,28 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
       const userId = user?.uid;
   
       if (userId) {
+
+        const db = getDatabase();
+        const docRef = ref(
+          db,
+          `users/${userId}/${type === "resume" ? "resumes" : "coverLetters"}/${Date.now()}` // Unique key
+        );
+  
+        await set(docRef, {
+          ...data,
+          template: selectedTemplate,
+          downloadedAt: new Date().toISOString(),
+        });
+  
+        console.log(`${type} data saved to Realtime Database`);
+
         await makeService.notifyDocumentDownloaded({
           userId,
           documentType: type, // 'resume' or 'coverLetter'
           templateName: selectedTemplate || undefined,
         });
+
+
       } else {
         console.warn('No authenticated user found. Skipping email notification.');
       }
