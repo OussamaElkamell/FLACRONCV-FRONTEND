@@ -49,13 +49,13 @@ const Index = () => {
                 </p>
               </div>
               <div className="flex gap-4">
-                <a href="#" className="text-sm text-muted-foreground hover:text-foreground">
+                <a href="terms" className="text-sm text-muted-foreground hover:text-foreground">
                   Terms
                 </a>
-                <a href="#" className="text-sm text-muted-foreground hover:text-foreground">
+                <a href="privacy" className="text-sm text-muted-foreground hover:text-foreground">
                   Privacy
                 </a>
-                <a href="#" className="text-sm text-muted-foreground hover:text-foreground">
+                <a href="contact" className="text-sm text-muted-foreground hover:text-foreground">
                   Contact
                 </a>
               </div>

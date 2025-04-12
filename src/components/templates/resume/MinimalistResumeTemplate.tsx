@@ -83,7 +83,7 @@ const MinimalistResumeTemplate: React.FC<MinimalistResumeTemplateProps> = ({
         </div>
       )}
       
-      {data.experience.some(exp => exp.company || exp.position) && (
+      {data.experience && data.experience.length > 0 && (
         <div className="mb-10">
           <h2 className="text-lg font-normal tracking-wide text-gray-800 mb-4 uppercase">Experience</h2>
           {data.experience.map((exp, index) => (
@@ -131,7 +131,44 @@ const MinimalistResumeTemplate: React.FC<MinimalistResumeTemplateProps> = ({
         </div>
       )}
       
-      {data.education.some(edu => edu.institution || edu.degree) && (
+      {/* Projects Section */}
+      {data.projects && data.projects.length > 0 && (
+        <div className="mb-10">
+          <h2 className="text-lg font-normal tracking-wide text-gray-800 mb-4 uppercase">Projects</h2>
+          {data.projects.map((project, index) => (
+            <div key={index} className="mb-6">
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-baseline mb-1">
+                <h3 className="text-md font-medium">
+                  {project.name || 'Project Name'}
+                </h3>
+                {project.date && (
+                  <span className="text-sm text-gray-500">{project.date}</span>
+                )}
+              </div>
+              {project.technologies && (
+                <p className="text-sm text-gray-600 mb-1">{project.technologies}</p>
+              )}
+              {project.description && (
+                <p className="text-sm text-gray-700 leading-relaxed">
+                  {project.description}
+                </p>
+              )}
+              {project.link && (
+                <a 
+                  href={project.link}
+                  className="text-sm text-gray-600 hover:text-gray-900 mt-1 inline-block"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  View Project
+                </a>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+      
+      {data.education && data.education.length > 0 && (
         <div className="mb-10">
           <h2 className="text-lg font-normal tracking-wide text-gray-800 mb-4 uppercase">Education</h2>
           {data.education.map((edu, index) => (
@@ -179,7 +216,7 @@ const MinimalistResumeTemplate: React.FC<MinimalistResumeTemplateProps> = ({
         </div>
       )}
       
-      {data.skills.some(skill => skill.skills) && (
+      {data.skills && data.skills.length > 0 && (
         <div>
           <h2 className="text-lg font-normal tracking-wide text-gray-800 mb-4 uppercase">Skills</h2>
           {data.skills.map((skill, index) => (
@@ -205,6 +242,61 @@ const MinimalistResumeTemplate: React.FC<MinimalistResumeTemplateProps> = ({
             ) : null
           ))}
         </div>
+      )}
+      
+      {/* Languages Section */}
+      {data.languages && data.languages.length > 0 && (
+        <div className="mt-8">
+          <h2 className="text-lg font-normal tracking-wide text-gray-800 mb-4 uppercase">Languages</h2>
+          <div className="flex flex-wrap gap-6">
+            {data.languages.map((lang, index) => (
+              <div key={index}>
+                <p className="text-md font-medium mb-1">{lang.language}</p>
+                <div className="flex">
+                  {[...Array(5)].map((_, i) => (
+                    <div 
+                      key={i} 
+                      className={`w-2 h-2 rounded-full mr-1 ${i < lang.proficiency ? 'bg-gray-700' : 'bg-gray-300'}`}
+                    />
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+      
+      {/* Interests Section */}
+      {data.interests && data.interests.length > 0 && (
+        <div className="mt-8">
+          <h2 className="text-lg font-normal tracking-wide text-gray-800 mb-4 uppercase">Interests</h2>
+          <div className="flex flex-wrap gap-2">
+            {data.interests.map((interest, index) => (
+              <span 
+                key={index}
+                className="bg-gray-100 text-gray-800 px-3 py-1 text-sm rounded"
+              >
+                {interest}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+      
+      {/* Custom Sections */}
+      {data.customSections && data.customSections.length > 0 && (
+        <>
+          {data.customSections.map((section, index) => (
+            <div key={index} className="mt-8">
+              <h2 className="text-lg font-normal tracking-wide text-gray-800 mb-4 uppercase">
+                {section.title}
+              </h2>
+              <div className="text-sm text-gray-700 leading-relaxed">
+                {section.content}
+              </div>
+            </div>
+          ))}
+        </>
       )}
     </div>
   );

@@ -16,14 +16,21 @@ const ModernResumeTemplate: React.FC<ModernResumeTemplateProps> = ({
   return (
     <div className="font-sans p-5 max-w-[800px] mx-auto text-sm">
       <div className="flex flex-col md:flex-row justify-between items-center bg-blue-500 text-white rounded-lg p-4 mb-5">
-      {data.personalInfo.photo && (
-          <img 
-            src={data.personalInfo.photo} 
-            alt="Profile Picture" 
-            className="w-24 h-24 rounded-full object-cover mr-4" 
-          />
-        )}
         <div>
+           {/* Profile photo */}
+        <div className="mb-4 flex justify-center">
+          {data.personalInfo.photo ? (
+            <img 
+              src={data.personalInfo.photo} 
+              alt={data.personalInfo.name} 
+              className="rounded-full w-24 h-24 object-cover border-4 border-white"
+            />
+          ) : (
+            <div className="rounded-full w-24 h-24 bg-slate-600 flex items-center justify-center text-xl font-bold">
+              {data.personalInfo.name.charAt(0)}
+            </div>
+          )}
+        </div>
           <h1 
             className="text-2xl font-bold"
             data-field="name"
@@ -85,7 +92,7 @@ const ModernResumeTemplate: React.FC<ModernResumeTemplateProps> = ({
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="md:col-span-2">
-          {data.experience.some(exp => exp.company || exp.position) && (
+          {data.experience && data.experience.some(exp => exp.company || exp.position) && (
             <div className="mb-4">
               <h2 className="text-base text-blue-500 font-bold mb-2">Work Experience</h2>
               {data.experience.map((exp, index) => (
@@ -133,7 +140,7 @@ const ModernResumeTemplate: React.FC<ModernResumeTemplateProps> = ({
             </div>
           )}
           
-          {/* Projects Section - New */}
+          {/* Projects Section */}
           {data.projects && data.projects.some(project => project.name || project.description) && (
             <div className="mb-4">
               <h2 className="text-base text-blue-500 font-bold mb-2">Projects</h2>
@@ -197,7 +204,7 @@ const ModernResumeTemplate: React.FC<ModernResumeTemplateProps> = ({
             </div>
           )}
           
-          {data.education.some(edu => edu.institution || edu.degree) && (
+          {data.education && data.education.some(edu => edu.institution || edu.degree) && (
             <div className="mb-4">
               <h2 className="text-base text-blue-500 font-bold mb-2">Education</h2>
               {data.education.map((edu, index) => (
@@ -247,7 +254,7 @@ const ModernResumeTemplate: React.FC<ModernResumeTemplateProps> = ({
         </div>
         
         <div>
-          {data.skills.some(skill => skill.skills) && (
+          {data.skills && data.skills.some(skill => skill.skills) && (
             <div className="bg-gray-50 p-3 rounded-lg mb-4">
               <h2 className="text-base text-blue-500 font-bold mb-2">Skills</h2>
               {data.skills.map((skill, index) => (
@@ -277,8 +284,8 @@ const ModernResumeTemplate: React.FC<ModernResumeTemplateProps> = ({
             </div>
           )}
           
-          {/* Updated Certifications Section */}
-          {data.certifications.some(cert => cert.name || cert.title)&& (
+          {/* Certifications Section */}
+          {data.certifications && data.certifications.length > 0 && (
             <div className="bg-gray-50 p-3 rounded-lg mb-4">
               <h2 className="text-base text-blue-500 font-bold mb-2">Certifications</h2>
               {data.certifications.map((cert, index) => (
@@ -334,6 +341,18 @@ const ModernResumeTemplate: React.FC<ModernResumeTemplateProps> = ({
                 ))}
               </div>
             </div>
+          )}
+          
+          {/* Custom Sections */}
+          {data.customSections && data.customSections.length > 0 && (
+            <>
+              {data.customSections.map((section, index) => (
+                <div key={index} className="bg-gray-50 p-3 rounded-lg mt-4">
+                  <h2 className="text-base text-blue-500 font-bold mb-2">{section.title}</h2>
+                  <p className="text-sm text-gray-700">{section.content}</p>
+                </div>
+              ))}
+            </>
           )}
         </div>
       </div>

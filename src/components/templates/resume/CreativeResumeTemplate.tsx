@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { ResumeData } from '@/types/documents';
 
@@ -15,13 +16,6 @@ const CreativeResumeTemplate: React.FC<CreativeResumeTemplateProps> = ({
   return (
     <div className="font-sans p-8 max-w-[800px] mx-auto">
       <div className="bg-purple-500 text-white p-8 rounded-lg mb-8">
-      {data.personalInfo.photo && (
-          <img 
-            src={data.personalInfo.photo} 
-            alt="Profile Picture" 
-            className="w-24 h-24 rounded-full object-cover mr-4" 
-          />
-        )}
         <h1 
           className="text-4xl font-bold mb-2"
           data-field="name"
@@ -84,7 +78,7 @@ const CreativeResumeTemplate: React.FC<CreativeResumeTemplateProps> = ({
       
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
         <div className="lg:col-span-3">
-          {data.experience.some(exp => exp.company || exp.position) && (
+          {data.experience && data.experience.length > 0 && (
             <div className="mb-10">
               <h2 className="text-xl font-bold text-purple-700 mb-4 flex items-center">
                 <span className="bg-purple-500 w-8 h-8 rounded-full mr-2"></span>
@@ -105,7 +99,44 @@ const CreativeResumeTemplate: React.FC<CreativeResumeTemplateProps> = ({
             </div>
           )}
           
-          {data.education.some(edu => edu.institution || edu.degree) && (
+          {/* Projects Section */}
+          {data.projects && data.projects.length > 0 && (
+            <div className="mb-10">
+              <h2 className="text-xl font-bold text-purple-700 mb-4 flex items-center">
+                <span className="bg-purple-500 w-8 h-8 rounded-full mr-2"></span>
+                Projects
+              </h2>
+              {data.projects.map((project, index) => (
+                <div key={index} className="mb-6 relative pl-6 before:absolute before:left-0 before:top-2 before:w-3 before:h-3 before:bg-purple-400 before:rounded-full">
+                  <h3 className="text-lg font-bold">{project.name || 'Project Name'}</h3>
+                  <div className="flex justify-between">
+                    {project.technologies && (
+                      <h4 className="text-purple-600 font-medium">{project.technologies}</h4>
+                    )}
+                    {project.date && (
+                      <span className="text-sm text-gray-500 italic">{project.date}</span>
+                    )}
+                  </div>
+                  {project.description && <p className="mt-2 text-gray-700">{project.description}</p>}
+                  {project.link && (
+                    <a 
+                      href={project.link} 
+                      className="mt-1 text-purple-600 hover:text-purple-800 inline-flex items-center"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <span>View Project</span>
+                      <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                      </svg>
+                    </a>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+          
+          {data.education && data.education.length > 0 && (
             <div className="mb-10">
               <h2 className="text-xl font-bold text-purple-700 mb-4 flex items-center">
                 <span className="bg-purple-500 w-8 h-8 rounded-full mr-2"></span>
@@ -125,11 +156,32 @@ const CreativeResumeTemplate: React.FC<CreativeResumeTemplateProps> = ({
               ))}
             </div>
           )}
+          
+          {/* Certifications Section */}
+          {data.certifications && data.certifications.length > 0 && (
+            <div className="mb-10">
+              <h2 className="text-xl font-bold text-purple-700 mb-4 flex items-center">
+                <span className="bg-purple-500 w-8 h-8 rounded-full mr-2"></span>
+                Certifications
+              </h2>
+              {data.certifications.map((cert, index) => (
+                <div key={index} className="mb-4 relative pl-6 before:absolute before:left-0 before:top-2 before:w-3 before:h-3 before:bg-purple-400 before:rounded-full">
+                  <div className="flex justify-between">
+                    <h3 className="text-lg font-bold">{cert.name}</h3>
+                    <span className="text-sm text-gray-500 italic">{cert.date}</span>
+                  </div>
+                  {cert.title && typeof cert.title === 'string' && (
+                    <p className="text-purple-600">{cert.title}</p>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
         
         <div className="lg:col-span-2">
-          {data.skills.some(skill => skill.skills) && (
-            <div className="bg-purple-50 p-6 rounded-lg">
+          {data.skills && data.skills.length > 0 && (
+            <div className="bg-purple-50 p-6 rounded-lg mb-8">
               <h2 className="text-xl font-bold text-purple-700 mb-4 flex items-center">
                 <span className="bg-purple-500 w-8 h-8 rounded-full mr-2"></span>
                 Skills
@@ -149,6 +201,64 @@ const CreativeResumeTemplate: React.FC<CreativeResumeTemplateProps> = ({
                 ) : null
               ))}
             </div>
+          )}
+          
+          {/* Languages Section */}
+          {data.languages && data.languages.length > 0 && (
+            <div className="bg-purple-50 p-6 rounded-lg mb-8">
+              <h2 className="text-xl font-bold text-purple-700 mb-4 flex items-center">
+                <span className="bg-purple-500 w-8 h-8 rounded-full mr-2"></span>
+                Languages
+              </h2>
+              {data.languages.map((lang, index) => (
+                <div key={index} className="mb-3">
+                  <div className="flex justify-between mb-1">
+                    <h3 className="font-medium">{lang.language}</h3>
+                  </div>
+                  <div className="w-full bg-purple-200 rounded-full h-2">
+                    <div 
+                      className="bg-purple-600 h-2 rounded-full" 
+                      style={{ width: `${Math.min(lang.proficiency * 20, 100)}%` }}
+                    ></div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+          
+          {/* Interests Section */}
+          {data.interests && data.interests.length > 0 && (
+            <div className="bg-purple-50 p-6 rounded-lg mb-8">
+              <h2 className="text-xl font-bold text-purple-700 mb-4 flex items-center">
+                <span className="bg-purple-500 w-8 h-8 rounded-full mr-2"></span>
+                Interests
+              </h2>
+              <div className="flex flex-wrap gap-2">
+                {data.interests.map((interest, index) => (
+                  <span 
+                    key={index} 
+                    className="bg-purple-200 text-purple-800 rounded-full px-3 py-1 text-sm"
+                  >
+                    {interest}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+          
+          {/* Custom Sections */}
+          {data.customSections && data.customSections.length > 0 && (
+            <>
+              {data.customSections.map((section, index) => (
+                <div key={index} className="bg-purple-50 p-6 rounded-lg mb-8">
+                  <h2 className="text-xl font-bold text-purple-700 mb-4 flex items-center">
+                    <span className="bg-purple-500 w-8 h-8 rounded-full mr-2"></span>
+                    {section.title}
+                  </h2>
+                  <p className="text-gray-700">{section.content}</p>
+                </div>
+              ))}
+            </>
           )}
         </div>
       </div>

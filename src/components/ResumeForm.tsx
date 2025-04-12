@@ -3,7 +3,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Plus, Trash2, Sparkles, Loader2, Upload, X, Link } from 'lucide-react';
+import { Plus, Trash2, Sparkles, Loader2, Upload, X, Link2, FileText } from 'lucide-react';
+import { CalendarIcon } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { 
   Card,
@@ -14,6 +15,15 @@ import {
   CardTitle
 } from '@/components/ui/card';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+import { format } from 'date-fns';
+import { Calendar } from '@/components/ui/calendar';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { cn } from '@/lib/utils';
+import { ResumeData } from '@/types/documents';
+import { z } from 'zod';
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 
 const initialEducation = { institution: '', degree: '', date: '', description: '' };
 const initialExperience = { company: '', position: '', date: '', description: '' };
@@ -21,10 +31,30 @@ const initialSkills = { category: 'Technical Skills', skills: '' };
 const initialProject = { name: '', description: '', link: '', technologies: '', date: '' };
 const initialCertification = { title: '', name: '', date: '' };
 
-const ResumeForm = ({ setResumeData }: { setResumeData: React.Dispatch<React.SetStateAction<any>> }) => {
+interface CustomSection {
+  title: string;
+  content: string;
+}
+
+const initialCustomSection: CustomSection = { 
+  title: '', 
+  content: '' 
+};
+
+const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+const phoneRegex = /^[\d\s\-+()]{1,15}$/;
+
+const ResumeForm = ({ 
+  setResumeData, 
+  resumeData 
+}: { 
+  setResumeData: React.Dispatch<React.SetStateAction<any>>,
+  resumeData: ResumeData 
+}) => {
   const { toast } = useToast();
+  const [isInitialized, setIsInitialized] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<ResumeData>({
     personalInfo: {
       name: '',
       email: '',
@@ -41,13 +71,27 @@ const ResumeForm = ({ setResumeData }: { setResumeData: React.Dispatch<React.Set
     certifications: [{ ...initialCertification }],
     languages: [],
     interests: [],
-    qualities: [],
+    customSections: [], // Initialize as empty array
+    template: 'professional',
   });
+console.log("resumeData",resumeData);
 
-  useEffect(() => {
+useEffect(() => {
+  if (resumeData && !isInitialized) {
+    const dataWithCustomSections = {
+      ...resumeData,
+      customSections: resumeData.customSections || [],
+    };
+    setFormData(dataWithCustomSections);
+    setIsInitialized(true);
+  }
+}, [resumeData, isInitialized]);
+
+useEffect(() => {
+  if (formData) {
     setResumeData(formData);
-  }, [formData, setResumeData]);
-
+  }
+}, [formData]);
   const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
@@ -77,8 +121,37 @@ const ResumeForm = ({ setResumeData }: { setResumeData: React.Dispatch<React.Set
     });
   };
 
+  const validateEmail = (email: string): boolean => {
+    return emailRegex.test(email);
+  };
+
+  const validatePhone = (phone: string): boolean => {
+    return phoneRegex.test(phone);
+  };
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+  
+    if (name === 'email' && value !== '' && !validateEmail(value)) {
+      toast({
+        title: "Invalid Email",
+        description: "Please enter a valid email address",
+        variant: "destructive",
+      });
+    }
+  
+    if (name === 'phone' && value !== '' && !validatePhone(value)) {
+      toast({
+        title: "Invalid Phone Number",
+        description: "Please enter a valid phone number (max 15 digits)",
+        variant: "destructive",
+      });
+    }
+  };
+  
+  
   const handlePersonalInfoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+
     setFormData({
       ...formData,
       personalInfo: {
@@ -110,27 +183,124 @@ const ResumeForm = ({ setResumeData }: { setResumeData: React.Dispatch<React.Set
     });
   };
 
-  const addItem = (type: 'education' | 'experience' | 'skills' | 'projects' | 'certifications') => {
+  const addItem = (type: 'education' | 'experience' | 'skills' | 'projects' | 'certifications' | 'customSections') => {
     let newItem;
     if (type === 'education') newItem = { ...initialEducation };
     else if (type === 'experience') newItem = { ...initialExperience };
     else if (type === 'projects') newItem = { ...initialProject };
     else if (type === 'certifications') newItem = { ...initialCertification };
+    else if (type === 'customSections') newItem = { ...initialCustomSection };
     else newItem = { ...initialSkills };
 
     setFormData({
       ...formData,
-      [type]: [...formData[type], newItem],
+      [type]: [...(formData[type] || []), newItem],
     });
   };
 
-  const removeItem = (index: number, type: 'education' | 'experience' | 'skills' | 'projects' | 'certifications') => {
-    const updatedArray = [...formData[type]];
+  const removeItem = (index: number, type: 'education' | 'experience' | 'skills' | 'projects' | 'certifications' | 'customSections') => {
+    const updatedArray = [...(formData[type] || [])];
     updatedArray.splice(index, 1);
     
     setFormData({
       ...formData,
       [type]: updatedArray,
+    });
+  };
+
+  const handleCustomSectionChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, 
+    index: number, 
+    field: keyof CustomSection
+  ) => {
+    const value = e.target.value;
+    const updatedSections = [...(formData.customSections || [])];
+    updatedSections[index] = { 
+      ...updatedSections[index], 
+      [field]: value 
+    };
+    
+    setFormData({
+      ...formData,
+      customSections: updatedSections,
+    });
+  };
+
+  const handleEducationDateChange = (date: Date | undefined, index: number) => {
+    if (!date) return;
+    
+    const formattedDate = format(date, 'MMMM yyyy');
+    const updatedEducation = [...formData.education];
+    updatedEducation[index] = { ...updatedEducation[index], date: formattedDate };
+    
+    setFormData({
+      ...formData,
+      education: updatedEducation,
+    });
+  };
+
+  const handleProjectDateChange = (date: Date | undefined, index: number) => {
+    if (!date) return;
+    
+    const formattedDate = format(date, 'MMMM yyyy');
+    const updatedProjects = [...formData.projects];
+    updatedProjects[index] = { ...updatedProjects[index], date: formattedDate };
+    
+    setFormData({
+      ...formData,
+      projects: updatedProjects,
+    });
+  };
+
+  const handleExperienceStartDateChange = (date: Date | undefined, index: number) => {
+    if (!date) return;
+    
+    const updatedExperience = [...formData.experience];
+    const currentDateParts = updatedExperience[index].date.split(' - ');
+    const endDate = currentDateParts.length > 1 ? currentDateParts[1] : 'Present';
+    
+    updatedExperience[index] = { 
+      ...updatedExperience[index], 
+      date: `${format(date, 'MMMM yyyy')} - ${endDate}` 
+    };
+    
+    setFormData({
+      ...formData,
+      experience: updatedExperience,
+    });
+  };
+
+  const handleExperienceEndDateChange = (date: Date | undefined, index: number) => {
+    if (!date) return;
+    
+    const updatedExperience = [...formData.experience];
+    const currentDateParts = updatedExperience[index].date.split(' - ');
+    const startDate = currentDateParts.length > 0 ? currentDateParts[0] : format(new Date(), 'MMMM yyyy');
+    
+    updatedExperience[index] = { 
+      ...updatedExperience[index], 
+      date: `${startDate} - ${format(date, 'MMMM yyyy')}` 
+    };
+    
+    setFormData({
+      ...formData,
+      experience: updatedExperience,
+    });
+  };
+
+  const handleSetPresentDate = (index: number) => {
+    const updatedExperience = [...formData.experience];
+    const currentDateParts = updatedExperience[index].date.split(' - ');
+    const startDate = currentDateParts.length > 0 ? currentDateParts[0] : format(new Date(), 'MMMM yyyy');
+    
+    updatedExperience[index] = { 
+      ...updatedExperience[index], 
+      date: `${startDate} - Present` 
+    };
+    
+    setFormData({
+      ...formData,
+      experience: updatedExperience,
     });
   };
 
@@ -241,9 +411,12 @@ const ResumeForm = ({ setResumeData }: { setResumeData: React.Dispatch<React.Set
                 id="email" 
                 name="email" 
                 type="email" 
-                value={formData.personalInfo.email} 
+                value={formData.personalInfo.email}
+                onBlur={handleBlur} 
                 onChange={handlePersonalInfoChange}
                 placeholder="john.smith@example.com"
+                pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
+                title="Please enter a valid email address"
               />
             </div>
             <div className="space-y-2">
@@ -252,8 +425,12 @@ const ResumeForm = ({ setResumeData }: { setResumeData: React.Dispatch<React.Set
                 id="phone" 
                 name="phone" 
                 value={formData.personalInfo.phone} 
+                onBlur={handleBlur}
                 onChange={handlePersonalInfoChange}
                 placeholder="(555) 123-4567"
+                maxLength={15}
+                pattern="[\d\s\-+()]{1,15}"
+                title="Please enter a valid phone number (max 15 digits)"
               />
             </div>
             <div className="space-y-2">
@@ -294,7 +471,22 @@ const ResumeForm = ({ setResumeData }: { setResumeData: React.Dispatch<React.Set
             placeholder="Experienced professional with a background in..."
             className="min-h-[100px]"
           />
-         
+          <div className="flex items-center gap-2 mt-3">
+            <Button 
+              type="button" 
+              variant="outline" 
+              className="text-brand-500 border-brand-500 hover:bg-brand-50"
+              onClick={() => {
+                toast({
+                  title: "AI Suggestion",
+                  description: "Leave this field blank to let our AI generate a professional summary for you.",
+                });
+              }}
+            >
+              <Sparkles className="h-4 w-4 mr-2" />
+              AI Tips
+            </Button>
+          </div>
         </CardContent>
       </Card>
 
@@ -352,13 +544,28 @@ const ResumeForm = ({ setResumeData }: { setResumeData: React.Dispatch<React.Set
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor={`edu-date-${index}`}>Graduation Date</Label>
-                  <Input 
-                    id={`edu-date-${index}`} 
-                    name="date" 
-                    value={edu.date} 
-                    onChange={(e) => handleArrayChange(e, index, 'education')}
-                    placeholder="May 2020"
-                  />
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        id={`edu-date-${index}`}
+                        variant="outline"
+                        className={cn(
+                          "w-full justify-start text-left font-normal",
+                          !edu.date && "text-muted-foreground"
+                        )}
+                      >
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        {edu.date ? edu.date : <span>Pick graduation date</span>}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        onSelect={(date) => handleEducationDateChange(date, index)}
+                        className={cn("p-3 pointer-events-auto")}
+                      />
+                    </PopoverContent>
+                  </Popover>
                 </div>
                 <div className="space-y-2 sm:col-span-2">
                   <Label htmlFor={`edu-description-${index}`}>Description (Optional)</Label>
@@ -428,15 +635,78 @@ const ResumeForm = ({ setResumeData }: { setResumeData: React.Dispatch<React.Set
                     placeholder="Software Engineer"
                   />
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor={`exp-date-${index}`}>Date Range</Label>
-                  <Input 
-                    id={`exp-date-${index}`} 
-                    name="date" 
-                    value={exp.date} 
-                    onChange={(e) => handleArrayChange(e, index, 'experience')}
-                    placeholder="Jan 2020 - Present"
-                  />
+                <div className="space-y-2 sm:col-span-2">
+                  <Label>Date Range</Label>
+                  <div className="flex flex-wrap gap-2">
+                    <div className="flex-1">
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant="outline"
+                            className={cn(
+                              "w-full justify-start text-left font-normal",
+                              "text-muted-foreground"
+                            )}
+                          >
+                            <CalendarIcon className="mr-2 h-4 w-4" />
+                            <span>Start Date</span>
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0" align="start">
+                          <Calendar
+                            mode="single"
+                            onSelect={(date) => handleExperienceStartDateChange(date, index)}
+                            className={cn("p-3 pointer-events-auto")}
+                          />
+                        </PopoverContent>
+                      </Popover>
+                    </div>
+                    <div className="flex-1">
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant="outline"
+                            className={cn(
+                              "w-full justify-start text-left font-normal",
+                              "text-muted-foreground"
+                            )}
+                          >
+                            <CalendarIcon className="mr-2 h-4 w-4" />
+                            <span>End Date</span>
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0" align="start">
+                          <Calendar
+                            mode="single"
+                            onSelect={(date) => handleExperienceEndDateChange(date, index)}
+                            className={cn("p-3 pointer-events-auto")}
+                          />
+                        </PopoverContent>
+                      </Popover>
+                    </div>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleSetPresentDate(index)}
+                      className="whitespace-nowrap"
+                    >
+                      Set as Present
+                    </Button>
+                  </div>
+                  <div className="mt-2">
+                    <Input 
+                      id={`exp-date-${index}`} 
+                      name="date" 
+                      value={exp.date} 
+                      onChange={(e) => handleArrayChange(e, index, 'experience')}
+                      placeholder="Jan 2020 - Present"
+                      className="text-sm"
+                    />
+                    <p className="text-xs text-gray-500 mt-1">
+                      You can also directly edit the date format above
+                    </p>
+                  </div>
                 </div>
                 <div className="space-y-2 sm:col-span-2">
                   <Label htmlFor={`exp-description-${index}`}>Description</Label>
@@ -499,13 +769,28 @@ const ResumeForm = ({ setResumeData }: { setResumeData: React.Dispatch<React.Set
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor={`project-date-${index}`}>Date</Label>
-                  <Input 
-                    id={`project-date-${index}`} 
-                    name="date" 
-                    value={project.date} 
-                    onChange={(e) => handleArrayChange(e, index, 'projects')}
-                    placeholder="2023"
-                  />
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        id={`project-date-${index}`}
+                        variant="outline"
+                        className={cn(
+                          "w-full justify-start text-left font-normal",
+                          !project.date && "text-muted-foreground"
+                        )}
+                      >
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        {project.date ? project.date : <span>Pick project date</span>}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        onSelect={(date) => handleProjectDateChange(date, index)}
+                        className={cn("p-3 pointer-events-auto")}
+                      />
+                    </PopoverContent>
+                  </Popover>
                 </div>
                 <div className="space-y-2 sm:col-span-2">
                   <Label htmlFor={`project-link-${index}`}>Project Link (Optional)</Label>
@@ -565,7 +850,7 @@ const ResumeForm = ({ setResumeData }: { setResumeData: React.Dispatch<React.Set
           </div>
         </CardHeader>
         <CardContent className="space-y-6">
-          {formData.certifications.map((cert, index) => (
+          {formData?.certifications?.map((cert, index) => (
             <div key={index} className="p-4 border rounded-lg relative">
               <Button 
                 type="button" 
@@ -606,6 +891,7 @@ const ResumeForm = ({ setResumeData }: { setResumeData: React.Dispatch<React.Set
                     value={cert.date} 
                     onChange={(e) => handleArrayChange(e, index, 'certifications')}
                     placeholder="June 2022"
+                    className="text-sm"
                   />
                 </div>
               </div>
@@ -672,7 +958,68 @@ const ResumeForm = ({ setResumeData }: { setResumeData: React.Dispatch<React.Set
         </CardContent>
       </Card>
 
-      
+      <Card>
+        <CardHeader>
+          <div className="flex justify-between items-center">
+            <div>
+              <CardTitle>Custom Sections</CardTitle>
+              <CardDescription>Add your own custom sections to the resume</CardDescription>
+            </div>
+            <Button 
+              type="button" 
+              variant="outline" 
+              onClick={() => addItem('customSections')}
+              className="text-brand-500"
+            >
+              <Plus className="h-4 w-4 mr-2" />
+              Add Custom Section
+            </Button>
+          </div>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          {(formData.customSections || []).map((section, index) => (
+            <div key={index} className="p-4 border rounded-lg relative">
+              <Button 
+                type="button" 
+                variant="ghost" 
+                size="icon"
+                onClick={() => removeItem(index, 'customSections')} 
+                className="absolute top-2 right-2 text-destructive hover:text-destructive/90 hover:bg-destructive/10"
+              >
+                <Trash2 className="h-4 w-4" />
+              </Button>
+              <div className="grid grid-cols-1 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor={`custom-title-${index}`}>Section Title</Label>
+                  <Input 
+                    id={`custom-title-${index}`} 
+                    value={section.title} 
+                    onChange={(e) => handleCustomSectionChange(e, index, 'title')}
+                    placeholder="Languages, Interests, Achievements..."
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor={`custom-content-${index}`}>Content</Label>
+                  <Textarea 
+                    id={`custom-content-${index}`} 
+                    value={section.content} 
+                    onChange={(e) => handleCustomSectionChange(e, index, 'content')}
+                    placeholder="Add the content for this section here..."
+                    className="min-h-[100px]"
+                  />
+                </div>
+              </div>
+            </div>
+          ))}
+          {(!formData.customSections || formData.customSections.length === 0) && (
+            <div className="text-center text-muted-foreground py-6">
+              <FileText className="mx-auto h-8 w-8 opacity-40 mb-2" />
+              <p>Add custom sections like Languages, Interests, Volunteer Work, etc.</p>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
     </form>
   );
 };

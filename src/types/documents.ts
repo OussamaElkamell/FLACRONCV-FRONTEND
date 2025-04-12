@@ -46,7 +46,12 @@ export interface ResumeData {
   }>;
   qualities?: Array<string>;
   template?: string;
+  customSections?: Array<{
+    title: string;
+    content: string;
+  }>;
 }
+
 
 export interface CoverLetterData {
   personalInfo: {
@@ -69,4 +74,5 @@ export interface CoverLetterData {
   motivation: string;
   closing: string;
   template?: string;
+  
 }

@@ -1,9 +1,10 @@
-
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Check, Lock } from 'lucide-react';
+import { Check, Lock, ExternalLink } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import useFirebaseAuth from '@/hooks/useFirebaseAuth';
+import { Link } from 'react-router-dom';
+import { toast } from 'sonner';
 
 const templates = {
   resume: [
@@ -52,10 +53,50 @@ const templates = {
     {
       id: 'professionalModern',
       name: 'Professional Modern',
-      description: 'Modern professional design with bold header',
+      description: 'Modern professional design with bold header (french)',
       color: 'bg-purple-900',
       requiresPro: true,
     },
+    {
+      id: 'executive',
+      name: 'Executive',
+      description: 'Sophisticated design for senior professionals',
+      color: 'bg-gray-900',
+      requiresPro: true,
+
+    },
+    {
+      id: 'technical',
+      name: 'Technical',
+      description: 'Optimized for technical roles with skills focus',
+      color: 'bg-indigo-700',
+      requiresPro: true,
+      premium: true
+    },
+    {
+      id: 'academic',
+      name: 'Academic',
+      description: 'Perfect for academic and research positions',
+      color: 'bg-emerald-700',
+      requiresPro: true,
+      premium: true
+    },
+    {
+      id: 'elegant',
+      name: 'Elegant',
+      description: 'Refined design with sophisticated typography',
+      color: 'bg-amber-700',
+      requiresPro: true,
+      premium: true
+    },
+    {
+      id: 'corporate',
+      name: 'Corporate',
+      description: 'Professional template for corporate environments',
+      color: 'bg-blue-800',
+      requiresPro: true,
+      premium: true
+    }
   ],
   coverLetter: [
     {
@@ -86,6 +127,38 @@ const templates = {
       color: 'bg-purple-500',
       requiresPro: true,
     },
+    {
+      id: 'executive',
+      name: 'Executive',
+      description: 'Sophisticated letterhead for senior roles',
+      color: 'bg-gray-900',
+      requiresPro: true,
+      premium: true
+    },
+    {
+      id: 'technical',
+      name: 'Technical',
+      description: 'Optimized for technical and IT positions',
+      color: 'bg-indigo-700',
+      requiresPro: true,
+      premium: true
+    },
+    {
+      id: 'academic',
+      name: 'Academic',
+      description: 'Formal style for academic applications',
+      color: 'bg-emerald-700',
+      requiresPro: true,
+      premium: true
+    },
+    {
+      id: 'corporate',
+      name: 'Corporate',
+      description: 'Professional design for corporate applications',
+      color: 'bg-blue-800',
+      requiresPro: true,
+      premium: true
+    }
   ]
 };
 
@@ -100,27 +173,44 @@ const TemplateSelector: React.FC<TemplateSelectorProps> = ({
   setSelectedTemplate,
   type
 }) => {
-  const availableTemplates = templates[type];
+  const [showAllTemplates, setShowAllTemplates] = useState(false);
   const { user } = useFirebaseAuth();
   
-  // Check if user has pro subscription
   const hasPro = user?.subscription?.plan === 'pro';
   
-  // Handle template selection
+  const displayTemplates = showAllTemplates 
+    ? templates[type]
+    : templates[type].filter(template => !template.premium);
+  
   const handleTemplateSelect = (templateId: string, requiresPro: boolean) => {
     if (requiresPro && !hasPro) {
-      // If it's a pro template and user doesn't have pro subscription,
-      // don't allow selection
+      toast.info("Pro Template", {
+        description: "Upgrade to a Pro subscription to access premium templates"
+      });
       return;
     }
     setSelectedTemplate(templateId);
+  };
+  
+  const handleBrowseMore = () => {
+    if (showAllTemplates) {
+      setShowAllTemplates(false);
+    } else {
+      setShowAllTemplates(true);
+      
+      if (!hasPro) {
+        toast.info("Premium Templates", {
+          description: "Check out our premium templates available with a Pro subscription"
+        });
+      }
+    }
   };
   
   return (
     <div className="w-full">
       <h3 className="text-lg font-medium mb-4">Choose a Template</h3>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {availableTemplates.map((template) => (
+        {displayTemplates.map((template) => (
           <div 
             key={template.id}
             className={cn(
@@ -146,6 +236,12 @@ const TemplateSelector: React.FC<TemplateSelectorProps> = ({
               </div>
             )}
             
+            {template.premium && (
+              <div className="absolute top-2 left-2 bg-purple-600 text-white text-xs px-1.5 py-0.5 rounded">
+                PRO
+              </div>
+            )}
+            
             <div className={cn("h-16 w-full rounded-md mb-3", template.color)} />
             <div className="text-sm font-medium">
               {template.name}
@@ -161,9 +257,10 @@ const TemplateSelector: React.FC<TemplateSelectorProps> = ({
         <Button 
           variant="outline" 
           className="text-sm text-muted-foreground"
-          onClick={() => {}}
+          onClick={handleBrowseMore}
         >
-          Browse More Templates
+          {showAllTemplates ? "Show Basic Templates" : "Browse More Templates"} 
+          <ExternalLink className="h-3 w-3 ml-1" />
         </Button>
       </div>
     </div>

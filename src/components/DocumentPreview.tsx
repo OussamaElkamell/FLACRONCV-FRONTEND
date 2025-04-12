@@ -4,10 +4,10 @@ import { Button } from '@/components/ui/button';
 import { Download, Maximize2, Minimize2, Edit2, Eye } from 'lucide-react';
 import { toast } from 'sonner';
 import { ResumeData, CoverLetterData } from '@/types/documents';
-import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
-import { getAuth } from 'firebase/auth';
+
 import ModernResumeTemplate from '@/components/templates/resume/ModernResumeTemplate';
 import MinimalistResumeTemplate from '@/components/templates/resume/MinimalistResumeTemplate';
 import CreativeResumeTemplate from '@/components/templates/resume/CreativeResumeTemplate';
@@ -20,9 +20,17 @@ import ModernCoverLetterTemplate from '@/components/templates/coverLetter/Modern
 import MinimalistCoverLetterTemplate from '@/components/templates/coverLetter/MinimalistCoverLetterTemplate';
 import CreativeCoverLetterTemplate from '@/components/templates/coverLetter/CreativeCoverLetterTemplate';
 import ProfessionalCoverLetterTemplate from '@/components/templates/coverLetter/ProfessionalCoverLetterTemplate';
-import { makeService } from '@/services/makeService';
+import AcademicResumeTemplate from './templates/resume/AcademicResumeTemplate';
+import CorporateResumeTemplate from './templates/resume/CorporateResumeTemplate';
+import ExecutiveResumeTemplate from './templates/resume/ExecutiveResumeTemplate';
+import ElegantResumeTemplate from './templates/resume/ElegantResumeTemplate';
+import TechnicalResumeTemplate from './templates/resume/TechnicalResumeTemplate';
+import AcademicCoverLetterTemplate from './templates/coverLetter/AcademicCoverLetterTemplate';
+import CorporateCoverLetterTemplate from './templates/coverLetter/CorporateCoverLetterTemplate';
+import ExecutiveCoverLetterTemplate from './templates/coverLetter/ExecutiveCoverLetterTemplate';
 import { getDatabase, ref, set } from 'firebase/database';
-
+import { makeService } from '@/services/makeService';
+import { getAuth } from 'firebase/auth';
 interface DocumentPreviewProps {
   type: 'resume' | 'coverLetter';
   data: ResumeData | CoverLetterData;
@@ -87,61 +95,26 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
     return () => observer.disconnect();
   }, [data, selectedTemplate]);
   
-
-
   const handleDownload = async () => {
     if (!documentRef.current) return;
-  
+    
     if (onDownloadRequest && !onDownloadRequest()) {
       return;
     }
-  
-    const toastId = toast.loading("Preparing Download", {
-      description: "Please wait while we generate your PDF...",
-    });
-  
+    
+
+
     try {
       const pdf = new jsPDF({
         orientation: 'portrait',
         unit: 'mm',
-        format: 'a4',
+        format: 'a4'
       });
-  
+      
       const pdfWidth = pdf.internal.pageSize.getWidth();
       const pdfHeight = pdf.internal.pageSize.getHeight();
-      const highScale = 8;
-  
-      for (let i = 0; i < pages.length; i++) {
-        const pageContainer = document.getElementById(`document-page-${i}`);
-        if (!pageContainer) continue;
-  
-        const canvas = await html2canvas(pageContainer, {
-          scale: highScale,
-          useCORS: true,
-          allowTaint: true,
-          backgroundColor: "#ffffff",
-          logging: false,
-          imageTimeout: 15000,
-        });
-  
-        if (i > 0) pdf.addPage();
-  
-        const imgData = canvas.toDataURL('image/jpeg', 2.0);
-        pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
-      }
-  
-      const filename = type === 'resume' ? 'resume.pdf' : 'cover-letter.pdf';
-      pdf.save(filename);
-  
-      toast.dismiss(toastId);
-      toast.success("Download Complete", {
-        description: `Your ${type === 'resume' ? 'resume' : 'cover letter'} has been downloaded.`,
-      });
-  
-      // ✅ Send notification email if authenticated
       const user = getAuth().currentUser;
       const userId = user?.uid;
-  
       if (userId) {
 
         const db = getDatabase();
@@ -165,21 +138,41 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
         });
 
 
-      } else {
-        console.warn('No authenticated user found. Skipping email notification.');
       }
-  
+      for (let i = 0; i < pages.length; i++) {
+        const pageContainer = document.getElementById(`document-page-${i}`);
+        
+        if (!pageContainer) continue;
+        
+        const canvas = await html2canvas(pageContainer, {
+          scale: 3,
+          useCORS: true,
+          allowTaint: true,
+          backgroundColor: "#ffffff",
+          logging: false,
+          imageTimeout: 15000,
+        });
+        
+        if (i > 0) {
+          pdf.addPage();
+        }
+        
+        const imgData = canvas.toDataURL('image/jpeg', 1.0);
+        pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
+      }
+      
+      pdf.save(`${type === 'resume' ? 'resume' : 'cover-letter'}.pdf`);
+      
+      toast.success("Download Complete", {
+        description: `Your ${type === 'resume' ? 'resume' : 'cover letter'} has been downloaded.`
+      });
     } catch (error) {
       console.error('PDF generation error:', error);
-      toast.dismiss(toastId);
       toast.error("Download Failed", {
-        description: "There was an error generating your PDF. Please try again.",
+        description: "There was an error generating your PDF. Please try again."
       });
     }
   };
-  
-
-  
 
   const toggleFullscreen = () => {
     setIsFullscreen(!isFullscreen);
@@ -235,6 +228,13 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
         
         if (resumeData.skills[index]) {
           resumeData.skills[index][subField as keyof typeof resumeData.skills[0]] = newValue;
+        }
+      } else if (fieldName.startsWith('projects.') && sectionIndex) {
+        const subField = fieldName.split('.')[1];
+        const index = parseInt(sectionIndex);
+        
+        if (resumeData.projects && resumeData.projects[index]) {
+          resumeData.projects[index][subField as keyof typeof resumeData.projects[0]] = newValue;
         }
       }
       
@@ -298,6 +298,16 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
           return <ProfessionalPurpleTemplate data={resumeData} editMode={isEditMode} editableProps={editableProps} />;
         case 'professionalModern':
           return <ProfessionalModernTemplate data={resumeData} editMode={isEditMode} editableProps={editableProps} />;
+          case 'executive':
+            return <ExecutiveResumeTemplate data={resumeData} editMode={isEditMode} editableProps={editableProps} />;
+          case 'academic':
+            return <AcademicResumeTemplate data={resumeData} editMode={isEditMode} editableProps={editableProps} />;
+            case 'corporate':
+              return <CorporateResumeTemplate data={resumeData} editMode={isEditMode} editableProps={editableProps} />;
+              case 'elegant':
+                return <ElegantResumeTemplate data={resumeData} editMode={isEditMode} editableProps={editableProps} />;
+                case 'technical':
+                  return <TechnicalResumeTemplate data={resumeData} editMode={isEditMode} editableProps={editableProps} />;
         case 'professional':
         default:
           return <ProfessionalResumeTemplate data={resumeData} editMode={isEditMode} editableProps={editableProps} />;
@@ -312,6 +322,14 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
           return <MinimalistCoverLetterTemplate data={coverLetterData} editMode={isEditMode} editableProps={editableProps} />;
         case 'creative':
           return <CreativeCoverLetterTemplate data={coverLetterData} editMode={isEditMode} editableProps={editableProps} />;
+          case 'academic':
+            return <AcademicCoverLetterTemplate data={coverLetterData} editMode={isEditMode} editableProps={editableProps} />;
+            case 'executive':
+              return <ExecutiveCoverLetterTemplate data={coverLetterData} editMode={isEditMode} editableProps={editableProps} />;
+              case 'corporate':
+                return <CorporateCoverLetterTemplate data={coverLetterData} editMode={isEditMode} editableProps={editableProps} />;
+                case 'technical':
+                  return <AcademicCoverLetterTemplate data={coverLetterData} editMode={isEditMode} editableProps={editableProps} />;
         case 'professional':
         default:
           return <ProfessionalCoverLetterTemplate data={coverLetterData} editMode={isEditMode} editableProps={editableProps} />;
@@ -319,116 +337,118 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
     }
   };
 
-  const renderPages = () => {
-    return pages.map((pageIndex) => (
-      <div 
-        key={pageIndex}
-        id={`document-page-${pageIndex}`}
-        className={`doc-paper bg-white w-[595px] shadow-md mx-auto mb-4`}
-        style={{ 
-          height: `${PAGE_HEIGHT}px`,
-          overflow: 'hidden',
-          position: 'relative'
-        }}
-      >
-        <div 
-          className="absolute top-0 left-0 right-0 w-full"
-          style={{ 
-            transform: `translateY(-${pageIndex * PAGE_HEIGHT}px)`,
-          }}
-        >
-          {renderTemplate()}
-        </div>
-        
-        {pageIndex < pages.length - 1 && pages.length > 1 && (
-          <div className="absolute bottom-1 right-2 text-xs text-gray-400 page-indicator">
-            Page {pageIndex + 1} of {pages.length}
-          </div>
-        )}
-      </div>
-    ));
-  };
-
   return (
-    <div className="relative">
-      <div className="absolute top-4 right-4 z-10 flex gap-2">
-        {setData && (
-          <Button 
-            onClick={toggleEditMode} 
-            variant="outline" 
-            size="icon" 
-            className="bg-white hover:bg-gray-100"
-            title={isEditMode ? "View Mode" : "Edit Mode"}
+    <>
+      <div className="flex justify-between items-center mb-4">
+        <div className="flex items-center">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={toggleEditMode}
+            className={`mr-2 ${isEditMode ? 'bg-gray-100' : ''}`}
           >
-            {isEditMode ? 
-              <Eye className="h-4 w-4" /> : 
-              <Edit2 className="h-4 w-4" />
-            }
+            {isEditMode ? (
+              <>
+                <Eye className="h-4 w-4 mr-1" />
+                <span className="hidden sm:inline">View Mode</span>
+              </>
+            ) : (
+              <>
+                <Edit2 className="h-4 w-4 mr-1" />
+                <span className="hidden sm:inline">Edit Mode</span>
+              </>
+            )}
           </Button>
-        )}
-        <Button 
-          onClick={toggleFullscreen} 
-          variant="outline" 
-          size="icon" 
-          className="bg-white hover:bg-gray-100"
-        >
-          {isFullscreen ? 
-            <Minimize2 className="h-4 w-4" /> : 
-            <Maximize2 className="h-4 w-4" />
-          }
-        </Button>
-        <Button onClick={handleDownload} className="bg-brand-500 hover:bg-brand-600">
-          <Download className="mr-2 h-4 w-4" />
-          Download PDF
-        </Button>
-      </div>
-      
-      {isEditMode && (
-        <div className="absolute top-4 left-4 z-10">
-          <div className="bg-amber-50 text-amber-800 px-3 py-1 rounded text-xs shadow-sm border border-amber-200">
-            Edit Mode: Click on text to edit directly
-          </div>
-        </div>
-      )}
-      
-      <div className="hidden" ref={documentRef}>
-        {renderTemplate()}
-      </div>
-      
-      <div className="hidden" ref={printRef}></div>
-      
-      <div className="doc-preview bg-gray-100 border rounded-lg overflow-auto shadow-lg">
-        <div className="p-4 flex flex-col items-center">
-          {renderPages()}
-          
-          {pages.length > 1 && (
-            <div className="text-center text-sm text-gray-600 mt-2 mb-4">
-              Your document has multiple pages ({pages.length})
-            </div>
+          {isEditMode && (
+            <p className="text-sm text-muted-foreground hidden sm:block">
+              Click on text to edit it directly
+            </p>
           )}
         </div>
-      </div>
-
-      <Dialog open={isFullscreen} onOpenChange={setIsFullscreen}>
-        <DialogTitle className="sr-only">Document Preview</DialogTitle>
-        <DialogDescription className="sr-only">
-          Preview your document in fullscreen mode
-        </DialogDescription>
-        <DialogContent className="max-w-screen max-h-screen w-screen h-screen p-6 rounded-none flex items-center justify-center bg-gray-100 overflow-auto">
-          <Button 
-            onClick={toggleFullscreen} 
-            variant="outline" 
-            size="icon" 
-            className="absolute top-4 right-4 bg-white hover:bg-gray-100"
+        
+        <div className="flex items-center">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleDownload}
+            className="mr-2"
           >
-            <Minimize2 className="h-4 w-4" />
+            <Download className="h-4 w-4 mr-1" />
+            <span className="hidden sm:inline">Download PDF</span>
           </Button>
-          <div className="h-full overflow-auto flex flex-col items-center py-4">
-            {renderPages()}
+          
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={toggleFullscreen}
+          >
+            {isFullscreen ? (
+              <>
+                <Minimize2 className="h-4 w-4 mr-1" />
+                <span className="hidden sm:inline">Exit Fullscreen</span>
+              </>
+            ) : (
+              <>
+                <Maximize2 className="h-4 w-4 mr-1" />
+                <span className="hidden sm:inline">Fullscreen</span>
+              </>
+            )}
+          </Button>
+        </div>
+      </div>
+      
+      <div
+        className={`border border-gray-200 rounded-md mx-auto overflow-hidden ${
+          isOverflowing ? 'shadow-md' : ''
+        }`}
+        style={{
+          width: `${PAGE_WIDTH / 1.2}px`,
+          height: isOverflowing ? `${PAGE_HEIGHT / 1.2}px` : 'auto',
+          overflowY: isOverflowing ? 'auto' : 'visible',
+        }}
+        ref={documentRef}
+      >
+        {pages.map((pageIndex) => (
+          <div
+            key={pageIndex}
+            id={`document-page-${pageIndex}`}
+            className="bg-white"
+            style={{
+              width: `${PAGE_WIDTH / 1.2}px`,
+              minHeight: `${PAGE_HEIGHT / 1.2}px`,
+              boxSizing: 'border-box',
+              overflow: 'hidden',
+              position: 'relative',
+              breakAfter: 'page',
+              breakInside: 'avoid',
+            }}
+          >
+            {pageIndex === 0 && renderTemplate()}
+          </div>
+        ))}
+      </div>
+      
+      <Dialog open={isFullscreen} onOpenChange={setIsFullscreen}>
+        <DialogContent className="max-w-4xl w-[95vw]">
+          <DialogTitle>Preview</DialogTitle>
+          <div
+            className="border border-gray-200 rounded-md overflow-auto max-h-[80vh]"
+            style={{
+              width: '100%',
+            }}
+          >
+            {renderTemplate()}
           </div>
         </DialogContent>
       </Dialog>
-    </div>
+      
+      {/* Hidden container for printing */}
+      <div className="hidden" ref={printRef}>
+        <div style={{ width: `${PAGE_WIDTH}px`, minHeight: `${PAGE_HEIGHT}px` }}>
+          {renderTemplate()}
+        </div>
+      </div>
+    </>
   );
 };
 
