@@ -117,9 +117,10 @@ const ProfessionalPurpleTemplate: React.FC<ProfessionalPurpleTemplateProps> = ({
                   </div>
                   {project.description && <p className="text-sm mt-1">{project.description}</p>}
                   {project.link && (
-                    <a href={project.link} target="_blank" rel="noreferrer" className="text-sm text-purple-700 mt-1 inline-block">
-                      {project.link}
-                    </a>
+                    <div className="text-sm text-purple-700 mt-1 inline-block">
+                       {project.link} 
+                      </div>
+                     
                   )}
                 </div>
               ))}

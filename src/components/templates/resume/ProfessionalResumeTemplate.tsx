@@ -182,14 +182,7 @@ const ProfessionalResumeTemplate: React.FC<ProfessionalResumeTemplateProps> = ({
                   </p>
                 )}
                 {project.link && (
-                  <a 
-                    href={project.link}
-                    className="text-xs text-brand-500 hover:underline mt-0.5 inline-block"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    View Project
-                  </a>
+                 project.link
                 )}
               </div>
             ) : null
@@ -269,64 +262,61 @@ const ProfessionalResumeTemplate: React.FC<ProfessionalResumeTemplateProps> = ({
       )}
       
       {data.skills.some(skill => skill.skills) && (
-        <div>
-          <h2 className="text-sm font-bold border-b border-gray-300 pb-0.5 mb-1">Skills</h2>
-          {data.skills.map((skill, index) => (
-            skill.skills ? (
-              <div key={index} className="mb-1">
-                <h3 
-                  className="text-xs font-semibold"
-                  data-field={`skills.category`}
-                  data-index={index.toString()}
-                  {...(editMode ? editableProps : {})}
-                >
-                  {skill.category}
-                </h3>
-                <p 
-                  className="text-xs"
-                  data-field={`skills.skills`}
-                  data-index={index.toString()}
-                  {...(editMode ? editableProps : {})}
-                >
-                  {skill.skills}
-                </p>
-              </div>
-            ) : null
-          ))}
-        </div>
-      )}
-      
-      {/* Languages Section */}
-      {data.languages && data.languages.length > 0 && (
-        <div className="mb-4">
-          <h2 className="text-sm font-bold border-b border-gray-300 pb-0.5 mb-1">Languages</h2>
-          <div className="flex flex-wrap gap-x-4 gap-y-1">
-            {data.languages.map((lang, index) => (
-              <div key={index} className="flex items-center">
-                <span className="text-xs mr-1">{lang.language}:</span>
-                <div className="flex">
-                  {[...Array(5)].map((_, i) => (
-                    <div 
-                      key={i} 
-                      className={`w-1.5 h-1.5 mx-px rounded-full ${i < lang.proficiency ? 'bg-gray-700' : 'bg-gray-300'}`}
-                    />
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-      
-      {/* Interests Section */}
-      {data.interests && data.interests.length > 0 && (
-        <div className="mb-4">
-          <h2 className="text-sm font-bold border-b border-gray-300 pb-0.5 mb-1">Interests</h2>
-          <p className="text-xs">
-            {data.interests.join(', ')}
+  <div>
+    <h2 className="text-sm font-bold border-b border-gray-300 pb-0.5 mb-1">Skills</h2>
+    {data.skills.map((skill, index) => (
+      skill.skills ? (
+        <div key={index} className="mb-1">
+          <h3
+            className="text-xs font-semibold"
+            data-field={`skills.category`}
+            data-index={index.toString()}
+            {...(editMode ? editableProps : {})}
+          >
+            {skill.category}
+          </h3>
+          <p
+            className="text-xs"
+            data-field={`skills.skills`}
+            data-index={index.toString()}
+            {...(editMode ? editableProps : {})}
+          >
+            {skill.skills}
           </p>
         </div>
-      )}
+      ) : null
+    ))}
+  </div>
+)}
+
+{/* Custom Sections */}
+{data.customSections && data.customSections.length > 0 && (
+  <div>
+    {data.customSections.map((section, index) => (
+      section.content ? (
+        <div key={index} className="mb-1">
+          <h2
+            className="text-sm font-bold border-b border-gray-300 pb-0.5 mb-1"
+            data-field={`customSections.title`}
+            data-index={index.toString()}
+            {...(editMode ? editableProps : {})}
+          >
+            {section.title}
+          </h2>
+          <p
+            className="text-xs"
+            data-field={`customSections.content`}
+            data-index={index.toString()}
+            {...(editMode ? editableProps : {})}
+          >
+            {section.content}
+          </p>
+        </div>
+      ) : null
+    ))}
+  </div>
+)}
+
     </div>
   );
 };

@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import Navbar from '@/components/Navbar';
 import { Button } from '@/components/ui/button';
@@ -10,8 +9,18 @@ import { toast } from 'sonner';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import { get, getDatabase, ref } from 'firebase/database';
+import { getAuth } from 'firebase/auth';
 
+// Example schema using zod
 const formSchema = z.object({
   name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
   email: z.string().email({ message: 'Please enter a valid email address.' }),
@@ -23,6 +32,11 @@ type ContactFormValues = z.infer<typeof formSchema>;
 
 const ContactPage = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const auth = getAuth();
+  const user = auth.currentUser;
+  const userId = user?.uid;
+  
 
   const form = useForm<ContactFormValues>({
     resolver: zodResolver(formSchema),
@@ -36,17 +50,36 @@ const ContactPage = () => {
 
   async function onSubmit(values: ContactFormValues) {
     setIsSubmitting(true);
-    
-    // Simulate API call
+
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      
-      toast.success('Message sent successfully', {
-        description: 'We will get back to you as soon as possible.',
+      const db = getDatabase();
+      const userRef = ref(db, `users/${userId}/email`);
+      const snapshot = await get(userRef);
+
+      if (!snapshot.exists()) {
+        throw new Error('User not found');
+      }
+
+      const userEmail = snapshot.val();
+
+      const payload = {
+        ...values,
+        userEmail,
+      };
+
+      await fetch('https://hook.us2.make.com/2lun7c4qi7kw6tngcu30rethfplgmbjz', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
       });
-      
+
+      toast.success('Message sent successfully!', {
+        description: 'We will get back to you shortly.',
+      });
+
       form.reset();
     } catch (error) {
+      console.error('Error:', error);
       toast.error('Failed to send message', {
         description: 'Please try again later.',
       });
@@ -89,7 +122,6 @@ const ContactPage = () => {
                     </FormItem>
                   )}
                 />
-                
                 <FormField
                   control={form.control}
                   name="email"
@@ -103,7 +135,6 @@ const ContactPage = () => {
                     </FormItem>
                   )}
                 />
-                
                 <FormField
                   control={form.control}
                   name="subject"
@@ -117,7 +148,6 @@ const ContactPage = () => {
                     </FormItem>
                   )}
                 />
-                
                 <FormField
                   control={form.control}
                   name="message"
@@ -125,22 +155,17 @@ const ContactPage = () => {
                     <FormItem>
                       <FormLabel>Message</FormLabel>
                       <FormControl>
-                        <Textarea 
-                          placeholder="How can we help you?" 
-                          className="min-h-[150px]" 
-                          {...field} 
+                        <Textarea
+                          placeholder="How can we help you?"
+                          className="min-h-[150px]"
+                          {...field}
                         />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-                
-                <Button 
-                  type="submit" 
-                  className="w-full" 
-                  disabled={isSubmitting}
-                >
+                <Button type="submit" className="w-full" disabled={isSubmitting}>
                   {isSubmitting ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -156,11 +181,10 @@ const ContactPage = () => {
               </form>
             </Form>
           </div>
-          
+
           <div>
             <div className="bg-muted p-6 rounded-lg">
               <h2 className="text-xl font-semibold mb-4">Get in Touch</h2>
-              
               <div className="space-y-4">
                 <div className="flex items-start">
                   <Mail className="h-5 w-5 mr-3 text-brand-500 mt-0.5" />
@@ -170,7 +194,7 @@ const ContactPage = () => {
                     <p className="text-sm text-muted-foreground">We'll respond within 24 hours</p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-start">
                   <MessageSquare className="h-5 w-5 mr-3 text-brand-500 mt-0.5" />
                   <div>
@@ -179,7 +203,7 @@ const ContactPage = () => {
                     <p className="text-sm text-muted-foreground">9:00 AM - 6:00 PM EST</p>
                   </div>
                 </div>
-                
+
                 <div className="border-t pt-4 mt-6">
                   <h3 className="font-medium mb-2">FAQ</h3>
                   <p className="text-muted-foreground mb-2">

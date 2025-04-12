@@ -119,17 +119,13 @@ const CreativeResumeTemplate: React.FC<CreativeResumeTemplateProps> = ({
                   </div>
                   {project.description && <p className="mt-2 text-gray-700">{project.description}</p>}
                   {project.link && (
-                    <a 
-                      href={project.link} 
+                    <div 
+                    
                       className="mt-1 text-purple-600 hover:text-purple-800 inline-flex items-center"
-                      target="_blank"
-                      rel="noopener noreferrer"
+                  
                     >
-                      <span>View Project</span>
-                      <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                      </svg>
-                    </a>
+               {project.link} 
+                    </div>
                   )}
                 </div>
               ))}

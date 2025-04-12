@@ -82,19 +82,7 @@ const PaymentSuccessPage = () => {
     }
   }, [sessionId, refreshUserData, user, notificationSent]);
   
-  useEffect(() => {
-    if (verified && user?.id && !notificationSent) {
-      // Send notification to Make.com about payment confirmation
-      makeService.notifyPaymentConfirmed({
-        userId: user.id,
-        sessionId: sessionId,
-        plan: plan
-      });
-  
-      // Update notificationSent to prevent future notifications
-      setNotificationSent(true);
-    }
-  }, [verified, user, notificationSent, sessionId, plan]);
+ 
   
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-muted/20 p-4">

@@ -154,7 +154,7 @@ const ProfessionalModernTemplate: React.FC<ProfessionalModernTemplateProps> = ({
               
               {project.link && (
                 <div className="ml-4 text-sm text-purple-700">
-                  <a href={project.link} target="_blank" rel="noreferrer">{project.link}</a>
+                 {project.link} 
                 </div>
               )}
             </div>

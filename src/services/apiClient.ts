@@ -10,6 +10,7 @@ import {
 } from './firebaseRealtimeDb';
 import { ref, set, get, push, remove, update, query, orderByChild, equalTo } from 'firebase/database';
 import Stripe from 'stripe';
+import { getAuth } from 'firebase/auth';
 // Create an Axios instance for any remaining API needs
 const apiClient = axios.create({
   baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api',
@@ -249,8 +250,21 @@ export const paymentApi = {
   
   verifyPaymentSuccess: async (sessionId: string) => {
     try {
-      const response = await apiClient.get(`/payment/verify?session_id=${sessionId}`);
-      return response.data;
+      const user = getAuth().currentUser;
+      if (user) {
+        const token = await user.getIdToken();
+        const response = await apiClient.get(`/payment/verify?session_id=${sessionId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        return response.data;
+      } else {
+        return {
+          success: false,
+          message: 'User not authenticated'
+        };
+      }
     } catch (error) {
       console.error('Error verifying payment:', error);
       return {
@@ -259,6 +273,7 @@ export const paymentApi = {
       };
     }
   },
+  
   
   unsubscribe: async () => {
     try {

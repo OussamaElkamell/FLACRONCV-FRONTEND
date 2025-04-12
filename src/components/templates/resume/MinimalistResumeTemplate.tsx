@@ -154,14 +154,13 @@ const MinimalistResumeTemplate: React.FC<MinimalistResumeTemplateProps> = ({
                 </p>
               )}
               {project.link && (
-                <a 
-                  href={project.link}
+                <div
+          
                   className="text-sm text-gray-600 hover:text-gray-900 mt-1 inline-block"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                 
                 >
-                  View Project
-                </a>
+              {project.link}
+                </div>
               )}
             </div>
           ))}

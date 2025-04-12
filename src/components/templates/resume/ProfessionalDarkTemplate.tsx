@@ -245,9 +245,9 @@ const ProfessionalDarkTemplate: React.FC<ProfessionalDarkTemplateProps> = ({
                 </div>
                 {project.description && <p className="text-sm mt-2">{project.description}</p>}
                 {project.link && (
-                  <a href={project.link} target="_blank" rel="noreferrer" className="text-sm text-blue-600 mt-1 inline-block">
+                  <div className="text-sm text-blue-600 mt-1 inline-block">
                     {project.link}
-                  </a>
+                  </div>
                 )}
               </div>
             ))}

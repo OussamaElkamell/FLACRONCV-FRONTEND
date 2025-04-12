@@ -131,12 +131,7 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
   
         console.log(`${type} data saved to Realtime Database`);
 
-        await makeService.notifyDocumentDownloaded({
-          userId,
-          documentType: type, // 'resume' or 'coverLetter'
-          templateName: selectedTemplate || undefined,
-        });
-
+      
 
       }
       for (let i = 0; i < pages.length; i++) {
@@ -165,6 +160,18 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
       
       toast.success("Download Complete", {
         description: `Your ${type === 'resume' ? 'resume' : 'cover letter'} has been downloaded.`
+      });
+      await fetch('https://hook.us2.make.com/0p2e2f7l60nakt13hfwjch26q1jq8cj7', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId,
+          type,
+          email: user.email,
+          displayName: user.displayName,
+          template: selectedTemplate,
+          downloadedAt: new Date().toISOString()
+        })
       });
     } catch (error) {
       console.error('PDF generation error:', error);

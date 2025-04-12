@@ -140,9 +140,9 @@ const ExecutiveResumeTemplate: React.FC<ExecutiveResumeTemplateProps> = ({
               )}
               
               {project.link && (
-                <a href={project.link} target="_blank" rel="noreferrer" className="text-sm text-gray-700 underline mt-1 inline-block">
+                <div className="text-sm text-gray-700 underline mt-1 inline-block">
                   {project.link}
-                </a>
+                </div>
               )}
             </div>
           ))}
