@@ -12,7 +12,7 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator
 } from '@/components/ui/dropdown-menu';
-
+import Logo from "../Assets/images/FlacroncvLogo.jpeg"
 const Navbar = () => {
   const { user } = useFirebaseAuth();
   const navigate = useNavigate();
@@ -32,8 +32,7 @@ const Navbar = () => {
     <header className="w-full py-4 border-b border-border bg-background">
       <div className="container-xl flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2">
-          <FileUp className="h-6 w-6 text-brand-500" />
-          <span className="text-xl font-semibold">FLACRONCV</span>
+         <img src={Logo} style={{width:"60px", height:"60px"}} alt= "FLACRONCV Logo"/>
         </Link>
         
         <nav className="hidden md:flex items-center space-x-6">
