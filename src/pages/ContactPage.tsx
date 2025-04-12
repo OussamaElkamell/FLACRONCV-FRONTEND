@@ -190,7 +190,7 @@ const ContactPage = () => {
                   <Mail className="h-5 w-5 mr-3 text-brand-500 mt-0.5" />
                   <div>
                     <h3 className="font-medium">Email</h3>
-                    <p className="text-muted-foreground">support@flacroncv.com</p>
+                    <p className="text-muted-foreground">contact@flacroncv.com</p>
                     <p className="text-sm text-muted-foreground">We'll respond within 24 hours</p>
                   </div>
                 </div>
