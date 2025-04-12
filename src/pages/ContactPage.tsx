@@ -204,15 +204,7 @@ const ContactPage = () => {
                   </div>
                 </div>
 
-                <div className="border-t pt-4 mt-6">
-                  <h3 className="font-medium mb-2">FAQ</h3>
-                  <p className="text-muted-foreground mb-2">
-                    Find quick answers to common questions in our FAQ section.
-                  </p>
-                  <Button variant="outline" asChild className="w-full">
-                    <a href="#faq">View FAQ</a>
-                  </Button>
-                </div>
+              
               </div>
             </div>
           </div>
