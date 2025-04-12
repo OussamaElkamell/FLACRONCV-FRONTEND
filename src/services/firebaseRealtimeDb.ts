@@ -540,6 +540,7 @@ export const firebaseAiService = {
     try {
       console.log('Enhancing cover letter with AI');
       return await aiService.enhanceCoverLetter(coverLetterData);
+      
     } catch (error) {
       console.error('Error enhancing cover letter with AI:', error);
       return { 

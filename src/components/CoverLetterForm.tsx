@@ -12,10 +12,19 @@ import {
 } from '@/components/ui/card';
 import { Sparkles, Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { CoverLetterData } from '@/types/documents';
 
-const CoverLetterForm = ({ setCoverLetterData }: { setCoverLetterData: React.Dispatch<React.SetStateAction<any>> }) => {
+const CoverLetterForm =  ({
+  setCoverLetterData,
+  coverLetterData, 
+}: {
+  setCoverLetterData: React.Dispatch<React.SetStateAction<any>>;
+  coverLetterData: CoverLetterData;
+}) => {
   const { toast } = useToast();
   const [isGenerating, setIsGenerating] = useState(false);
+  const [isInitialized, setIsInitialized] = useState(false);
+const [isCoverLetterInitialized, setIsCoverLetterInitialized] = useState(false);
   const [formData, setFormData] = useState({
     personalInfo: {
       name: '',
@@ -37,11 +46,21 @@ const CoverLetterForm = ({ setCoverLetterData }: { setCoverLetterData: React.Dis
     motivation: '',
     closing: '',
   });
-
-  // Update parent component's state whenever formData changes
   useEffect(() => {
-    setCoverLetterData(formData);
-  }, [formData, setCoverLetterData]);
+    if (coverLetterData && !isCoverLetterInitialized) {
+      const dataWithCustomSections = {
+        ...coverLetterData
+      };
+      setFormData(dataWithCustomSections);
+      setIsCoverLetterInitialized(true);
+    }
+  }, [coverLetterData, isCoverLetterInitialized]);
+  useEffect(() => {
+    if (formData) {
+      setCoverLetterData(formData);
+    }
+  }, [formData]);
+
   const [errors, setErrors] = useState<{ email?: boolean; phone?: boolean }>({});
   const handlePersonalInfoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;

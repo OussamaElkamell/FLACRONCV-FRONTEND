@@ -120,7 +120,7 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
         const db = getDatabase();
         const docRef = ref(
           db,
-          `users/${userId}/${type === "resume" ? "resumes" : "coverLetters"}/${Date.now()}` // Unique key
+          `users/${userId}/${type === "resume" ? "resumes" : "coverLetters"}/${Date.now()}` 
         );
   
         await set(docRef, {

@@ -12,9 +12,10 @@ import { openaiService } from '@/services/openaiService';
 
 interface CoverLetterToolbarProps {
   coverLetterData: CoverLetterData;
+  setCoverLetterData: React.Dispatch<React.SetStateAction<CoverLetterData>>;
 }
 
-const CoverLetterToolbar: React.FC<CoverLetterToolbarProps> = ({ coverLetterData }) => {
+const CoverLetterToolbar: React.FC<CoverLetterToolbarProps> = ({ coverLetterData,setCoverLetterData }) => {
   const [linkedInTips, setLinkedInTips] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isEnhancing, setIsEnhancing] = useState(false);
@@ -76,6 +77,7 @@ const CoverLetterToolbar: React.FC<CoverLetterToolbarProps> = ({ coverLetterData
       // Call OpenAI for enhancement
       const result = await openaiService.enhanceCoverLetter(coverLetterData);
       if (result.success) {
+        setCoverLetterData(result.data);
         toast.success("Cover letter enhanced with AI");
       } else {
         toast.error("Failed to enhance cover letter with AI");

@@ -142,7 +142,7 @@ const CoverLetterPage = () => {
                   <TabsTrigger value="template">Choose Template</TabsTrigger>
                 </TabsList>
                 <TabsContent value="content" className="space-y-4">
-                  <CoverLetterForm setCoverLetterData={setCoverLetterData} />
+                  <CoverLetterForm setCoverLetterData={setCoverLetterData} coverLetterData={coverLetterData} />
                 </TabsContent>
                 <TabsContent value="template">
                   <TemplateSelector 
@@ -169,7 +169,7 @@ const CoverLetterPage = () => {
   </div>
 
   <div className="mt-4">
-    <CoverLetterToolbar coverLetterData={coverLetterData} />
+    <CoverLetterToolbar coverLetterData={coverLetterData} setCoverLetterData={setCoverLetterData} />
   </div>
 </div>
 

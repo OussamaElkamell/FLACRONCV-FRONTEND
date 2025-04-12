@@ -52,8 +52,9 @@ const ResumeForm = ({
   resumeData: ResumeData 
 }) => {
   const { toast } = useToast();
-  const [isInitialized, setIsInitialized] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [isInitialized, setIsInitialized] = useState(false);
+ 
   const [errors, setErrors] = useState<{ email?: boolean; phone?: boolean }>({});
 
   const [formData, setFormData] = useState<ResumeData>({
