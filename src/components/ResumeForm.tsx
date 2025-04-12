@@ -54,6 +54,8 @@ const ResumeForm = ({
   const { toast } = useToast();
   const [isInitialized, setIsInitialized] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [errors, setErrors] = useState<{ email?: boolean; phone?: boolean }>({});
+
   const [formData, setFormData] = useState<ResumeData>({
     personalInfo: {
       name: '',
@@ -121,150 +123,157 @@ useEffect(() => {
     });
   };
 
-  const validateEmail = (email: string): boolean => {
-    return emailRegex.test(email);
-  };
+        const validateEmail = (email: string): boolean => {
+          return emailRegex.test(email);
+        };
 
-  const validatePhone = (phone: string): boolean => {
-    return phoneRegex.test(phone);
-  };
-  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-  
-    if (name === 'email' && value !== '' && !validateEmail(value)) {
-      toast({
-        title: "Invalid Email",
-        description: "Please enter a valid email address",
-        variant: "destructive",
-      });
-    }
-  
-    if (name === 'phone' && value !== '' && !validatePhone(value)) {
-      toast({
-        title: "Invalid Phone Number",
-        description: "Please enter a valid phone number (max 15 digits)",
-        variant: "destructive",
-      });
-    }
-  };
-  
-  
-  const handlePersonalInfoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
+        const validatePhone = (phone: string): boolean => {
+          return phoneRegex.test(phone);
+        };
+        const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+          const { name, value } = e.target;
+        
+          if (name === 'email') {
+            const isValid = validateEmail(value);
+            setErrors((prev) => ({ ...prev, email: !isValid }));
+            if (value !== '' && !isValid) {
+              toast({
+                title: "Invalid Email",
+                description: "Please enter a valid email address",
+                variant: "destructive",
+              });
+            }
+          }
+        
+          if (name === 'phone') {
+            const isValid = validatePhone(value);
+            setErrors((prev) => ({ ...prev, phone: !isValid }));
+            if (value !== '' && !isValid) {
+              toast({
+                title: "Invalid Phone Number",
+                description: "Please enter a valid phone number (max 15 digits)",
+                variant: "destructive",
+              });
+            }
+          }
+        };
+        
+        const handlePersonalInfoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+          const { name, value } = e.target;
 
-    setFormData({
-      ...formData,
-      personalInfo: {
-        ...formData.personalInfo,
-        [name]: value,
-      },
-    });
-  };
+          setFormData({
+            ...formData,
+            personalInfo: {
+              ...formData.personalInfo,
+              [name]: value,
+            },
+          });
+        };
 
-  const handleSummaryChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setFormData({
-      ...formData,
-      summary: e.target.value,
-    });
-  };
+        const handleSummaryChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+          setFormData({
+            ...formData,
+            summary: e.target.value,
+          });
+        };
 
-  const handleArrayChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, 
-    index: number,
-    type: 'education' | 'experience' | 'skills' | 'projects' | 'certifications'
-  ) => {
-    const { name, value } = e.target;
-    const updatedArray = [...formData[type]];
-    updatedArray[index] = { ...updatedArray[index], [name]: value };
-    
-    setFormData({
-      ...formData,
-      [type]: updatedArray,
-    });
-  };
+        const handleArrayChange = (
+          e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, 
+          index: number,
+          type: 'education' | 'experience' | 'skills' | 'projects' | 'certifications'
+        ) => {
+          const { name, value } = e.target;
+          const updatedArray = [...formData[type]];
+          updatedArray[index] = { ...updatedArray[index], [name]: value };
+          
+          setFormData({
+            ...formData,
+            [type]: updatedArray,
+          });
+        };
 
-  const addItem = (type: 'education' | 'experience' | 'skills' | 'projects' | 'certifications' | 'customSections') => {
-    let newItem;
-    if (type === 'education') newItem = { ...initialEducation };
-    else if (type === 'experience') newItem = { ...initialExperience };
-    else if (type === 'projects') newItem = { ...initialProject };
-    else if (type === 'certifications') newItem = { ...initialCertification };
-    else if (type === 'customSections') newItem = { ...initialCustomSection };
-    else newItem = { ...initialSkills };
+        const addItem = (type: 'education' | 'experience' | 'skills' | 'projects' | 'certifications' | 'customSections') => {
+          let newItem;
+          if (type === 'education') newItem = { ...initialEducation };
+          else if (type === 'experience') newItem = { ...initialExperience };
+          else if (type === 'projects') newItem = { ...initialProject };
+          else if (type === 'certifications') newItem = { ...initialCertification };
+          else if (type === 'customSections') newItem = { ...initialCustomSection };
+          else newItem = { ...initialSkills };
 
-    setFormData({
-      ...formData,
-      [type]: [...(formData[type] || []), newItem],
-    });
-  };
+          setFormData({
+            ...formData,
+            [type]: [...(formData[type] || []), newItem],
+          });
+        };
 
-  const removeItem = (index: number, type: 'education' | 'experience' | 'skills' | 'projects' | 'certifications' | 'customSections') => {
-    const updatedArray = [...(formData[type] || [])];
-    updatedArray.splice(index, 1);
-    
-    setFormData({
-      ...formData,
-      [type]: updatedArray,
-    });
-  };
+        const removeItem = (index: number, type: 'education' | 'experience' | 'skills' | 'projects' | 'certifications' | 'customSections') => {
+          const updatedArray = [...(formData[type] || [])];
+          updatedArray.splice(index, 1);
+          
+          setFormData({
+            ...formData,
+            [type]: updatedArray,
+          });
+        };
 
-  const handleCustomSectionChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, 
-    index: number, 
-    field: keyof CustomSection
-  ) => {
-    const value = e.target.value;
-    const updatedSections = [...(formData.customSections || [])];
-    updatedSections[index] = { 
-      ...updatedSections[index], 
-      [field]: value 
-    };
-    
-    setFormData({
-      ...formData,
-      customSections: updatedSections,
-    });
-  };
+        const handleCustomSectionChange = (
+          e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, 
+          index: number, 
+          field: keyof CustomSection
+        ) => {
+          const value = e.target.value;
+          const updatedSections = [...(formData.customSections || [])];
+          updatedSections[index] = { 
+            ...updatedSections[index], 
+            [field]: value 
+          };
+          
+          setFormData({
+            ...formData,
+            customSections: updatedSections,
+          });
+        };
 
-  const handleEducationDateChange = (date: Date | undefined, index: number) => {
-    if (!date) return;
-    
-    const formattedDate = format(date, 'MMMM yyyy');
-    const updatedEducation = [...formData.education];
-    updatedEducation[index] = { ...updatedEducation[index], date: formattedDate };
-    
-    setFormData({
-      ...formData,
-      education: updatedEducation,
-    });
-  };
+        const handleEducationDateChange = (date: Date | undefined, index: number) => {
+          if (!date) return;
+          
+          const formattedDate = format(date, 'MMMM yyyy');
+          const updatedEducation = [...formData.education];
+          updatedEducation[index] = { ...updatedEducation[index], date: formattedDate };
+          
+          setFormData({
+            ...formData,
+            education: updatedEducation,
+          });
+        };
 
-  const handleProjectDateChange = (date: Date | undefined, index: number) => {
-    if (!date) return;
-    
-    const formattedDate = format(date, 'MMMM yyyy');
-    const updatedProjects = [...formData.projects];
-    updatedProjects[index] = { ...updatedProjects[index], date: formattedDate };
-    
-    setFormData({
-      ...formData,
-      projects: updatedProjects,
-    });
-  };
+        const handleProjectDateChange = (date: Date | undefined, index: number) => {
+          if (!date) return;
+          
+          const formattedDate = format(date, 'MMMM yyyy');
+          const updatedProjects = [...formData.projects];
+          updatedProjects[index] = { ...updatedProjects[index], date: formattedDate };
+          
+          setFormData({
+            ...formData,
+            projects: updatedProjects,
+          });
+        };
 
-  const handleExperienceStartDateChange = (date: Date | undefined, index: number) => {
-    if (!date) return;
-    
-    const updatedExperience = [...formData.experience];
-    const currentDateParts = updatedExperience[index].date.split(' - ');
-    const endDate = currentDateParts.length > 1 ? currentDateParts[1] : 'Present';
-    
-    updatedExperience[index] = { 
-      ...updatedExperience[index], 
-      date: `${format(date, 'MMMM yyyy')} - ${endDate}` 
-    };
-    
-    setFormData({
+        const handleExperienceStartDateChange = (date: Date | undefined, index: number) => {
+          if (!date) return;
+          
+          const updatedExperience = [...formData.experience];
+          const currentDateParts = updatedExperience[index].date.split(' - ');
+          const endDate = currentDateParts.length > 1 ? currentDateParts[1] : 'Present';
+          
+          updatedExperience[index] = { 
+            ...updatedExperience[index], 
+            date: `${format(date, 'MMMM yyyy')} - ${endDate}` 
+          };
+          
+          setFormData({
       ...formData,
       experience: updatedExperience,
     });
@@ -415,6 +424,7 @@ useEffect(() => {
                 onBlur={handleBlur} 
                 onChange={handlePersonalInfoChange}
                 placeholder="john.smith@example.com"
+                className={errors.email ? "border-red-500 focus-visible:ring-red-500" : ""}
                 pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
                 title="Please enter a valid email address"
               />
@@ -429,6 +439,7 @@ useEffect(() => {
                 onChange={handlePersonalInfoChange}
                 placeholder="(555) 123-4567"
                 maxLength={15}
+                className={errors.phone ? "border-red-500 focus-visible:ring-red-500" : ""}
                 pattern="[\d\s\-+()]{1,15}"
                 title="Please enter a valid phone number (max 15 digits)"
               />
@@ -471,22 +482,7 @@ useEffect(() => {
             placeholder="Experienced professional with a background in..."
             className="min-h-[100px]"
           />
-          <div className="flex items-center gap-2 mt-3">
-            <Button 
-              type="button" 
-              variant="outline" 
-              className="text-brand-500 border-brand-500 hover:bg-brand-50"
-              onClick={() => {
-                toast({
-                  title: "AI Suggestion",
-                  description: "Leave this field blank to let our AI generate a professional summary for you.",
-                });
-              }}
-            >
-              <Sparkles className="h-4 w-4 mr-2" />
-              AI Tips
-            </Button>
-          </div>
+       
         </CardContent>
       </Card>
 

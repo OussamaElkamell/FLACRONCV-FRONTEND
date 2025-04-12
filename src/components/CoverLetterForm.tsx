@@ -42,7 +42,7 @@ const CoverLetterForm = ({ setCoverLetterData }: { setCoverLetterData: React.Dis
   useEffect(() => {
     setCoverLetterData(formData);
   }, [formData, setCoverLetterData]);
-
+  const [errors, setErrors] = useState<{ email?: boolean; phone?: boolean }>({});
   const handlePersonalInfoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({
@@ -53,7 +53,44 @@ const CoverLetterForm = ({ setCoverLetterData }: { setCoverLetterData: React.Dis
       },
     });
   };
+const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+const phoneRegex = /^[\d\s\-+()]{1,15}$/;
 
+  const validateEmail = (email: string): boolean => {
+          return emailRegex.test(email);
+        };
+
+        const validatePhone = (phone: string): boolean => {
+          return phoneRegex.test(phone);
+        };
+        const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+          const { name, value } = e.target;
+        
+          if (name === 'email') {
+            const isValid = validateEmail(value);
+            setErrors((prev) => ({ ...prev, email: !isValid }));
+            if (value !== '' && !isValid) {
+              toast({
+                title: "Invalid Email",
+                description: "Please enter a valid email address",
+                variant: "destructive",
+              });
+            }
+          }
+        
+          if (name === 'phone') {
+            const isValid = validatePhone(value);
+            setErrors((prev) => ({ ...prev, phone: !isValid }));
+            if (value !== '' && !isValid) {
+              toast({
+                title: "Invalid Phone Number",
+                description: "Please enter a valid phone number (max 15 digits)",
+                variant: "destructive",
+              });
+            }
+          }
+        };
+        
   const handleRecipientInfoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({
@@ -146,7 +183,10 @@ const CoverLetterForm = ({ setCoverLetterData }: { setCoverLetterData: React.Dis
                 id="email" 
                 name="email" 
                 type="email" 
+                className={errors.email ? "border-red-500 focus-visible:ring-red-500" : ""}
+                pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
                 value={formData.personalInfo.email} 
+                onBlur={handleBlur}
                 onChange={handlePersonalInfoChange}
                 placeholder="john.smith@example.com"
               />
@@ -156,9 +196,13 @@ const CoverLetterForm = ({ setCoverLetterData }: { setCoverLetterData: React.Dis
               <Input 
                 id="phone" 
                 name="phone" 
+                onBlur={handleBlur}
                 value={formData.personalInfo.phone} 
                 onChange={handlePersonalInfoChange}
                 placeholder="(555) 123-4567"
+                maxLength={15}
+                className={errors.phone ? "border-red-500 focus-visible:ring-red-500" : ""}
+              pattern="[\d\s\-+()]{1,15}"
               />
             </div>
             <div className="space-y-2">
@@ -168,6 +212,7 @@ const CoverLetterForm = ({ setCoverLetterData }: { setCoverLetterData: React.Dis
                 name="location" 
                 value={formData.personalInfo.location} 
                 onChange={handlePersonalInfoChange}
+             
                 placeholder="New York, NY"
               />
             </div>
