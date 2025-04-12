@@ -123,7 +123,7 @@ const AtsOptimizationPanel: React.FC<AtsOptimizationPanelProps> = ({ resumeData 
           <Button 
             onClick={handleAnalyze} 
             disabled={loading || !jobDescription.trim()}
-            className="w-full"
+            className="w-full text-[#E67912] bg-[#E67912]  hover:bg-[#f19239] text-white border-[#E67912]"
           >
             {loading ? 'Analyzing...' : 'Analyze Resume'}
           </Button>

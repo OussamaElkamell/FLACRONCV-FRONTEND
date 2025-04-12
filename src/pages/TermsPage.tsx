@@ -55,7 +55,7 @@ const TermsPage = () => {
 
           <h2>6. Privacy Policy</h2>
           <p>
-            Your use of FLACRONCV is also governed by our Privacy Policy, which can be found <Link to="/privacy" className="text-brand-500 hover:underline">here</Link>.
+            Your use of FLACRONCV is also governed by our Privacy Policy, which can be found <Link to="/privacy" className="text-[#E67912] hover:underline">here</Link>.
           </p>
 
           <h2>7. Governing Law</h2>

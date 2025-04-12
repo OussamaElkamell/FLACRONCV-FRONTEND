@@ -112,11 +112,11 @@
   }
   
   .gradient-bg {
-    @apply bg-gradient-to-br from-brand-500 to-brand-700;
+    @apply bg-gradient-to-br from-[#E67912] to-[#E67912];
   }
   
   .gradient-text {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-brand-600 to-brand-400;
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-[#E67912] to-[#E67912];
   }
   
   .doc-paper {

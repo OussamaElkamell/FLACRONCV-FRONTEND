@@ -98,7 +98,7 @@ const PrivacyPage = () => {
 
           <h2>7. Contact Us</h2>
           <p>
-            If you have any questions about this Privacy Policy, please <Link to="/contact" className="text-brand-500 hover:underline">contact us</Link>.
+            If you have any questions about this Privacy Policy, please <Link to="/contact" className="text-[#E67912] hover:underline">contact us</Link>.
           </p>
         </div>
       </div>

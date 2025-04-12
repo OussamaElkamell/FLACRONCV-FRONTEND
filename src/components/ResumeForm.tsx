@@ -392,7 +392,7 @@ useEffect(() => {
                 <Button 
                   type="button" 
                   variant="outline" 
-                  className="text-brand-500"
+                  className="text-[#E67912] hover:bg-[#E67912] hover:text-white border-[#E67912]"
                   onClick={() => document.getElementById('photo-upload')?.click()}
                 >
                   {formData.personalInfo.photo ? 'Change Photo' : 'Upload Photo'}
@@ -498,7 +498,7 @@ useEffect(() => {
               type="button" 
               variant="outline" 
               onClick={() => addItem('education')}
-              className="text-brand-500"
+               className="text-[#E67912] hover:bg-[#E67912] hover:text-white border-[#E67912]"
             >
               <Plus className="h-4 w-4 mr-2" />
               Add Education
@@ -591,7 +591,7 @@ useEffect(() => {
               type="button" 
               variant="outline" 
               onClick={() => addItem('experience')}
-              className="text-brand-500"
+              className="text-[#E67912]"
             >
               <Plus className="h-4 w-4 mr-2" />
               Add Experience
@@ -642,10 +642,10 @@ useEffect(() => {
                             variant="outline"
                             className={cn(
                               "w-full justify-start text-left font-normal",
-                              "text-muted-foreground"
+                              "text-muted-foreground text-[#E67912] hover:bg-[#E67912] hover:text-white border-[#E67912]"
                             )}
                           >
-                            <CalendarIcon className="mr-2 h-4 w-4" />
+                            <CalendarIcon className="mr-2 h-4 w-4 text-[#E67912] hover:bg-[#E67912] hover:text-white border-[#E67912]" />
                             <span>Start Date</span>
                           </Button>
                         </PopoverTrigger>
@@ -665,7 +665,7 @@ useEffect(() => {
                             variant="outline"
                             className={cn(
                               "w-full justify-start text-left font-normal",
-                              "text-muted-foreground"
+                              "text-muted-foreground text-[#E67912] hover:bg-[#E67912] hover:text-white border-[#E67912]"
                             )}
                           >
                             <CalendarIcon className="mr-2 h-4 w-4" />
@@ -681,6 +681,7 @@ useEffect(() => {
                         </PopoverContent>
                       </Popover>
                     </div>
+                   
                     <Button
                       type="button"
                       variant="outline"
@@ -733,7 +734,7 @@ useEffect(() => {
               type="button" 
               variant="outline" 
               onClick={() => addItem('projects')}
-              className="text-brand-500"
+              className="text-[#E67912] hover:bg-[#E67912] hover:text-white border-[#E67912]"
             >
               <Plus className="h-4 w-4 mr-2" />
               Add Project
@@ -772,7 +773,7 @@ useEffect(() => {
                         id={`project-date-${index}`}
                         variant="outline"
                         className={cn(
-                          "w-full justify-start text-left font-normal",
+                          "w-full justify-start text-left font-normal text-[#E67912] hover:bg-[#E67912] hover:text-white border-[#E67912]",
                           !project.date && "text-muted-foreground"
                         )}
                       >
@@ -839,7 +840,7 @@ useEffect(() => {
               type="button" 
               variant="outline" 
               onClick={() => addItem('certifications')}
-              className="text-brand-500"
+              className="text-[#E67912] hover:bg-[#E67912] hover:text-white border-[#E67912]"
             >
               <Plus className="h-4 w-4 mr-2" />
               Add Certification
@@ -908,7 +909,7 @@ useEffect(() => {
               type="button" 
               variant="outline" 
               onClick={() => addItem('skills')}
-              className="text-brand-500"
+              className="text-[#E67912] hover:bg-[#E67912] hover:text-white border-[#E67912]"
             >
               <Plus className="h-4 w-4 mr-2" />
               Add Skill Category
@@ -966,7 +967,7 @@ useEffect(() => {
               type="button" 
               variant="outline" 
               onClick={() => addItem('customSections')}
-              className="text-brand-500"
+              className="text-[#E67912] hover:bg-[#E67912] hover:text-white border-[#E67912]"
             >
               <Plus className="h-4 w-4 mr-2" />
               Add Custom Section

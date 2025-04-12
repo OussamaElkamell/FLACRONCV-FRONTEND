@@ -40,7 +40,7 @@ const Features = () => {
     <div className="py-24 sm:py-32 bg-secondary/50">
       <div className="container-xl">
         <div className="mx-auto max-w-2xl lg:text-center">
-          <h2 className="text-base font-semibold leading-7 text-brand-600">Get Hired Faster</h2>
+          <h2 className="text-base font-semibold leading-7 text-[#E67912]">Get Hired Faster</h2>
           <p className="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">
             Everything you need to create standout job applications
           </p>
@@ -53,7 +53,7 @@ const Features = () => {
             {features.map((feature) => (
               <div key={feature.name} className="relative pl-16">
                 <dt className="text-base font-semibold leading-7">
-                  <div className="absolute left-0 top-0 flex h-10 w-10 items-center justify-center rounded-lg bg-brand-500">
+                  <div className="absolute left-0 top-0 flex h-10 w-10 items-center justify-center rounded-lg bg-[#E67912]">
                     <feature.icon className="h-6 w-6 text-white" aria-hidden="true" />
                   </div>
                   {feature.name}

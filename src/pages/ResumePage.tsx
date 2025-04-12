@@ -151,13 +151,15 @@ const ResumePage = () => {
         <div className="container-xl">
           <div className="mb-8 flex items-center justify-between">
             <div className="flex items-center">
-              <Button variant="ghost" size="icon" asChild className="mr-2">
-                <Link to="/">
-                  <ChevronLeft className="h-5 w-5" />
-                </Link>
-              </Button>
+            <Link
+  to="/"
+  className="hover:bg-[#E67912] p-2 rounded-md transition-colors duration-200"
+>
+  <ChevronLeft className="h-5 w-5" />
+</Link>
+
               <h1 className="text-2xl font-bold flex items-center gap-2">
-                <FileText className="h-6 w-6 text-brand-500" />
+                <FileText className="h-6 w-6 text-[#E67912]" />
                 FLACRONCV Resume Builder
               </h1>
             </div>

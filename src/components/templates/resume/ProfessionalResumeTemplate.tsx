@@ -63,7 +63,7 @@ const ProfessionalResumeTemplate: React.FC<ProfessionalResumeTemplateProps> = ({
             <span>
               <a 
                 href={`https://${data.personalInfo.linkedin.replace('https://', '')}`}
-                className="text-brand-500 hover:underline"
+                className="text-[#E67912] hover:underline"
                 data-field="linkedin"
                 {...(editMode ? {...editableProps, href: undefined} : {})}
               >

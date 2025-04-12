@@ -92,7 +92,7 @@ const UserSettingsPage = () => {
         <div className="container max-w-4xl">
           <div className="mb-8">
             <h1 className="text-2xl font-bold flex items-center gap-2">
-              <UserCog className="h-6 w-6 text-brand-500" />
+              <UserCog className="h-6 w-6 text-[#E67912]" />
               Account Settings
             </h1>
             <p className="text-muted-foreground mt-1">
@@ -105,7 +105,7 @@ const UserSettingsPage = () => {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <CreditCard className="h-5 w-5 text-brand-500" />
+                  <CreditCard className="h-5 w-5 text-[#E67912]" />
                   Subscription
                 </CardTitle>
                 <CardDescription>

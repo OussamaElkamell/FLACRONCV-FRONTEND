@@ -93,7 +93,7 @@ const ContactPage = () => {
       <Navbar />
       <div className="container mx-auto py-10 px-4">
         <div className="mb-8">
-          <Button variant="ghost" asChild className="mb-4">
+          <Button variant="ghost" asChild className="mb-4 text-[#E67912]  hover:bg-[#f19239] text-black border-[#E67912]">
             <Link to="/">
               <ArrowLeft className="mr-2 h-4 w-4" />
               Back to Home
@@ -165,7 +165,7 @@ const ContactPage = () => {
                     </FormItem>
                   )}
                 />
-                <Button type="submit" className="w-full" disabled={isSubmitting}>
+                <Button type="submit" className="w-full text-[#E67912] bg-[#E67912] hover:bg-[#f19239] text-white border-[#E67912]" disabled={isSubmitting}>
                   {isSubmitting ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -187,7 +187,7 @@ const ContactPage = () => {
               <h2 className="text-xl font-semibold mb-4">Get in Touch</h2>
               <div className="space-y-4">
                 <div className="flex items-start">
-                  <Mail className="h-5 w-5 mr-3 text-brand-500 mt-0.5" />
+                  <Mail className="h-5 w-5 mr-3 text-[#E67912] mt-0.5" />
                   <div>
                     <h3 className="font-medium">Email</h3>
                     <p className="text-muted-foreground">contact@flacroncv.com</p>
@@ -196,7 +196,7 @@ const ContactPage = () => {
                 </div>
 
                 <div className="flex items-start">
-                  <MessageSquare className="h-5 w-5 mr-3 text-brand-500 mt-0.5" />
+                  <MessageSquare className="h-5 w-5 mr-3 text-[#E67912] mt-0.5" />
                   <div>
                     <h3 className="font-medium">Live Chat</h3>
                     <p className="text-muted-foreground">Available Monday to Friday</p>

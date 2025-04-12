@@ -286,7 +286,7 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
       contentEditable: true, 
       suppressContentEditableWarning: true,
       onBlur: handleContentEdit,
-      className: "outline-none focus:ring-1 focus:ring-brand-500 hover:bg-gray-50 transition-colors"
+      className: "outline-none focus:ring-1 focus:ring-[#E67912] hover:bg-gray-50 transition-colors"
     } : {};
     
     if (type === 'resume') {
@@ -352,7 +352,7 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
             variant="outline"
             size="sm"
             onClick={toggleEditMode}
-            className={`mr-2 ${isEditMode ? 'bg-gray-100' : ''}`}
+            className={`mr-2 text-[#E67912] hover:bg-[#E67912] hover:text-white border-[#E67912] ${isEditMode ? 'bg-gray-100' : ''}`}
           >
             {isEditMode ? (
               <>
@@ -378,7 +378,7 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
             variant="outline"
             size="sm"
             onClick={handleDownload}
-            className="mr-2"
+            className="mr-2 text-[#E67912] hover:bg-[#E67912] hover:text-white border-[#E67912]"
           >
             <Download className="h-4 w-4 mr-1" />
             <span className="hidden sm:inline">Download PDF</span>
@@ -388,16 +388,17 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
             variant="outline"
             size="sm"
             onClick={toggleFullscreen}
+            className='text-[#E67912] hover:bg-[#E67912] hover:text-white border-[#E67912]'
           >
             {isFullscreen ? (
               <>
                 <Minimize2 className="h-4 w-4 mr-1" />
-                <span className="hidden sm:inline">Exit Fullscreen</span>
+                <span className="hidden sm:inline text-[#E67912] hover:bg-[#E67912] hover:text-white border-[#E67912]">Exit Fullscreen</span>
               </>
             ) : (
               <>
                 <Maximize2 className="h-4 w-4 mr-1" />
-                <span className="hidden sm:inline">Fullscreen</span>
+                <span className="hidden sm:inline text-[#E67912] hover:bg-[#E67912] hover:text-white border-[#E67912]">Fullscreen</span>
               </>
             )}
           </Button>

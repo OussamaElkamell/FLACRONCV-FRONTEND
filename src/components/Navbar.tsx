@@ -51,39 +51,56 @@ const Navbar = () => {
           {user ? (
             <>
               <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" className="flex items-center gap-2">
-                    <User className="h-4 w-4" />
-                    <span className="hidden md:inline-block">{user.email?.split('@')[0]}</span>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56">
-                  <DropdownMenuItem asChild>
-                    <Link to="/resume" className="flex items-center">
-                      <FileText className="mr-2 h-4 w-4" />
-                      Resume Builder
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link to="/cover-letter" className="flex items-center">
-                      <FileText className="mr-2 h-4 w-4" />
-                      Cover Letter
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem asChild>
-                    <Link to="/settings" className="flex items-center">
-                      <UserCog className="mr-2 h-4 w-4" />
-                      Account Settings
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={handleLogout} className="flex items-center">
-                    <LogOut className="mr-2 h-4 w-4" />
-                    Logout
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+  <DropdownMenuTrigger asChild>
+    <Button 
+      variant="outline" 
+      className="flex items-center gap-2 text-[#E67912] hover:bg-[#E67912] hover:text-white border-[#E67912]"
+    >
+      <User className="h-4 w-4" />
+      <span className="hidden md:inline-block">{user.email?.split('@')[0]}</span>
+    </Button>
+  </DropdownMenuTrigger>
+  <DropdownMenuContent align="end" className="w-56">
+    <DropdownMenuItem asChild>
+      <Link 
+        to="/resume" 
+        className="flex items-center w-full p-2 rounded-md hover:bg-[#E67912] hover:text-white transition-colors"
+      >
+        <FileText className="mr-2 h-4 w-4" />
+        Resume Builder
+      </Link>
+    </DropdownMenuItem>
+    <DropdownMenuItem asChild>
+      <Link 
+        to="/cover-letter" 
+        className="flex items-center w-full p-2 rounded-md hover:bg-[#E67912] hover:text-white transition-colors"
+      >
+        <FileText className="mr-2 h-4 w-4" />
+        Cover Letter
+      </Link>
+    </DropdownMenuItem>
+    <DropdownMenuSeparator />
+    <DropdownMenuItem asChild>
+      <Link 
+        to="/settings" 
+        className="flex items-center w-full p-2 rounded-md hover:bg-[#E67912] hover:text-white transition-colors"
+      >
+        <UserCog className="mr-2 h-4 w-4" />
+        Account Settings
+      </Link>
+    </DropdownMenuItem>
+    <DropdownMenuSeparator />
+    <DropdownMenuItem 
+      onClick={handleLogout} 
+      className="flex items-center p-2 rounded-md hover:bg-[#E67912] hover:text-white transition-colors"
+    >
+      <LogOut className="mr-2 h-4 w-4" />
+      Logout
+    </DropdownMenuItem>
+  </DropdownMenuContent>
+</DropdownMenu>
+
+
         
             </>
           ) : (
@@ -94,7 +111,7 @@ const Navbar = () => {
                   Login
                 </Link>
               </Button>
-              <Button asChild className="bg-brand-500 hover:bg-brand-600">
+              <Button asChild className="bg-[#E67912] hover:bg-[#E67912]">
                 <Link to="/register">
                   <User className="mr-2 h-4 w-4" />
                   Register

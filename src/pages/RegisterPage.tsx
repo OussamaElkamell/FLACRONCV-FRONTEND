@@ -88,7 +88,7 @@ const RegisterPage = () => {
         <CardHeader className="space-y-1">
           <div className="flex justify-center mb-4">
             <Link to="/" className="flex items-center gap-2">
-              <FileUp className="h-8 w-8 text-brand-500" />
+              <FileUp className="h-8 w-8 text-[#E67912]" />
               <span className="text-2xl font-bold">FLACRONCV</span>
             </Link>
           </div>
@@ -149,7 +149,7 @@ const RegisterPage = () => {
                 />
               </div>
             </div>
-            <Button type="submit" className="w-full" disabled={loading}>
+            <Button type="submit" className="w-full  text-[#E67912] bg-[#E67912] hover:bg-[#fca657] text-white border-[#E67912]" disabled={loading}>
               {loading ? 'Creating account...' : 'Register with Email'}
             </Button>
           </form>
@@ -163,7 +163,7 @@ const RegisterPage = () => {
           
           <Button 
             variant="outline" 
-            className="w-full flex items-center justify-center gap-2"
+            className="w-full flex items-center justify-center gap-2  text-[#E67912] hover:bg-[#E67912] hover:text-white border-[#E67912]"
             onClick={handleGoogleSignup}
             disabled={googleLoading}
           >
@@ -191,7 +191,7 @@ const RegisterPage = () => {
         <CardFooter className="flex justify-center">
           <p className="text-sm text-gray-600">
             Already have an account?{' '}
-            <Link to="/login" className="text-blue-600 hover:text-blue-500 font-semibold">
+            <Link to="/login" className="text-[#E67912]  hover:text-[#f8b473]">
               Sign in
             </Link>
           </p>

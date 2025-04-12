@@ -12,7 +12,7 @@ const templates = {
       id: 'professional',
       name: 'Professional',
       description: 'Clean and traditional design suitable for most industries',
-      color: 'bg-brand-500',
+      color: 'bg-gray-800',
       requiresPro: false,
     },
     {
@@ -103,7 +103,7 @@ const templates = {
       id: 'professional',
       name: 'Professional',
       description: 'Formal and traditional letterhead style',
-      color: 'bg-brand-500',
+      color: 'bg-gray-800',
       requiresPro: false,
     },
     {
@@ -216,7 +216,7 @@ const TemplateSelector: React.FC<TemplateSelectorProps> = ({
             className={cn(
               "relative cursor-pointer rounded-lg border-2 p-4 transition-all",
               selectedTemplate === template.id 
-                ? "border-brand-500 bg-brand-50" 
+                ? "border-[#E67912] bg-brand-50" 
                 : "border-border hover:border-brand-200",
               template.requiresPro && !hasPro 
                 ? "opacity-70 hover:opacity-100" 
@@ -226,7 +226,7 @@ const TemplateSelector: React.FC<TemplateSelectorProps> = ({
           >
             {selectedTemplate === template.id && (
               <div className="absolute top-2 right-2">
-                <Check className="h-5 w-5 text-brand-500" />
+                <Check className="h-5 w-5 text-[#E67912]" />
               </div>
             )}
             

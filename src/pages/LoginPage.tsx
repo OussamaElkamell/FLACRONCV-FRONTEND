@@ -73,7 +73,7 @@ const LoginPage = () => {
         <CardHeader className="space-y-1">
           <div className="flex justify-center mb-4">
             <Link to="/" className="flex items-center gap-2">
-              <FileUp className="h-8 w-8 text-brand-500" />
+              <FileUp className="h-8 w-8 text-[#E67912]" />
               <span className="text-2xl font-bold">FLACRONCV</span>
             </Link>
           </div>
@@ -107,7 +107,7 @@ const LoginPage = () => {
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <Label htmlFor="password">Password</Label>
-                <Link to="/forgot-password" className="text-sm text-blue-600 hover:text-blue-500">
+                <Link to="/forgot-password" className="text-[#E67912]  hover:text-[#f8b473]">
                   Forgot password?
                 </Link>
               </div>
@@ -124,7 +124,7 @@ const LoginPage = () => {
                 />
               </div>
             </div>
-            <Button type="submit" className="w-full" disabled={loading}>
+            <Button type="submit" className="w-full   hover:bg-[#d68334] bg-[#E67912] text-white  border-[#E67912]" disabled={loading} >
               {loading ? 'Logging in...' : 'Login with Email'}
             </Button>
           </form>
@@ -138,7 +138,7 @@ const LoginPage = () => {
           
           <Button 
             variant="outline" 
-            className="w-full flex items-center justify-center gap-2"
+            className="w-full flex items-center justify-center gap-2  text-[#E67912] hover:bg-[#E67912] hover:text-white border-[#E67912]"
             onClick={handleGoogleLogin}
             disabled={googleLoading}
           >
@@ -166,7 +166,7 @@ const LoginPage = () => {
         <CardFooter className="flex justify-center">
           <p className="text-sm text-gray-600">
             Don't have an account?{' '}
-            <Link to="/register" className="text-blue-600 hover:text-blue-500 font-semibold">
+            <Link to="/register" className="text-[#E67912]  hover:text-[#f8b473]">
               Sign up
             </Link>
           </p>

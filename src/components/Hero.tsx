@@ -8,24 +8,24 @@ const Hero = () => {
   return (
     <div className="relative overflow-hidden py-20 sm:py-32">
       <div className="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80" aria-hidden="true">
-        <div className="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-brand-500 to-brand-300 opacity-20 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]"></div>
+        <div className="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#E67912] to-[#E67912] opacity-20 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]"></div>
       </div>
       
       <div className="container-xl">
         <div className="mx-auto max-w-2xl text-center">
-          <h1 className="text-4xl font-bold tracking-tight sm:text-6xl bg-clip-text text-transparent bg-gradient-to-r from-brand-800 to-brand-600">
+          <h1 className="text-4xl font-bold tracking-tight sm:text-6xl bg-clip-text text-transparent bg-gradient-to-r from-[#E67912] to-[#E67912]">
             Create Winning Resumes With AI
           </h1>
           <p className="mt-6 text-lg leading-8 text-muted-foreground">
             Our AI-powered resume builder helps you create professional resumes and cover letters optimized for applicant tracking systems.
           </p>
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center ">
-  <Button asChild size="lg" className="bg-brand-500 hover:bg-brand-600">
+  <Button asChild size="lg" className="bg-[#E67912] hover:bg-[#E67912]">
     <Link to="/resume">
       Create Resume
     </Link>
   </Button>
-  <Button asChild variant="outline" size="lg" className="sm:mt-0 mt-4">
+  <Button asChild variant="outline" size="lg" className="sm:mt-0 mt-4 text-[#E67912] hover:bg-[#E67912] hover:text-white border-[#E67912] ml-2">
     <Link to="/cover-letter">
       Write Cover Letter
     </Link>
@@ -49,7 +49,7 @@ const Hero = () => {
                     <p className="mt-1 text-gray-700">Dedicated software engineer with 5+ years of experience in full-stack development...</p>
                   </div>
                   <div className="sparkle-effect absolute top-5 right-5">
-                    <Sparkles className="h-6 w-6 text-brand-500" />
+                    <Sparkles className="h-6 w-6 text-[#E67912]" />
                   </div>
                 </div>
               </div>
