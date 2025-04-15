@@ -397,8 +397,14 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
               </>
             ) : (
               <>
-                <Maximize2 className="h-4 w-4 mr-1" />
-                <span className="hidden sm:inline text-[#E67912] hover:bg-[#E67912] hover:text-white border-[#E67912]">Fullscreen</span>
+    <div className="flex items-center group cursor-pointer">
+  <Maximize2 />
+  <span className="  px-2 py-1 group-hover:text-white">
+    Fullscreen
+  </span>
+</div>
+
+
               </>
             )}
           </Button>
