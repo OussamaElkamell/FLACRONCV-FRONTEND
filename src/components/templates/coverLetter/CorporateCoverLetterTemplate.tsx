@@ -21,7 +21,7 @@ const CorporateCoverLetterTemplate: React.FC<CorporateCoverLetterTemplateProps> 
       {/* Corporate header */}
       <div className="bg-blue-800 text-white p-6 mb-6">
         <div className="flex justify-between items-center">
-          <h1 className="text-2xl font-bold">{data.personalInfo.name}</h1>
+          <h1 className="text-2xl font-bold text-white">{data.personalInfo.name}</h1>
           <div className="text-right">
             <div className="text-sm">Professional Application</div>
             <div className="text-xs mt-1">Corporate Cover Letter</div>

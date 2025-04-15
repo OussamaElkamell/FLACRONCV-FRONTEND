@@ -33,13 +33,13 @@ const ProfessionalPurpleTemplate: React.FC<ProfessionalPurpleTemplateProps> = ({
         
         <div>
           <h1 
-            className="text-3xl font-bold text-purple-800 mb-2"
+            className="text-xl font-bold text-purple-800 mb-2"
             data-field="name"
             {...(editMode ? editableProps : {})}
           >
             {data.personalInfo.name || ''}
           </h1>
-          <h2 className="text-xl text-purple-600 mb-4">Profil</h2>
+         
           <p 
             className="text-sm leading-relaxed"
             data-field="summary"

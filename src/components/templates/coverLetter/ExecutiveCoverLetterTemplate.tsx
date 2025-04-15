@@ -20,7 +20,7 @@ const ExecutiveCoverLetterTemplate: React.FC<ExecutiveCoverLetterTemplateProps> 
     <div className="font-serif p-8 max-w-[800px] mx-auto bg-white">
       {/* Header with classic executive styling */}
       <div className="bg-gray-900 text-white p-6 mb-8 text-center">
-        <h1 className="text-3xl font-bold tracking-widest uppercase">{data.personalInfo.name}</h1>
+        <h1 className="text-3xl font-bold tracking-widest uppercase text-white">{data.personalInfo.name}</h1>
         <div className="mt-2 flex justify-center flex-wrap gap-x-6 text-gray-300">
           {data.personalInfo.email && <span>{data.personalInfo.email}</span>}
           {data.personalInfo.phone && <span>{data.personalInfo.phone}</span>}

@@ -33,7 +33,7 @@ const AcademicResumeTemplate: React.FC<AcademicResumeTemplateProps> = ({
           )}
         </div>
         <h1 
-          className="text-3xl font-bold mb-1 tracking-wide" 
+          className="text-3xl font-bold mb-1 tracking-wide text-white" 
           data-field="name"
           {...(editMode ? editableProps : {})}
         >

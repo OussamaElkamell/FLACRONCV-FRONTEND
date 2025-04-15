@@ -21,7 +21,7 @@ const TechnicalResumeTemplate: React.FC<TechnicalResumeTemplateProps> = ({
           <div>
             
             <h1 
-              className="text-2xl font-bold mb-1" 
+              className="text-2xl font-bold mb-1 text-white" 
               data-field="name"
               {...(editMode ? editableProps : {})}
             >
@@ -29,28 +29,28 @@ const TechnicalResumeTemplate: React.FC<TechnicalResumeTemplateProps> = ({
             </h1>
            
             
-            <div className="grid grid-cols-2 gap-2 text-sm">
+            <div className=" grid-cols-2 gap-2 text-sm">
               {data.personalInfo.email && (
                 <div className="flex items-center">
-                  <span className="mr-2">✉️</span>
+                  <span >✉️</span>
                   <span>{data.personalInfo.email}</span>
                 </div>
               )}
               {data.personalInfo.phone && (
                 <div className="flex items-center">
-                  <span className="mr-2">📞</span>
+                  <span>📞</span>
                   <span>{data.personalInfo.phone}</span>
                 </div>
               )}
               {data.personalInfo.location && (
                 <div className="flex items-center">
-                  <span className="mr-2">📍</span>
+                  <span >📍</span>
                   <span>{data.personalInfo.location}</span>
                 </div>
               )}
               {data.personalInfo.linkedin && (
                 <div className="flex items-center">
-                  <span className="mr-2">🔗</span>
+                  <span>🔗</span>
                   <span>{data.personalInfo.linkedin}</span>
                 </div>
               )}

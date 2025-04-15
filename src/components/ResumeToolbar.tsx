@@ -83,7 +83,7 @@ const ResumeToolbar: React.FC<ResumeToolbarProps> = ({ resumeData ,setResumeData
       <div className="space-y-4">
         <Button
           variant="secondary"
-          className="w-full flex items-center justify-center"
+          className="w-full flex items-center justify-center text-[#E67912] hover:bg-[#E67912] hover:text-white border-[#E67912]"
           onClick={handleAIEnhance}
           disabled={isEnhancing || !hasPro}
         >
@@ -98,7 +98,7 @@ const ResumeToolbar: React.FC<ResumeToolbarProps> = ({ resumeData ,setResumeData
         
         <Button
           variant="outline"
-          className="w-full flex items-center justify-center"
+          className="w-full flex items-center justify-center text-[#E67912] hover:bg-[#E67912] hover:text-white border-[#E67912]"
           disabled={isLoading || !hasPro}
           onClick={handleLinkedInOptimize}
         >

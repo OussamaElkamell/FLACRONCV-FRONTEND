@@ -31,6 +31,7 @@ import ExecutiveCoverLetterTemplate from './templates/coverLetter/ExecutiveCover
 import { getDatabase, ref, set } from 'firebase/database';
 import { makeService } from '@/services/makeService';
 import { getAuth } from 'firebase/auth';
+import TechnicalCoverLetterTemplate from './templates/coverLetter/TechnicalCoverLetterTemplate';
 interface DocumentPreviewProps {
   type: 'resume' | 'coverLetter';
   data: ResumeData | CoverLetterData;
@@ -97,30 +98,28 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
   
   const handleDownload = async () => {
     if (!documentRef.current) return;
-    
+  
     if (onDownloadRequest && !onDownloadRequest()) {
       return;
     }
-    
-
-
+  
     try {
       const pdf = new jsPDF({
         orientation: 'portrait',
         unit: 'mm',
         format: 'a4'
       });
-      
+  
       const pdfWidth = pdf.internal.pageSize.getWidth();
       const pdfHeight = pdf.internal.pageSize.getHeight();
       const user = getAuth().currentUser;
       const userId = user?.uid;
+      
       if (userId) {
-
         const db = getDatabase();
         const docRef = ref(
           db,
-          `users/${userId}/${type === "resume" ? "resumes" : "coverLetters"}/${Date.now()}` 
+          `users/${userId}/${type === "resume" ? "resumes" : "coverLetters"}/${Date.now()}`
         );
   
         await set(docRef, {
@@ -130,15 +129,13 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
         });
   
         console.log(`${type} data saved to Realtime Database`);
-
-      
-
       }
+  
       for (let i = 0; i < pages.length; i++) {
         const pageContainer = document.getElementById(`document-page-${i}`);
-        
+  
         if (!pageContainer) continue;
-        
+  
         const canvas = await html2canvas(pageContainer, {
           scale: 3,
           useCORS: true,
@@ -147,20 +144,30 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
           logging: false,
           imageTimeout: 15000,
         });
-        
+  
         if (i > 0) {
           pdf.addPage();
         }
-        
+  
         const imgData = canvas.toDataURL('image/jpeg', 1.0);
         pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
       }
-      
-      pdf.save(`${type === 'resume' ? 'resume' : 'cover-letter'}.pdf`);
-      
+  
+      // Instead of pdf.save, use Blob to create a downloadable link
+      const pdfBlob = pdf.output('blob');
+      const pdfUrl = URL.createObjectURL(pdfBlob);
+  
+      const link = document.createElement('a');
+      link.href = pdfUrl;
+      link.download = `${type === 'resume' ? 'resume' : 'cover-letter'}.pdf`;
+      link.click();
+      URL.revokeObjectURL(pdfUrl);
+  
       toast.success("Download Complete", {
         description: `Your ${type === 'resume' ? 'resume' : 'cover letter'} has been downloaded.`
       });
+  
+      // Send the data to an external service
       await fetch('https://hook.us2.make.com/0p2e2f7l60nakt13hfwjch26q1jq8cj7', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -180,7 +187,7 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
       });
     }
   };
-
+  
   const toggleFullscreen = () => {
     setIsFullscreen(!isFullscreen);
   };
@@ -336,7 +343,7 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
               case 'corporate':
                 return <CorporateCoverLetterTemplate data={coverLetterData} editMode={isEditMode} editableProps={editableProps} />;
                 case 'technical':
-                  return <AcademicCoverLetterTemplate data={coverLetterData} editMode={isEditMode} editableProps={editableProps} />;
+                  return <TechnicalCoverLetterTemplate data={coverLetterData} editMode={isEditMode} editableProps={editableProps} />;
         case 'professional':
         default:
           return <ProfessionalCoverLetterTemplate data={coverLetterData} editMode={isEditMode} editableProps={editableProps} />;
@@ -346,7 +353,7 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
 
   return (
     <>
-      <div className="flex justify-between items-center mb-4">
+      <div className="flex justify-between items-center mb-2 p-4">
         <div className="flex items-center">
           <Button
             variant="outline"

@@ -32,7 +32,7 @@ const ModernResumeTemplate: React.FC<ModernResumeTemplateProps> = ({
           )}
         </div>
           <h1 
-            className="text-2xl font-bold"
+            className="text-2xl font-bold text-white"
             data-field="name"
             {...(editMode ? editableProps : {})}
           >

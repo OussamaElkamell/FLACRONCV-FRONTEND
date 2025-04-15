@@ -20,7 +20,7 @@ const AcademicCoverLetterTemplate: React.FC<AcademicCoverLetterTemplateProps> = 
     <div className="font-serif p-8 max-w-[800px] mx-auto bg-white">
       {/* Header with academic styling */}
       <div className="bg-emerald-700 text-white p-6 mb-8 text-center">
-        <h1 className="text-2xl font-bold tracking-wide">{data.personalInfo.name}</h1>
+        <h1 className="text-2xl font-bold tracking-wide text-white">{data.personalInfo.name}</h1>
         <p className="text-lg mt-1 italic text-emerald-100">Academic Professional</p>
         <div className="mt-3 flex justify-center flex-wrap gap-x-6 text-emerald-100">
           {data.personalInfo.email && <span>{data.personalInfo.email}</span>}

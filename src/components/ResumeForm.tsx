@@ -25,6 +25,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 
+import CustomDatePicker from './DatePicker/datePicker';
+
+
 const initialEducation = { institution: '', degree: '', date: '', description: '' };
 const initialExperience = { company: '', position: '', date: '', description: '' };
 const initialSkills = { category: 'Technical Skills', skills: '' };
@@ -78,7 +81,7 @@ const ResumeForm = ({
     template: 'professional',
   });
 console.log("resumeData",resumeData);
-
+const [popoverOpen, setPopoverOpen] = useState(false); 
 useEffect(() => {
   if (resumeData && !isInitialized) {
     const dataWithCustomSections = {
@@ -194,7 +197,7 @@ useEffect(() => {
         };
 
         const addItem = (type: 'education' | 'experience' | 'skills' | 'projects' | 'certifications' | 'customSections') => {
-          let newItem;
+          let newItem: { institution?: string; degree?: string; date?: string; description?: string; company?: string; position?: string; name?: string; link?: string; technologies?: string; title?: string; content?: string; category?: string; skills?: string; };
           if (type === 'education') newItem = { ...initialEducation };
           else if (type === 'experience') newItem = { ...initialExperience };
           else if (type === 'projects') newItem = { ...initialProject };
@@ -207,16 +210,18 @@ useEffect(() => {
             [type]: [...(formData[type] || []), newItem],
           });
         };
-
         const removeItem = (index: number, type: 'education' | 'experience' | 'skills' | 'projects' | 'certifications' | 'customSections') => {
-          const updatedArray = [...(formData[type] || [])];
-          updatedArray.splice(index, 1);
-          
-          setFormData({
-            ...formData,
-            [type]: updatedArray,
+          setFormData((prevFormData) => {
+            const updatedArray = [...(prevFormData[type] || [])];
+            updatedArray.splice(index, 1);
+        
+            return {
+              ...prevFormData,
+              [type]: updatedArray,
+            };
           });
         };
+        
 
         const handleCustomSectionChange = (
           e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, 
@@ -242,7 +247,7 @@ useEffect(() => {
           const formattedDate = format(date, 'MMMM yyyy');
           const updatedEducation = [...formData.education];
           updatedEducation[index] = { ...updatedEducation[index], date: formattedDate };
-          
+      
           setFormData({
             ...formData,
             education: updatedEducation,
@@ -346,6 +351,7 @@ useEffect(() => {
     e.preventDefault();
   };
 
+  
   return (
     <form className="space-y-8" onSubmit={handleSubmit}>
       <Card>
@@ -539,31 +545,14 @@ useEffect(() => {
                     placeholder="Bachelor of Science"
                   />
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor={`edu-date-${index}`}>Graduation Date</Label>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button
-                        id={`edu-date-${index}`}
-                        variant="outline"
-                        className={cn(
-                          "w-full justify-start text-left font-normal",
-                          !edu.date && "text-muted-foreground text-[#E67912] hover:bg-[#E67912] hover:text-white"
-                        )}
-                      >
-                        <CalendarIcon className="mr-2 h-4 w-4" />
-                        {edu.date ? edu.date : <span>Pick graduation date</span>}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
-                      <Calendar
-                        mode="single"
-                        onSelect={(date) => handleEducationDateChange(date, index)}
-                        className={cn("p-3 pointer-events-auto")}
-                      />
-                    </PopoverContent>
-                  </Popover>
-                </div>
+                <CustomDatePicker
+  id={`edu-date-${index}`}
+  date={edu.date}
+  onSelect={(date) => handleEducationDateChange(date, index)}
+  label="Graduation Date"
+  placeholder="Pick graduation date"
+/>
+
                 <div className="space-y-2 sm:col-span-2">
                   <Label htmlFor={`edu-description-${index}`}>Description (Optional)</Label>
                   <Textarea 
@@ -633,79 +622,54 @@ useEffect(() => {
                   />
                 </div>
                 <div className="space-y-2 sm:col-span-2">
-                  <Label>Date Range</Label>
-                  <div className="flex flex-wrap gap-2">
-                    <div className="flex-1">
-                      <Popover>
-                        <PopoverTrigger asChild>
-                          <Button
-                            variant="outline"
-                            className={cn(
-                              "w-full justify-start text-left font-normal",
-                              "text-muted-foreground text-[#E67912] hover:bg-[#E67912] hover:text-white "
-                            )}
-                          >
-                            <CalendarIcon className="mr-2 h-4 w-4 " />
-                            <span>Start Date</span>
-                          </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0" align="start">
-                          <Calendar
-                            mode="single"
-                            onSelect={(date) => handleExperienceStartDateChange(date, index)}
-                            className={cn("p-3 pointer-events-auto")}
-                          />
-                        </PopoverContent>
-                      </Popover>
-                    </div>
-                    <div className="flex-1">
-                      <Popover>
-                        <PopoverTrigger asChild>
-                          <Button
-                            variant="outline"
-                            className={cn(
-                              "w-full justify-start text-left font-normal",
-                              "text-muted-foreground text-[#E67912] hover:bg-[#E67912] hover:text-white"
-                            )}
-                          >
-                            <CalendarIcon className="mr-2 h-4 w-4" />
-                            <span>End Date</span>
-                          </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0" align="start">
-                          <Calendar
-                            mode="single"
-                            onSelect={(date) => handleExperienceEndDateChange(date, index)}
-                            className={cn("p-3 pointer-events-auto")}
-                          />
-                        </PopoverContent>
-                      </Popover>
-                    </div>
-                   
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleSetPresentDate(index)}
-                      className="whitespace-nowrap text-[#E67912] hover:bg-[#E67912] hover:text-white"
-                    >
-                      Set as Present
-                    </Button>
-                  </div>
-                  <div className="mt-2">
-                    <Input 
-                      id={`exp-date-${index}`} 
-                      name="date" 
-                      value={exp.date} 
-                      onChange={(e) => handleArrayChange(e, index, 'experience')}
-                      placeholder="Jan 2020 - Present"
-                      className="text-sm"
-                    />
-                    <p className="text-xs text-gray-500 mt-1">
-                      You can also directly edit the date format above
-                    </p>
-                  </div>
-                </div>
+  <Label>Date Range</Label>
+  <div className="flex flex-wrap gap-2">
+    <div className="flex-1">
+      <CustomDatePicker
+        id={`start-date-${index}`}
+        label="Start Date"
+        date={exp.date.split(" - ")[0]} // e.g. "Jan 2020"
+        onSelect={(date) => handleExperienceStartDateChange(date, index)}
+        placeholder="Start Date"
+      />
+    </div>
+
+    <div className="flex-1">
+      <CustomDatePicker
+        id={`end-date-${index}`}
+        label="End Date"
+        date={exp.date.split(" - ")[1] !== "Present" ? exp.date.split(" - ")[1] : ""}
+        onSelect={(date) => handleExperienceEndDateChange(date, index)}
+        placeholder="End Date"
+      />
+    </div>
+
+    <Button
+      type="button"
+      variant="outline"
+      size="sm"
+      onClick={() => handleSetPresentDate(index)}
+      className="whitespace-nowrap text-[#E67912] hover:bg-[#E67912] hover:text-white"
+    >
+      Set as Present
+    </Button>
+  </div>
+
+  <div className="mt-2">
+    <Input 
+      id={`exp-date-${index}`} 
+      name="date" 
+      value={exp.date} 
+      onChange={(e) => handleArrayChange(e, index, 'experience')}
+      placeholder="Jan 2020 - Present"
+      className="text-sm"
+    />
+    <p className="text-xs text-gray-500 mt-1">
+      You can also directly edit the date format above
+    </p>
+  </div>
+</div>
+
                 <div className="space-y-2 sm:col-span-2">
                   <Label htmlFor={`exp-description-${index}`}>Description</Label>
                   <Textarea 
@@ -766,30 +730,16 @@ useEffect(() => {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor={`project-date-${index}`}>Date</Label>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button
-                        id={`project-date-${index}`}
-                        variant="outline"
-                        className={cn(
-                          "w-full justify-start text-left font-normal text-[#E67912] hover:bg-[#E67912] hover:text-white",
-                          !project.date && "text-muted-foreground"
-                        )}
-                      >
-                        <CalendarIcon className="mr-2 h-4 w-4" />
-                        {project.date ? project.date : <span>Pick project date</span>}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
-                      <Calendar
-                        mode="single"
-                        onSelect={(date) => handleProjectDateChange(date, index)}
-                        className={cn("p-3 pointer-events-auto")}
-                      />
-                    </PopoverContent>
-                  </Popover>
-                </div>
+  <Label htmlFor={`project-date-${index}`}>Date</Label>
+  <div className="flex-1">
+    <CustomDatePicker
+                      id={`project-date-${index}`}
+                      date={project.date}
+                      onSelect={(date) => handleProjectDateChange(date, index)}
+                      placeholder="Pick project date" label={undefined}    />
+  </div>
+</div>
+
                 <div className="space-y-2 sm:col-span-2">
                   <Label htmlFor={`project-link-${index}`}>Project Link (Optional)</Label>
                   <div className="flex gap-2">

@@ -12,7 +12,10 @@ const ExecutiveResumeTemplate: React.FC<ExecutiveResumeTemplateProps> = ({
   data,
   editMode = false,
   editableProps = {} 
+
+  
 }) => {
+  console.log("data",data);
   return (
     <div className="font-serif p-0 max-w-[800px] mx-auto text-sm bg-white">
       {/* Header with name and executive styling */}
@@ -20,13 +23,20 @@ const ExecutiveResumeTemplate: React.FC<ExecutiveResumeTemplateProps> = ({
         <div className="flex items-start justify-between">
             
           <div>
-            <h1 
-              className="text-3xl font-bold tracking-tight mb-1" 
-              data-field="name"
-              {...(editMode ? editableProps : {})}
-            >
-              {data.personalInfo.name || ''}
-            </h1>
+          <h1 
+  className="text-3xl text-white font-bold tracking-tight mb-1" 
+  style={{
+    color: 'white', // Keeps text white
+    background: 'transparent', // Explicitly set background to transparent
+    outline: 'none', // Prevents any outline or border style
+    cursor: editMode ? 'text' : 'default', // Set appropriate cursor for edit mode
+  }}
+  data-field="name"
+  {...(editMode ? editableProps : {})}
+>
+  {data.personalInfo.name || ''}
+</h1>
+
             <div className="flex flex-wrap gap-3 text-gray-300 text-sm">
               {data.personalInfo.email && (
                 <span>{data.personalInfo.email}</span>

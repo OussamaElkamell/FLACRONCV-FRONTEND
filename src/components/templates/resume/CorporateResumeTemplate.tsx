@@ -20,7 +20,7 @@ const CorporateResumeTemplate: React.FC<CorporateResumeTemplateProps> = ({
         <div className="flex justify-between items-center">
           <div>
             <h1 
-              className="text-2xl font-bold mb-1" 
+              className="text-2xl font-bold mb-1 text-white" 
               data-field="name"
               {...(editMode ? editableProps : {})}
             >

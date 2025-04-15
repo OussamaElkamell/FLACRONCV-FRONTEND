@@ -21,7 +21,7 @@ const TechnicalCoverLetterTemplate: React.FC<TechnicalCoverLetterTemplateProps> 
       {/* Header with technical styling */}
       <div className="bg-indigo-700 text-white p-6 mb-6">
         <div className="flex flex-col md:flex-row justify-between items-center">
-          <h1 className="text-2xl font-bold mb-2 md:mb-0">{data.personalInfo.name}</h1>
+          <h1 className="text-2xl font-bold mb-2 md:mb-0 text-white">{data.personalInfo.name}</h1>
           <div className="flex flex-wrap gap-4 text-sm">
             {data.personalInfo.email && (
               <div className="flex items-center">

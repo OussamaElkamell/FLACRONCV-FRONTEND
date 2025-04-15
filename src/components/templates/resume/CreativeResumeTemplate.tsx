@@ -16,13 +16,30 @@ const CreativeResumeTemplate: React.FC<CreativeResumeTemplateProps> = ({
   return (
     <div className="font-sans p-8 max-w-[800px] mx-auto">
       <div className="bg-purple-500 text-white p-8 rounded-lg mb-8">
+      <div className="flex justify-center items-center">
+  {data.personalInfo.photo ? (
+    <img 
+      src={data.personalInfo.photo} 
+      alt={data.personalInfo.name} 
+      className="w-24 h-24 object-cover rounded"
+    />
+  ) : (
+    <div className="w-24 h-24 bg-purple-100 flex items-center justify-center rounded">
+      <span className="text-2xl font-bold text-purple-700">
+        {data.personalInfo.name ? data.personalInfo.name.charAt(0) : ''}
+      </span>
+    </div>
+  )}
+</div>
+
         <h1 
-          className="text-4xl font-bold mb-2"
+          className="text-4xl font-bold mb-2 text-white"
           data-field="name"
           {...(editMode ? editableProps : {})}
         >
           {data.personalInfo.name || 'Your Name'}
         </h1>
+        
         <div className="flex flex-wrap gap-4 text-purple-100">
           {data.personalInfo.email && (
             <a 

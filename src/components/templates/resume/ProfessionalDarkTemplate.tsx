@@ -13,10 +13,11 @@ const ProfessionalDarkTemplate: React.FC<ProfessionalDarkTemplateProps> = ({
   editableProps = {} 
 }) => {
   return (
-    <div className="w-full h-[1400px] flex">
+    <div className="w-full min-h-screen flex overflow-auto">
 
       {/* Left sidebar with dark background */}
-      <div className="w-auto bg-slate-800 text-white p-4 flex flex-col">
+      <div className="w-auto bg-slate-800 text-white p-4 flex flex-col max-h-screen overflow-y-auto flex-grow">
+
         {/* Profile photo */}
         <div className="mb-4 flex justify-center">
           {data.personalInfo.photo ? (
@@ -33,81 +34,75 @@ const ProfessionalDarkTemplate: React.FC<ProfessionalDarkTemplateProps> = ({
         </div>
         
         {/* CV title */}
-        <h2 data-field="name" {...(editMode ? editableProps : {})} className="text-sm font-bold text-center mb-4">
+        <h2 data-field="name" {...(editMode ? editableProps : {})} className="text-lg font-bold text-center text-white mb-4">
           {data.personalInfo.name}
         </h2>
 
-        {/* Personal Information */}
         <div className="mb-6">
-          <h3 className="text-lg font-bold border-b border-slate-600 pb-2 mb-3">
-            Informations personnelles
-          </h3>
-          <div className="space-y-2">
-            <p className="flex items-center gap-2">
-              <span className="inline-block w-5">👤</span>
-              <span
-                data-field="name"
-                {...(editMode ? editableProps : {})}
-              >
-                {data.personalInfo.name || ''}
-              </span>
-            </p>
-            {data.personalInfo.email && (
-              <p className="flex items-center gap-2">
-                <span className="inline-block w-5">✉️</span>
-                <span
-                  data-field="email"
-                  {...(editMode ? editableProps : {})}
-                >
-                  {data.personalInfo.email}
-                </span>
-              </p>
-            )}
-            {data.personalInfo.phone && (
-              <p className="flex items-center gap-2">
-                <span className="inline-block w-5">📱</span>
-                <span
-                  data-field="phone"
-                  {...(editMode ? editableProps : {})}
-                >
-                  {data.personalInfo.phone}
-                </span>
-              </p>
-            )}
-            {data.personalInfo.location && (
-              <p className="flex items-center gap-2">
-                <span className="inline-block w-5">🏠</span>
-                <span
-                  data-field="location"
-                  {...(editMode ? editableProps : {})}
-                >
-                  {data.personalInfo.location}
-                </span>
-              </p>
-            )}
-            {data.personalInfo.linkedin && (
-              <p className="flex items-center gap-2">
-                <span className="inline-block w-5">🔗</span>
-                <span
-                  data-field="linkedin"
-                  {...(editMode ? editableProps : {})}
-                >
-                  {data.personalInfo.linkedin}
-                </span>
-              </p>
-            )}
-          </div>
-        </div>
+  <div className="space-y-2">
+    {data.personalInfo.email && (
+      <p className="flex items-center gap-2 text-xs"> {/* Added text-xs here */}
+        <span className="inline-block w-5">✉️</span>
+        <span
+          data-field="email"
+          {...(editMode ? editableProps : {})}
+          className="break-words w-24 "
+        >
+          {data.personalInfo.email}
+        </span>
+      </p>
+    )}
+    {data.personalInfo.phone && (
+      <p className="flex items-center gap-2 text-xs"> {/* Added text-xs here */}
+        <span className="inline-block w-5">📱</span>
+        <span
+          data-field="phone"
+          {...(editMode ? editableProps : {})}
+          className="break-words w-full"
+        >
+          {data.personalInfo.phone}
+        </span>
+      </p>
+    )}
+    {data.personalInfo.location && (
+      <p className="flex items-center gap-2 text-xs"> {/* Added text-xs here */}
+        <span className="inline-block w-5">🏠</span>
+        <span
+          data-field="location"
+          {...(editMode ? editableProps : {})}
+          className="break-words w-full"
+        >
+          {data.personalInfo.location}
+        </span>
+      </p>
+    )}
+    {data.personalInfo.linkedin && (
+      <p className="flex items-center gap-2 text-xs"> {/* Added text-xs here */}
+        <span className="inline-block w-5">🔗</span>
+        <span
+          data-field="linkedin"
+          {...(editMode ? editableProps : {})}
+          className="break-words w-full"
+        >
+          {data.personalInfo.linkedin}
+        </span>
+      </p>
+    )}
+  </div>
+</div>
+
+
+
         
         {/* Skills Section */}
         {data.skills && data.skills.length > 0 && data.skills.some(skill => skill.skills) && (
           <div className="mb-6">
-            <h3 className="text-lg font-bold border-b border-slate-600 pb-2 mb-3">
-              Compétences
+            <h3 className="text-lg font-bold border-b border-slate-600 pb-2 mb-3 text-white">
+              Skills
             </h3>
             {data.skills.filter(skill => skill.skills).map((skill, index) => (
               <div key={index} className="mb-3">
-                <h4 className="font-semibold">{skill.category}</h4>
+                <h4 className="font-semibold text-white">{skill.category}</h4>
                 <div className="mt-1">
                   {skill.skills.split(',').map((s, i) => {
                     const level = (i % 5) + 1; // Visual representation (using index for consistency)
@@ -135,7 +130,7 @@ const ProfessionalDarkTemplate: React.FC<ProfessionalDarkTemplateProps> = ({
         {data.languages && data.languages.length > 0 && (
           <div className="mb-6">
             <h3 className="text-lg font-bold border-b border-slate-600 pb-2 mb-3">
-              Langues
+              Languages
             </h3>
             {data.languages.map((lang, index) => (
               <div key={index} className="mb-2">
@@ -158,7 +153,7 @@ const ProfessionalDarkTemplate: React.FC<ProfessionalDarkTemplateProps> = ({
         {/* Certifications */}
         {data.certifications && data.certifications.length > 0 && data.certifications.some(cert => cert.name) && (
           <div className="mb-6">
-            <h3 className="text-lg font-bold border-b border-slate-600 pb-2 mb-3">
+            <h3 className="text-lg font-bold border-b border-slate-600 pb-2 mb-3 text-white">
               Certifications
             </h3>
             <ul className="list-none space-y-1">
@@ -175,7 +170,7 @@ const ProfessionalDarkTemplate: React.FC<ProfessionalDarkTemplateProps> = ({
         {data.interests && data.interests.length > 0 && (
           <div className="mb-6">
             <h3 className="text-lg font-bold border-b border-slate-600 pb-2 mb-3">
-              Centres d'intérêt
+              Interests
             </h3>
             <ul className="list-none space-y-1">
               {data.interests.map((interest, index) => (
@@ -190,9 +185,10 @@ const ProfessionalDarkTemplate: React.FC<ProfessionalDarkTemplateProps> = ({
       </div>
       
       {/* Main content */}
-      <div className="w-2/3 bg-white p-6">
+      <div className="w-2/3 bg-white p-6 max-h-screen overflow-y-auto">
+      {data.summary&&
         <div className="mb-6">
-          <h1 className="text-2xl font-bold mb-1">Profil</h1>
+          <h1 className="text-2xl font-bold mb-1">Profile</h1>
           <p 
             className="text-sm leading-relaxed"
             data-field="summary"
@@ -201,11 +197,12 @@ const ProfessionalDarkTemplate: React.FC<ProfessionalDarkTemplateProps> = ({
             {data.summary || ""}
           </p>
         </div>
+        }
         
         {/* Experience Section */}
         {data.experience && data.experience.length > 0 && data.experience.some(exp => exp.company || exp.position) && (
           <div className="mb-8">
-            <h2 className="text-xl font-bold mb-4">Expérience professionnelle</h2>
+            <h2 className="text-xl font-bold mb-4">Professional Experience</h2>
             {data.experience.filter(exp => exp.company || exp.position).map((exp, index) => (
               <div key={index} className="mb-6">
                 <div className="flex justify-between items-start mb-1">
@@ -233,7 +230,7 @@ const ProfessionalDarkTemplate: React.FC<ProfessionalDarkTemplateProps> = ({
         {/* Projects Section */}
         {data.projects && data.projects.length > 0 && data.projects.some(project => project.name) && (
           <div className="mb-8">
-            <h2 className="text-xl font-bold mb-4">Projets</h2>
+            <h2 className="text-xl font-bold mb-4">Projects</h2>
             {data.projects.filter(project => project.name).map((project, index) => (
               <div key={index} className="mb-6">
                 <div className="flex justify-between items-start mb-1">
@@ -257,7 +254,7 @@ const ProfessionalDarkTemplate: React.FC<ProfessionalDarkTemplateProps> = ({
         {/* Education Section */}
         {data.education && data.education.length > 0 && data.education.some(edu => edu.institution || edu.degree) && (
           <div className="mb-8">
-            <h2 className="text-xl font-bold mb-4">Formation</h2>
+            <h2 className="text-xl font-bold mb-4">Education</h2>
             {data.education.filter(edu => edu.institution || edu.degree).map((edu, index) => (
               <div key={index} className="mb-4">
                 <div className="flex justify-between items-start mb-1">
