@@ -548,7 +548,7 @@ useEffect(() => {
                         variant="outline"
                         className={cn(
                           "w-full justify-start text-left font-normal",
-                          !edu.date && "text-muted-foreground"
+                          !edu.date && "text-muted-foreground text-[#E67912] hover:bg-[#E67912] hover:text-white"
                         )}
                       >
                         <CalendarIcon className="mr-2 h-4 w-4" />
