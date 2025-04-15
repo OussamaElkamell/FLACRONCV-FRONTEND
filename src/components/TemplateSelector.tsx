@@ -216,10 +216,10 @@ const TemplateSelector: React.FC<TemplateSelectorProps> = ({
             className={cn(
               "relative cursor-pointer rounded-lg border-2 p-4 transition-all",
               selectedTemplate === template.id 
-                ? "border-[#E67912] bg-brand-50" 
+                ? "border-[#E67912] bg-brand-50 text-white" 
                 : "border-border hover:border-brand-200",
               template.requiresPro && !hasPro 
-                ? "opacity-70 hover:opacity-100" 
+                ? "opacity-70 hover:opacity-100 " 
                 : ""
             )}
             onClick={() => handleTemplateSelect(template.id, template.requiresPro)}
@@ -249,7 +249,10 @@ const TemplateSelector: React.FC<TemplateSelectorProps> = ({
                 <span className="ml-1 text-xs text-amber-500">PRO</span>
               )}
             </div>
-            <p className="text-xs text-muted-foreground mt-1">{template.description}</p>
+            <p className={`text-xs text-muted-foreground mt-1 ${selectedTemplate === template.id ? 'text-white' : 'text-black'}`}>
+  {template.description}
+</p>
+
           </div>
         ))}
       </div>
