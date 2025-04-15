@@ -20,7 +20,7 @@ const Hero = () => {
             Our AI-powered resume builder helps you create professional resumes and cover letters optimized for applicant tracking systems.
           </p>
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center ">
-  <Button asChild size="lg" className="bg-[#E67912] hover:bg-[#E67912]">
+  <Button asChild size="lg" className="bg-[#E67912] hover:bg-[#fb9d44] hover:text-white">
     <Link to="/resume">
       Create Resume
     </Link>

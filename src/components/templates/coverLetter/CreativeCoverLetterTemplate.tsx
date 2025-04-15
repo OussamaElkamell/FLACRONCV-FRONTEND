@@ -19,7 +19,7 @@ const CreativeCoverLetterTemplate: React.FC<CreativeCoverLetterTemplateProps> = 
     <div className="font-sans p-8 max-w-[800px] mx-auto">
       <div className="bg-purple-500 text-white p-8 rounded-lg mb-10">
         <h1 
-          className="text-3xl font-bold mb-2"
+          className="text-3xl font-bold mb-2 text-white"
           data-field="name"
           {...(editMode ? editableProps : {})}
         >
