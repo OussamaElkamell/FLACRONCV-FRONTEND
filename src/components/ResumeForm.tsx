@@ -591,7 +591,7 @@ useEffect(() => {
               type="button" 
               variant="outline" 
               onClick={() => addItem('experience')}
-              className="text-[#E67912]"
+              className="text-[#E67912] hover:bg-[#E67912] hover:text-white border-[#E67912]"
             >
               <Plus className="h-4 w-4 mr-2" />
               Add Experience
@@ -642,10 +642,10 @@ useEffect(() => {
                             variant="outline"
                             className={cn(
                               "w-full justify-start text-left font-normal",
-                              "text-muted-foreground text-[#E67912] hover:bg-[#E67912] hover:text-white border-[#E67912]"
+                              "text-muted-foreground text-[#E67912] hover:bg-[#E67912] hover:text-white "
                             )}
                           >
-                            <CalendarIcon className="mr-2 h-4 w-4 text-[#E67912] hover:bg-[#E67912] hover:text-white border-[#E67912]" />
+                            <CalendarIcon className="mr-2 h-4 w-4 " />
                             <span>Start Date</span>
                           </Button>
                         </PopoverTrigger>
@@ -665,7 +665,7 @@ useEffect(() => {
                             variant="outline"
                             className={cn(
                               "w-full justify-start text-left font-normal",
-                              "text-muted-foreground text-[#E67912] hover:bg-[#E67912] hover:text-white border-[#E67912]"
+                              "text-muted-foreground text-[#E67912] hover:bg-[#E67912] hover:text-white"
                             )}
                           >
                             <CalendarIcon className="mr-2 h-4 w-4" />
@@ -687,7 +687,7 @@ useEffect(() => {
                       variant="outline"
                       size="sm"
                       onClick={() => handleSetPresentDate(index)}
-                      className="whitespace-nowrap"
+                      className="whitespace-nowrap text-[#E67912] hover:bg-[#E67912] hover:text-white"
                     >
                       Set as Present
                     </Button>
@@ -773,7 +773,7 @@ useEffect(() => {
                         id={`project-date-${index}`}
                         variant="outline"
                         className={cn(
-                          "w-full justify-start text-left font-normal text-[#E67912] hover:bg-[#E67912] hover:text-white border-[#E67912]",
+                          "w-full justify-start text-left font-normal text-[#E67912] hover:bg-[#E67912] hover:text-white",
                           !project.date && "text-muted-foreground"
                         )}
                       >
@@ -967,7 +967,7 @@ useEffect(() => {
               type="button" 
               variant="outline" 
               onClick={() => addItem('customSections')}
-              className="text-[#E67912] hover:bg-[#E67912] hover:text-white border-[#E67912]"
+              className="text-[#E67912] hover:bg-[#E67912] hover:text-white "
             >
               <Plus className="h-4 w-4 mr-2" />
               Add Custom Section
