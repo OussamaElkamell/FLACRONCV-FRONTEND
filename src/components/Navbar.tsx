@@ -105,7 +105,7 @@ const Navbar = () => {
             </>
           ) : (
             <>
-              <Button asChild variant="outline">
+              <Button asChild variant="outline"  className=" hover:bg-[#E67912]">
                 <Link to="/login">
                   <LogIn className="mr-2 h-4 w-4" />
                   Login

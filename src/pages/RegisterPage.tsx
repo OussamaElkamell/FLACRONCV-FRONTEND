@@ -10,7 +10,7 @@ import { authService } from '@/services/firebaseClient';
 import { useToast } from '@/hooks/use-toast';
 import { FileUp, Mail, Lock } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
-
+import Logo from "../Assets/images/FlacroncvLogo.jpeg"
 const RegisterPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -87,9 +87,9 @@ const RegisterPage = () => {
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1">
           <div className="flex justify-center mb-4">
-            <Link to="/" className="flex items-center gap-2">
-              <FileUp className="h-8 w-8 text-[#E67912]" />
-              <span className="text-2xl font-bold">FLACRONCV</span>
+          <Link to="/" className="flex items-center gap-2">
+            <img src={Logo} style={{width:"80px", height:"80px"}} alt= "FLACRONCV Logo"/>
+              
             </Link>
           </div>
           <CardTitle className="text-2xl font-bold text-center">Create an account</CardTitle>
@@ -149,7 +149,7 @@ const RegisterPage = () => {
                 />
               </div>
             </div>
-            <Button type="submit" className="w-full  text-[#E67912] bg-[#E67912] hover:bg-[#fca657] text-white border-[#E67912]" disabled={loading}>
+            <Button type="submit" className="w-full   bg-[#E67912] hover:bg-[#fca657] text-white border-[#E67912]" disabled={loading}>
               {loading ? 'Creating account...' : 'Register with Email'}
             </Button>
           </form>

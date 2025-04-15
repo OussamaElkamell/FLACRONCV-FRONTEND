@@ -10,7 +10,7 @@ import { authService } from '@/services/firebaseClient';
 import { useToast } from '@/hooks/use-toast';
 import { FileUp, Mail, Lock } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
-
+import Logo from "../Assets/images/FlacroncvLogo.jpeg"
 const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -73,8 +73,8 @@ const LoginPage = () => {
         <CardHeader className="space-y-1">
           <div className="flex justify-center mb-4">
             <Link to="/" className="flex items-center gap-2">
-              <FileUp className="h-8 w-8 text-[#E67912]" />
-              <span className="text-2xl font-bold">FLACRONCV</span>
+            <img src={Logo} style={{width:"80px", height:"80px"}} alt= "FLACRONCV Logo"/>
+              
             </Link>
           </div>
           <CardTitle className="text-2xl font-bold text-center">Login to your account</CardTitle>
