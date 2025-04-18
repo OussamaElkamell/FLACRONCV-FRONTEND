@@ -129,15 +129,15 @@ const UserSettingsPage = () => {
                 {user?.subscription && user.subscription.plan !== 'free' ? (
                   <Button 
                     variant="outline" 
-                    className="w-full sm:w-auto" 
+                    className="w-full sm:w-auto bg-[#E67912] hover:bg-[#fb9d44] hover:text-white" 
                     onClick={() => setShowUnsubscribeDialog(true)}
                   >
-                    <UserX className="mr-2 h-4 w-4" />
+                    <UserX className="mr-2 h-4 w-4 " />
                     Cancel Subscription
                   </Button>
                 ) : (
                   <Button 
-                    className="w-full sm:w-auto" 
+                    className="w-full sm:w-auto bg-[#E67912] hover:bg-[#fb9d44] hover:text-white" 
                     onClick={() => navigate('/plans')}
                   >
                     <CreditCard className="mr-2 h-4 w-4" />

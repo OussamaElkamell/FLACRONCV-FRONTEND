@@ -11,7 +11,7 @@ const TermsPage = () => {
       <Navbar />
       <div className="container mx-auto py-10 px-4">
         <div className="mb-8">
-          <Button variant="ghost" asChild className="mb-4">
+          <Button variant="ghost" asChild className="mb-4  hover:bg-[#fb9d44] hover:text-white">
             <Link to="/">
               <ArrowLeft className="mr-2 h-4 w-4" />
               Back to Home

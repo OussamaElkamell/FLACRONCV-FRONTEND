@@ -230,17 +230,7 @@ const TemplateSelector: React.FC<TemplateSelectorProps> = ({
               </div>
             )}
             
-            {template.requiresPro && !hasPro && (
-              <div className="absolute top-2 right-2 bg-amber-500 rounded-full p-1">
-                <Lock className="h-3 w-3 text-white" />
-              </div>
-            )}
-            
-            {template.premium && (
-              <div className="absolute top-2 left-2 bg-purple-600 text-white text-xs px-1.5 py-0.5 rounded">
-                PRO
-              </div>
-            )}
+        
             
             <div className={cn("h-16 w-full rounded-md mb-3", template.color)} />
             <div className="text-sm font-medium">
@@ -259,7 +249,7 @@ const TemplateSelector: React.FC<TemplateSelectorProps> = ({
       <div className="mt-8 text-center">
         <Button 
           variant="outline" 
-          className="text-sm text-muted-foreground"
+          className="text-sm text-muted-foreground hover:bg-[#fb9d44] hover:text-white"
           onClick={handleBrowseMore}
         >
           {showAllTemplates ? "Show Basic Templates" : "Browse More Templates"} 

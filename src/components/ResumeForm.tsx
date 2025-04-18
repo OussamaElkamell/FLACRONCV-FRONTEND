@@ -938,7 +938,7 @@ useEffect(() => {
               </Button>
               <div className="grid grid-cols-1 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor={`custom-title-${index}`}>Section Title</Label>
+                  <Label htmlFor={`custom-title-${index}`}>Title</Label>
                   <Input 
                     id={`custom-title-${index}`} 
                     value={section.title} 
@@ -959,12 +959,7 @@ useEffect(() => {
               </div>
             </div>
           ))}
-          {(!formData.customSections || formData.customSections.length === 0) && (
-            <div className="text-center text-muted-foreground py-6">
-              <FileText className="mx-auto h-8 w-8 opacity-40 mb-2" />
-              <p>Add custom sections like Languages, Interests, Volunteer Work, etc.</p>
-            </div>
-          )}
+          
         </CardContent>
       </Card>
 
