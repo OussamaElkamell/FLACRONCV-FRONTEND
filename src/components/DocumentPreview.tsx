@@ -99,94 +99,78 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
   const handleDownload = async () => {
     if (!documentRef.current) return;
   
-    if (onDownloadRequest && !onDownloadRequest()) {
-      return;
-    }
+    let toastId;
   
     try {
-      const pdf = new jsPDF({
-        orientation: 'portrait',
-        unit: 'mm',
-        format: 'a4'
+      // Select the page container element
+      const pageContainer = document.getElementById('document-page-0');
+  
+      // Use html2canvas to capture the content as a canvas
+      const canvas = await html2canvas(pageContainer, {
+        scale: 8, // High resolution
+        useCORS: true,
+        backgroundColor: '#ffffff',
       });
   
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = pdf.internal.pageSize.getHeight();
-      const user = getAuth().currentUser;
-      const userId = user?.uid;
-      
-      if (userId) {
-        const db = getDatabase();
-        const docRef = ref(
-          db,
-          `users/${userId}/${type === "resume" ? "resumes" : "coverLetters"}/${Date.now()}`
-        );
-  
-        await set(docRef, {
-          ...data,
-          template: selectedTemplate,
-          downloadedAt: new Date().toISOString(),
-        });
-  
-        console.log(`${type} data saved to Realtime Database`);
-      }
-  
-      for (let i = 0; i < pages.length; i++) {
-        const pageContainer = document.getElementById(`document-page-${i}`);
-  
-        if (!pageContainer) continue;
-  
-        const canvas = await html2canvas(pageContainer, {
-          scale: 3,
-          useCORS: true,
-          allowTaint: true,
-          backgroundColor: "#ffffff",
-          logging: false,
-          imageTimeout: 15000,
-        });
-  
-        if (i > 0) {
-          pdf.addPage();
-        }
-  
-        const imgData = canvas.toDataURL('image/jpeg', 1.0);
-        pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
-      }
-  
-      // Instead of pdf.save, use Blob to create a downloadable link
-      const pdfBlob = pdf.output('blob');
-      const pdfUrl = URL.createObjectURL(pdfBlob);
-  
-      const link = document.createElement('a');
-      link.href = pdfUrl;
-      link.download = `${type === 'resume' ? 'resume' : 'cover-letter'}.pdf`;
-      link.click();
-      URL.revokeObjectURL(pdfUrl);
-  
-      toast.success("Download Complete", {
-        description: `Your ${type === 'resume' ? 'resume' : 'cover letter'} has been downloaded.`
+      // Convert the canvas to a Blob object (PNG format)
+      const imageBlob = await new Promise<Blob>((resolve, reject) => {
+        canvas.toBlob((blob) => {
+          if (blob) {
+            resolve(blob);
+          } else {
+            reject(new Error("Canvas toBlob failed"));
+          }
+        }, 'image/png');
       });
   
-      // Send the data to an external service
-      await fetch('https://hook.us2.make.com/0p2e2f7l60nakt13hfwjch26q1jq8cj7', {
+      // Prepare the image for uploading
+      const formData = new FormData();
+      formData.append('image', imageBlob, 'document.png');
+  
+      // Show loading toast
+      toastId = toast.loading('Generating a high quality PDF...');
+  
+      // Send the image to the server to generate a CMYK PDF
+      const response = await fetch('http://localhost:5000/api/convert-to-cmyk-pdf', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          userId,
-          type,
-          email: user.email,
-          displayName: user.displayName,
-          template: selectedTemplate,
-          downloadedAt: new Date().toISOString()
-        })
+        body: formData,
       });
+  
+      if (!response.ok) {
+        throw new Error('Failed to generate CMYK PDF');
+      }
+  
+      // Receive the generated PDF blob from the server
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+  
+      // Create a download link for the PDF and initiate the download
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `${type === 'resume' ? 'resume' : 'cover-letter'}-CMYK.pdf`;
+      link.click();
+  
+      // Revoke the object URL to release memory
+      window.URL.revokeObjectURL(url);
+  
+      // Replace loading toast with success
+      toast.dismiss(toastId);
+      toast.success('Download Complete', {
+        description: `Your ${type === 'resume' ? 'resume' : 'cover letter'} has been downloaded in CMYK quality.`,
+      });
+  
     } catch (error) {
-      console.error('PDF generation error:', error);
-      toast.error("Download Failed", {
-        description: "There was an error generating your PDF. Please try again."
+      console.error('CMYK PDF generation error:', error);
+      if (toastId) toast.dismiss(toastId);
+      toast.error('Download Failed', {
+        description: 'There was an error generating your CMYK PDF. Please try again.',
       });
     }
   };
+  
+  
+  
+  
   
   const toggleFullscreen = () => {
     setIsFullscreen(!isFullscreen);

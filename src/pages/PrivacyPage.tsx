@@ -13,7 +13,7 @@ const PrivacyPage = () => {
         <div className="mb-8">
           <Button variant="ghost" asChild className="mb-4">
             <Link to="/">
-              <ArrowLeft className="mr-2 h-4 w-4" />
+              <ArrowLeft className="mr-2 h-4 w-4 " />
               Back to Home
             </Link>
           </Button>
