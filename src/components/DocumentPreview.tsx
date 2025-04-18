@@ -131,34 +131,46 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
       toastId = toast.loading('Generating a high quality PDF...');
   
       // Send the image to the server to generate a CMYK PDF
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/convert-to-cmyk-pdf`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/pdf/convert-to-cmyk-pdf`, {
         method: 'POST',
         body: formData,
+        headers: {
+          Accept: 'application/pdf', // Tell the server to send PDF
+        },
       });
   
       if (!response.ok) {
         throw new Error('Failed to generate CMYK PDF');
       }
   
-      // Receive the generated PDF blob from the server
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
+      // Check the response Content-Type
+      const contentType = response.headers.get('Content-Type');
+      if (contentType && contentType.includes('application/pdf')) {
+        // Receive the generated PDF blob from the server
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
   
-      // Create a download link for the PDF and initiate the download
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = `${type === 'resume' ? 'resume' : 'cover-letter'}-CMYK.pdf`;
-      link.click();
+        // Create a download link for the PDF and initiate the download
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `${type === 'resume' ? 'resume' : 'cover-letter'}-CMYK.pdf`;
   
-      // Revoke the object URL to release memory
-      window.URL.revokeObjectURL(url);
+        // Append to body and trigger click event to start download
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
   
-      // Replace loading toast with success
-      toast.dismiss(toastId);
-      toast.success('Download Complete', {
-        description: `Your ${type === 'resume' ? 'resume' : 'cover letter'} has been downloaded in CMYK quality.`,
-      });
+        // Revoke the object URL to release memory
+        window.URL.revokeObjectURL(url);
   
+        // Replace loading toast with success
+        toast.dismiss(toastId);
+        toast.success('Download Complete', {
+          description: `Your ${type === 'resume' ? 'resume' : 'cover letter'} has been downloaded in CMYK quality.`,
+        });
+      } else {
+        throw new Error('Response is not a PDF');
+      }
     } catch (error) {
       console.error('CMYK PDF generation error:', error);
       if (toastId) toast.dismiss(toastId);
@@ -167,7 +179,6 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
       });
     }
   };
-  
   
   
   
