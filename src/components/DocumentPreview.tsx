@@ -131,7 +131,7 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
       toastId = toast.loading('Generating a high quality PDF...');
   
       // Send the image to the server to generate a CMYK PDF
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/pdf/convert-to-cmyk-pdf`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/convert-to-cmyk-pdf`, {
         method: 'POST',
         body: formData,
         headers: {
