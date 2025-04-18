@@ -85,10 +85,10 @@ const AcademicResumeTemplate: React.FC<AcademicResumeTemplateProps> = ({
                   <h3 className="font-bold">{edu.degree || ''}</h3>
                   <span className="text-gray-600">{edu.date || ''}</span>
                 </div>
-                <h4 className="italic mb-2">{edu.institution || ''}</h4>
+                <h4 className="text-xs mt-1 space-y-0.5 break-words">{edu.institution || ''}</h4>
                 
                 {edu.description && (
-                  <p>{edu.description}</p>
+                  <p className='text-xs mt-1 space-y-0.5 break-words'>{edu.description}</p>
                 )}
               </div>
             ))}
@@ -113,7 +113,7 @@ const AcademicResumeTemplate: React.FC<AcademicResumeTemplateProps> = ({
                 )}
                 
                 {project.description && (
-                  <p className="mb-1">{project.description}</p>
+                  <p className="text-xs mt-1 space-y-0.5 break-words">{project.description}</p>
                 )}
                 
                 {project.link && (
@@ -142,7 +142,7 @@ const AcademicResumeTemplate: React.FC<AcademicResumeTemplateProps> = ({
                 
                 {exp.description && (
                   <div>
-                    <ul className="list-disc pl-5 space-y-1">
+                    <ul className="text-xs mt-1 space-y-0.5 break-words">
                       {exp.description.split('\n').map((item, i) => (
                         <li key={i}>{item}</li>
                       ))}

@@ -126,7 +126,7 @@ const ModernResumeTemplate: React.FC<ModernResumeTemplateProps> = ({
                     </div>
                     {exp.description && (
                       <p 
-                        className="mt-1 text-xs text-gray-700 leading-tight"
+                        className="text-xs mt-1 space-y-0.5 break-words"
                         data-field={`experience.description`}
                         data-index={index.toString()}
                         {...(editMode ? editableProps : {})}
@@ -182,7 +182,7 @@ const ModernResumeTemplate: React.FC<ModernResumeTemplateProps> = ({
                     
                     {project.description && (
                       <p 
-                        className="mt-1 text-xs text-gray-700 leading-tight"
+                        className="text-xs mt-1 space-y-0.5 break-words"
                         data-field={`projects.description`}
                         data-index={index.toString()}
                         {...(editMode ? editableProps : {})}
@@ -230,7 +230,7 @@ const ModernResumeTemplate: React.FC<ModernResumeTemplateProps> = ({
                     </div>
                     {edu.description && (
                       <p 
-                        className="mt-1 text-xs text-gray-700 leading-tight"
+                        className="text-xs mt-1 space-y-0.5 break-words"
                         data-field={`education.description`}
                         data-index={index.toString()}
                         {...(editMode ? editableProps : {})}

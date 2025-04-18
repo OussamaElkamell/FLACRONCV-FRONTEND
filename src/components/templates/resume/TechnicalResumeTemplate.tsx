@@ -126,7 +126,7 @@ const TechnicalResumeTemplate: React.FC<TechnicalResumeTemplateProps> = ({
                   <h4 className="text-sm text-indigo-700 mb-1">{exp.company || ''}</h4>
                   
                   {exp.description && (
-                    <div className="text-xs">
+                    <div className="text-xs mt-1 space-y-0.5 break-words">
                       <ul className="list-disc pl-5 space-y-1">
                         {exp.description.split('\n').map((item, i) => (
                           <li key={i}>{item}</li>
@@ -163,7 +163,7 @@ const TechnicalResumeTemplate: React.FC<TechnicalResumeTemplateProps> = ({
                   )}
                   
                   {project.description && (
-                    <p className="text-xs mb-1">{project.description}</p>
+                    <p className="text-xs mt-1 space-y-0.5 break-words">{project.description}</p>
                   )}
                   
                   {project.link && (
@@ -194,7 +194,7 @@ const TechnicalResumeTemplate: React.FC<TechnicalResumeTemplateProps> = ({
                   </div>
                   
                   {edu.description && (
-                    <p className="text-xs">{edu.description}</p>
+                    <p className="text-xs mt-1 space-y-0.5 break-words">{edu.description}</p>
                   )}
                 </div>
               ))}

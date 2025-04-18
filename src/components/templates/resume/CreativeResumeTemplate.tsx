@@ -84,7 +84,7 @@ const CreativeResumeTemplate: React.FC<CreativeResumeTemplateProps> = ({
         <div className="mb-10 bg-purple-50 p-6 rounded-lg border-l-4 border-purple-500">
           <h2 className="text-xl font-bold text-purple-700 mb-3">About Me</h2>
           <p 
-            className="text-gray-700 leading-relaxed italic"
+            className="text-xs mt-1 space-y-0.5 break-words"
             data-field="summary"
             {...(editMode ? editableProps : {})}
           >
@@ -109,7 +109,7 @@ const CreativeResumeTemplate: React.FC<CreativeResumeTemplateProps> = ({
                       <h4 className="text-purple-600 font-medium">{exp.company || 'Company'}</h4>
                       <span className="text-sm text-gray-500 italic">{exp.date || 'Date'}</span>
                     </div>
-                    {exp.description && <p className="mt-2 text-gray-700">{exp.description}</p>}
+                    {exp.description && <p className="text-xs mt-1 space-y-0.5 break-words">{exp.description}</p>}
                   </div>
                 ) : null
               ))}
@@ -134,7 +134,7 @@ const CreativeResumeTemplate: React.FC<CreativeResumeTemplateProps> = ({
                       <span className="text-sm text-gray-500 italic">{project.date}</span>
                     )}
                   </div>
-                  {project.description && <p className="mt-2 text-gray-700">{project.description}</p>}
+                  {project.description && <p className="text-xs mt-1 space-y-0.5 break-words">{project.description}</p>}
                   {project.link && (
                     <div 
                     
@@ -163,7 +163,7 @@ const CreativeResumeTemplate: React.FC<CreativeResumeTemplateProps> = ({
                       <h4 className="text-purple-600 font-medium">{edu.institution || 'Institution'}</h4>
                       <span className="text-sm text-gray-500 italic">{edu.date || 'Date'}</span>
                     </div>
-                    {edu.description && <p className="mt-2 text-gray-700">{edu.description}</p>}
+                    {edu.description && <p className="text-xs mt-1 space-y-0.5 break-words">{edu.description}</p>}
                   </div>
                 ) : null
               ))}

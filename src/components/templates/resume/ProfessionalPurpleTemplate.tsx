@@ -41,7 +41,7 @@ const ProfessionalPurpleTemplate: React.FC<ProfessionalPurpleTemplateProps> = ({
           </h1>
          
           <p 
-            className="text-sm leading-relaxed"
+            className="text-xs mt-1 space-y-0.5 break-words"
             data-field="summary"
             {...(editMode ? editableProps : {})}
           >
@@ -68,8 +68,8 @@ const ProfessionalPurpleTemplate: React.FC<ProfessionalPurpleTemplateProps> = ({
                   </div>
                   
                   {exp.description && (
-                    <div className="mt-2 text-sm">
-                      <ul className="list-disc pl-5 space-y-1">
+                    <div className="text-xs mt-1 space-y-0.5 break-words">
+                      <ul className="text-xs mt-1 space-y-0.5 break-words">
                         {exp.description.split('\n').map((item, i) => (
                           <li key={i}>{item}</li>
                         ))}
@@ -94,7 +94,7 @@ const ProfessionalPurpleTemplate: React.FC<ProfessionalPurpleTemplateProps> = ({
                     </div>
                     <span className="text-sm">{edu.date || ''}</span>
                   </div>
-                  {edu.description && <p className="text-sm mt-1">{edu.description}</p>}
+                  {edu.description && <p className="text-xs mt-1 space-y-0.5 break-words">{edu.description}</p>}
                 </div>
               ))}
             </div>
@@ -115,7 +115,7 @@ const ProfessionalPurpleTemplate: React.FC<ProfessionalPurpleTemplateProps> = ({
                     </div>
                     <span className="text-sm">{project.date || ''}</span>
                   </div>
-                  {project.description && <p className="text-sm mt-1">{project.description}</p>}
+                  {project.description && <p className="text-xs mt-1 space-y-0.5 break-words">{project.description}</p>}
                   {project.link && (
                     <div className="text-sm text-purple-700 mt-1 inline-block">
                        {project.link} 

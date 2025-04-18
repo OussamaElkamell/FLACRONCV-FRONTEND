@@ -117,7 +117,7 @@ const MinimalistResumeTemplate: React.FC<MinimalistResumeTemplateProps> = ({
                 </h4>
                 {exp.description && (
                   <p 
-                    className="text-sm text-gray-700 leading-relaxed"
+                    className="text-xs mt-1 space-y-0.5 break-words"
                     data-field={`experience.description`}
                     data-index={index.toString()}
                     {...(editMode ? editableProps : {})}
@@ -149,7 +149,7 @@ const MinimalistResumeTemplate: React.FC<MinimalistResumeTemplateProps> = ({
                 <p className="text-sm text-gray-600 mb-1">{project.technologies}</p>
               )}
               {project.description && (
-                <p className="text-sm text-gray-700 leading-relaxed">
+                <p className="text-xs mt-1 space-y-0.5 break-words">
                   {project.description}
                 </p>
               )}
@@ -201,7 +201,7 @@ const MinimalistResumeTemplate: React.FC<MinimalistResumeTemplateProps> = ({
                 </h4>
                 {edu.description && (
                   <p 
-                    className="text-sm text-gray-700"
+                    className="text-xs mt-1 space-y-0.5 break-words"
                     data-field={`education.description`}
                     data-index={index.toString()}
                     {...(editMode ? editableProps : {})}

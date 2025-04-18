@@ -91,7 +91,7 @@ const CorporateResumeTemplate: React.FC<CorporateResumeTemplateProps> = ({
                 
                 {exp.description && (
                   <div>
-                    <ul className="list-disc pl-5 space-y-1">
+                    <ul className="text-xs mt-1 space-y-0.5 break-words">
                       {exp.description.split('\n').map((item, i) => (
                         <li key={i}>{item}</li>
                       ))}
@@ -117,7 +117,7 @@ const CorporateResumeTemplate: React.FC<CorporateResumeTemplateProps> = ({
                   <div className="text-sm text-gray-600 mt-1 mb-2">{edu.date || ''}</div>
                   
                   {edu.description && (
-                    <p className="text-sm">{edu.description}</p>
+                    <p className="text-xs mt-1 space-y-0.5 break-words">{edu.description}</p>
                   )}
                 </div>
               ))}
@@ -169,7 +169,7 @@ const CorporateResumeTemplate: React.FC<CorporateResumeTemplateProps> = ({
                 )}
                 
                 {project.description && (
-                  <p className="mb-1">{project.description}</p>
+                  <p className="text-xs mt-1 space-y-0.5 break-words">{project.description}</p>
                 )}
                 
                 {project.link && (

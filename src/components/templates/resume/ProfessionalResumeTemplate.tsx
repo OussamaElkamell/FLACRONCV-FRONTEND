@@ -123,7 +123,7 @@ const ProfessionalResumeTemplate: React.FC<ProfessionalResumeTemplateProps> = ({
                 </div>
                 {exp.description && (
                   <p 
-                    className="text-xs mt-0.5 leading-tight"
+                    className="text-xs mt-1 space-y-0.5 break-words"
                     data-field={`experience.description`}
                     data-index={index.toString()}
                     {...(editMode ? editableProps : {})}
@@ -143,7 +143,7 @@ const ProfessionalResumeTemplate: React.FC<ProfessionalResumeTemplateProps> = ({
           <h2 className="text-sm font-bold border-b border-gray-300 pb-0.5 mb-1">Projects</h2>
           {data.projects.map((project, index) => (
             project.name || project.description ? (
-              <div key={index} className="mb-2">
+              <div key={index} className="text-xs mt-1 space-y-0.5 break-words">
                 <div className="flex justify-between items-start">
                   <div>
                     <h3 
@@ -173,7 +173,7 @@ const ProfessionalResumeTemplate: React.FC<ProfessionalResumeTemplateProps> = ({
                 </div>
                 {project.description && (
                   <p 
-                    className="text-xs mt-0.5 leading-tight"
+                    className="text-xs mt-1 space-y-0.5 break-words"
                     data-field={`projects.description`}
                     data-index={index.toString()}
                     {...(editMode ? editableProps : {})}
@@ -226,7 +226,7 @@ const ProfessionalResumeTemplate: React.FC<ProfessionalResumeTemplateProps> = ({
                 </div>
                 {edu.description && (
                   <p 
-                    className="text-xs mt-0.5"
+                    className="text-xs mt-1 space-y-0.5 break-words"
                     data-field={`education.description`}
                     data-index={index.toString()}
                     {...(editMode ? editableProps : {})}

@@ -70,7 +70,7 @@ const ExecutiveResumeTemplate: React.FC<ExecutiveResumeTemplateProps> = ({
             EXECUTIVE SUMMARY
           </h2>
           <p 
-            className="text-sm leading-relaxed"
+            className="text-xs mt-1 space-y-0.5 break-words"
             data-field="summary"
             {...(editMode ? editableProps : {})}
           >
@@ -94,7 +94,7 @@ const ExecutiveResumeTemplate: React.FC<ExecutiveResumeTemplateProps> = ({
               <h4 className="text-sm font-semibold text-gray-800 mb-2">{exp.company || ''}</h4>
               
               {exp.description && (
-                <div className="text-sm">
+                <div className="text-xs mt-1 space-y-0.5 break-words">
                   <ul className="list-disc pl-5 space-y-1">
                     {exp.description.split('\n').map((item, i) => (
                       <li key={i}>{item}</li>
@@ -122,7 +122,7 @@ const ExecutiveResumeTemplate: React.FC<ExecutiveResumeTemplateProps> = ({
               <h4 className="text-sm font-semibold text-gray-800 mb-2">{edu.institution || ''}</h4>
               
               {edu.description && (
-                <p className="text-sm">{edu.description}</p>
+                <p className="text-xs mt-1 space-y-0.5 break-words">{edu.description}</p>
               )}
             </div>
           ))}
@@ -146,7 +146,7 @@ const ExecutiveResumeTemplate: React.FC<ExecutiveResumeTemplateProps> = ({
               )}
               
               {project.description && (
-                <p className="text-sm">{project.description}</p>
+                <p className="text-xs mt-1 space-y-0.5 break-words">{project.description}</p>
               )}
               
               {project.link && (
