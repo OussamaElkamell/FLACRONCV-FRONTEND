@@ -64,7 +64,7 @@ const MinimalistResumeTemplate: React.FC<MinimalistResumeTemplateProps> = ({
         </div>
         
         {data.personalInfo.photo && (
-          <Avatar className="w-24 h-24 border border-gray-200">
+          <Avatar className="rounded-full w-full max-w-[100px] h-auto  border border-gray-200">
             <AvatarImage src={data.personalInfo.photo} alt={data.personalInfo.name} />
             <AvatarFallback>{data.personalInfo.name?.charAt(0) || 'U'}</AvatarFallback>
           </Avatar>

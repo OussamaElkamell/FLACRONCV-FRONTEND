@@ -124,6 +124,7 @@
     min-height: 11in;
     width: 100%;
   }
+  
 
   .doc-preview {
     height: calc(100vh - 200px);

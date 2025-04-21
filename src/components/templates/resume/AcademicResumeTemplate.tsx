@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { ResumeData } from '@/types/documents';
 
@@ -14,12 +13,11 @@ const AcademicResumeTemplate: React.FC<AcademicResumeTemplateProps> = ({
   editableProps = {} 
 }) => {
   return (
-    <div className="font-serif p-0 max-w-[800px] mx-auto bg-white">
+    <div className="font-serif p-0 max-w-[800px] mx-auto text-[10px] print:text-[9pt]">
       {/* Header with name and emerald styling */}
-      
-      <div className="bg-emerald-700 text-white p-8 text-center">
-         {/* Profile photo */}
-         <div className="mb-4 flex justify-center">
+      <div className="bg-emerald-700 text-white pb-2 pl-0 pr-0 text-center">
+        {/* Profile photo */}
+        <div className="mb-4 flex justify-center">
           {data.personalInfo.photo ? (
             <img 
               src={data.personalInfo.photo} 
@@ -33,7 +31,7 @@ const AcademicResumeTemplate: React.FC<AcademicResumeTemplateProps> = ({
           )}
         </div>
         <h1 
-          className="text-3xl font-bold mb-1 tracking-wide text-white" 
+          className="text-2xl font-bold mb-1 tracking-wide text-white" 
           data-field="name"
           {...(editMode ? editableProps : {})}
         >
@@ -60,7 +58,7 @@ const AcademicResumeTemplate: React.FC<AcademicResumeTemplateProps> = ({
         {/* Summary/Research Interest Section */}
         {data.summary && (
           <div className="mb-6">
-            <h2 className="text-xl font-bold text-emerald-800 border-b-2 border-emerald-700 pb-1 mb-3">
+            <h2 className="text-md font-bold mb-1  text-emerald-800 border-b-2 border-emerald-700 pb-1 ">
               RESEARCH INTERESTS
             </h2>
             <p 
@@ -73,10 +71,10 @@ const AcademicResumeTemplate: React.FC<AcademicResumeTemplateProps> = ({
           </div>
         )}
         
-        {/* Education Section - Prioritized in Academic CV */}
+        {/* Education Section */}
         {data.education && data.education.length > 0 && data.education.some(edu => edu.institution || edu.degree) && (
           <div className="mb-6">
-            <h2 className="text-xl font-bold text-emerald-800 border-b-2 border-emerald-700 pb-1 mb-3">
+            <h2 className="text-md font-bold mb-1  text-emerald-800 border-b-2 border-emerald-700 pb-1">
               EDUCATION
             </h2>
             {data.education.filter(edu => edu.institution || edu.degree).map((edu, index) => (
@@ -95,10 +93,10 @@ const AcademicResumeTemplate: React.FC<AcademicResumeTemplateProps> = ({
           </div>
         )}
         
-        {/* Publications Section - Using Projects */}
+        {/* Publications Section */}
         {data.projects && data.projects.length > 0 && data.projects.some(project => project.name) && (
           <div className="mb-6">
-            <h2 className="text-xl font-bold text-emerald-800 border-b-2 border-emerald-700 pb-1 mb-3">
+            <h2 className="text-md font-bold mb-1  text-emerald-800 border-b-2 border-emerald-700 pb-1">
               PUBLICATIONS & RESEARCH
             </h2>
             {data.projects.filter(project => project.name).map((project, index) => (
@@ -129,7 +127,7 @@ const AcademicResumeTemplate: React.FC<AcademicResumeTemplateProps> = ({
         {/* Experience Section */}
         {data.experience && data.experience.length > 0 && data.experience.some(exp => exp.company || exp.position) && (
           <div className="mb-6">
-            <h2 className="text-xl font-bold text-emerald-800 border-b-2 border-emerald-700 pb-1 mb-3">
+            <h2 className="text-md font-bold mb-1  text-emerald-800 border-b-2 border-emerald-700 pb-1">
               TEACHING & PROFESSIONAL EXPERIENCE
             </h2>
             {data.experience.filter(exp => exp.company || exp.position).map((exp, index) => (
@@ -157,7 +155,7 @@ const AcademicResumeTemplate: React.FC<AcademicResumeTemplateProps> = ({
         {/* Skills Section */}
         {data.skills && data.skills.length > 0 && data.skills.some(skill => skill.skills) && (
           <div className="mb-6">
-            <h2 className="text-xl font-bold text-emerald-800 border-b-2 border-emerald-700 pb-1 mb-3">
+            <h2 className="text-md font-bold mb-1  text-emerald-800 border-b-2 border-emerald-700 pb-1">
               SPECIALIZED SKILLS
             </h2>
             {data.skills.filter(skillCategory => skillCategory.skills).map((skillCategory, categoryIndex) => (
@@ -172,7 +170,7 @@ const AcademicResumeTemplate: React.FC<AcademicResumeTemplateProps> = ({
         {/* Certifications Section */}
         {data.certifications && data.certifications.length > 0 && data.certifications.some(cert => cert.name) && (
           <div className="mb-6">
-            <h2 className="text-xl font-bold text-emerald-800 border-b-2 border-emerald-700 pb-1 mb-3">
+            <h2 className="text-md font-bold mb-1  text-emerald-800 border-b-2 border-emerald-700 pb-1">
               CERTIFICATIONS & AWARDS
             </h2>
             {data.certifications.filter(cert => cert.name).map((cert, index) => (
@@ -191,7 +189,7 @@ const AcademicResumeTemplate: React.FC<AcademicResumeTemplateProps> = ({
         {/* Languages Section */}
         {data.languages && data.languages.length > 0 && (
           <div className="mb-6">
-            <h2 className="text-xl font-bold text-emerald-800 border-b-2 border-emerald-700 pb-1 mb-3">
+            <h2 className="text-md font-bold mb-1  text-emerald-800 border-b-2 border-emerald-700 pb-1">
               LANGUAGES
             </h2>
             <div className="flex flex-wrap gap-x-8 gap-y-2">
@@ -215,7 +213,7 @@ const AcademicResumeTemplate: React.FC<AcademicResumeTemplateProps> = ({
         {/* Interests Section */}
         {data.interests && data.interests.length > 0 && (
           <div className="mb-6">
-            <h2 className="text-xl font-bold text-emerald-800 border-b-2 border-emerald-700 pb-1 mb-3">
+            <h2 className="text-md font-bold mb-1  text-emerald-800 border-b-2 border-emerald-700 pb-1">
               RESEARCH INTERESTS
             </h2>
             <ul className="list-disc pl-5 space-y-1">
@@ -231,7 +229,7 @@ const AcademicResumeTemplate: React.FC<AcademicResumeTemplateProps> = ({
           <>
             {data.customSections.filter(section => section.title && section.content).map((section, index) => (
               <div key={index} className="mb-6">
-                <h2 className="text-xl font-bold text-emerald-800 border-b-2 border-emerald-700 pb-1 mb-3">
+                <h2 className="text-md font-bold mb-1  text-emerald-800 border-b-2 border-emerald-700 pb-1">
                   {section.title.toUpperCase()}
                 </h2>
                 <p>{section.content}</p>

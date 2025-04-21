@@ -19,7 +19,7 @@ import ResumePage from '@/pages/ResumePage';
 import CoverLetterPage from '@/pages/CoverLetterPage';
 import AdminPage from '@/pages/AdminPage';
 import NotFound from '@/pages/NotFound';
-
+// import './App.css';
 
 
 function App() {

@@ -48,230 +48,123 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
   onDownloadRequest 
 }) => {
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const [isEditMode, setIsEditMode] = useState(false);
-  const documentRef = useRef<HTMLDivElement>(null);
-  const [contentHeight, setContentHeight] = useState<number | null>(null);
-  const [isOverflowing, setIsOverflowing] = useState(false);
-  const [pages, setPages] = useState<number[]>([0]);
-  const printRef = useRef<HTMLDivElement>(null);
+const [isEditMode, setIsEditMode] = useState(false);
+const documentRef = useRef<HTMLDivElement>(null);
+const printRef = useRef<HTMLDivElement>(null);
 
-  const PAGE_WIDTH = 595; // A4 width in pixels at 72 DPI
-  const PAGE_HEIGHT = 842; // A4 height in pixels at 72 DPI
-  const PRINT_SCALE = 4; // Higher scale for better PDF quality
+const [contentHeight, setContentHeight] = useState<number | null>(null);
+const [isOverflowing, setIsOverflowing] = useState(false);
+const [pages, setPages] = useState<number[]>([0]);
 
-  useEffect(() => {
-    if (!documentRef.current) return;
-    
-    const checkContentHeight = () => {
-      const docElement = documentRef.current;
-      if (!docElement) return;
-      
-      const contentElement = docElement.firstElementChild;
-      if (!contentElement) return;
-      
-      const totalHeight = contentElement.scrollHeight;
-      
-      setContentHeight(totalHeight);
-      
-      const numberOfPages = Math.ceil(totalHeight / PAGE_HEIGHT);
-      setIsOverflowing(numberOfPages > 1);
-      
-      if (numberOfPages > pages.length) {
-        setPages(Array.from({ length: numberOfPages }, (_, i) => i));
-      } else if (numberOfPages < pages.length && numberOfPages > 0) {
-        setPages(Array.from({ length: numberOfPages }, (_, i) => i));
-      }
-    };
-    
-    checkContentHeight();
-    
-    const observer = new MutationObserver(checkContentHeight);
-    observer.observe(documentRef.current, { 
-      childList: true, 
-      subtree: true, 
-      characterData: true,
-      attributes: true 
-    });
-    
-    return () => observer.disconnect();
-  }, [data, selectedTemplate]);
-  
-  // const handleDownload = async () => {
-  //   if (!documentRef.current) return;
-  
-  //   let toastId;
-  
-  //   try {
-  //     // Select the page container element
-  //     const pageContainer = document.getElementById('document-page-0');
-  
-  //     // Use html2canvas to capture the content as a canvas
-  //     const canvas = await html2canvas(pageContainer, {
-  //       scale: 8, // High resolution
-  //       useCORS: true,
-  //       backgroundColor: '#ffffff',
-  //     });
-  
-  //     // Convert the canvas to a Blob object (PNG format)
-  //     const imageBlob = await new Promise<Blob>((resolve, reject) => {
-  //       canvas.toBlob((blob) => {
-  //         if (blob) {
-  //           resolve(blob);
-  //         } else {
-  //           reject(new Error("Canvas toBlob failed"));
-  //         }
-  //       }, 'image/png');
-  //     });
-  
-  //     // Prepare the image for uploading
-  //     const formData = new FormData();
-  //     formData.append('image', imageBlob, 'document.png');
-  
-  //     // Show loading toast
-  //     toastId = toast.loading('Generating a high quality PDF...');
-  
-  //     // Send the image to the server to generate a CMYK PDF
-  //     const response = await fetch(`${import.meta.env.VITE_API_URL}/convert-to-cmyk-pdf`, {
-  //       method: 'POST',
-  //       body: formData,
-  //       headers: {
-  //         Accept: 'application/pdf', // Tell the server to send PDF
-  //       },
-  //     });
-  
-  //     if (!response.ok) {
-  //       throw new Error('Failed to generate CMYK PDF');
-  //     }
-  
-  //     // Check the response Content-Type
-  //     const contentType = response.headers.get('Content-Type');
-  //     if (contentType && contentType.includes('application/pdf')) {
-  //       // Receive the generated PDF blob from the server
-  //       const blob = await response.blob();
-  //       const url = window.URL.createObjectURL(blob);
-  
-  //       // Create a download link for the PDF and initiate the download
-  //       const link = document.createElement('a');
-  //       link.href = url;
-  //       link.download = `${type === 'resume' ? 'resume' : 'cover-letter'}-CMYK.pdf`;
-  
-  //       // Append to body and trigger click event to start download
-  //       document.body.appendChild(link);
-  //       link.click();
-  //       document.body.removeChild(link);
-  
-  //       // Revoke the object URL to release memory
-  //       window.URL.revokeObjectURL(url);
-  
-  //       // Replace loading toast with success
-  //       toast.dismiss(toastId);
-  //       toast.success('Download Complete', {
-  //         description: `Your ${type === 'resume' ? 'resume' : 'cover letter'} has been downloaded in CMYK quality.`,
-  //       });
-  //     } else {
-  //       throw new Error('Response is not a PDF');
-  //     }
-  //   } catch (error) {
-  //     console.error('CMYK PDF generation error:', error);
-  //     if (toastId) toast.dismiss(toastId);
-  //     toast.error('Download Failed', {
-  //       description: 'There was an error generating your CMYK PDF. Please try again.',
-  //     });
-  //   }
-  // };
-  
-  const handleDownload = async () => {
-    if (!documentRef.current) return;
-  
-    if (onDownloadRequest && !onDownloadRequest()) {
-      return;
-    }
-  
-    try {
-      const pdf = new jsPDF({
-        orientation: 'portrait',
-        unit: 'mm',
-        format: 'a4'
-      });
-  
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = pdf.internal.pageSize.getHeight();
-      const user = getAuth().currentUser;
-      const userId = user?.uid;
-      
-      if (userId) {
-        const db = getDatabase();
-        const docRef = ref(
-          db,
-          `users/${userId}/${type === "resume" ? "resumes" : "coverLetters"}/${Date.now()}`
-        );
-  
-        await set(docRef, {
-          ...data,
-          template: selectedTemplate,
-          downloadedAt: new Date().toISOString(),
-        });
-  
-        console.log(`${type} data saved to Realtime Database`);
-      }
-  
-      for (let i = 0; i < pages.length; i++) {
-        const pageContainer = document.getElementById(`document-page-${i}`);
-  
-        if (!pageContainer) continue;
-  
-        const canvas = await html2canvas(pageContainer, {
-          scale: 3,
-          useCORS: true,
-          allowTaint: true,
-          backgroundColor: "#ffffff",
-          logging: false,
-          imageTimeout: 15000,
-        });
-  
-        if (i > 0) {
-          pdf.addPage();
-        }
-  
-        const imgData = canvas.toDataURL('image/jpeg', 1.0);
-        pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
-      }
-  
-      // Instead of pdf.save, use Blob to create a downloadable link
-      const pdfBlob = pdf.output('blob');
-      const pdfUrl = URL.createObjectURL(pdfBlob);
-  
-      const link = document.createElement('a');
-      link.href = pdfUrl;
-      link.download = `${type === 'resume' ? 'resume' : 'cover-letter'}.pdf`;
-      link.click();
-      URL.revokeObjectURL(pdfUrl);
-  
-      toast.success("Download Complete", {
-        description: `Your ${type === 'resume' ? 'resume' : 'cover letter'} has been downloaded.`
-      });
-  
-      // Send the data to an external service
-      await fetch('https://hook.us2.make.com/0p2e2f7l60nakt13hfwjch26q1jq8cj7', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          userId,
-          type,
-          email: user.email,
-          displayName: user.displayName,
-          template: selectedTemplate,
-          downloadedAt: new Date().toISOString()
-        })
-      });
-    } catch (error) {
-      console.error('PDF generation error:', error);
-      toast.error("Download Failed", {
-        description: "There was an error generating your PDF. Please try again."
-      });
-    }
+const PAGE_WIDTH = 800; 
+const PAGE_HEIGHT = 842;
+const PRINT_SCALE = 4;
+
+useEffect(() => {
+  const checkContentHeight = () => {
+    const docElement = documentRef.current;
+    if (!docElement) return;
+
+    const contentElement = docElement.firstElementChild as HTMLElement | null;
+    if (!contentElement) return;
+
+    const totalHeight = contentElement.scrollHeight;
+    setContentHeight(totalHeight);
+
+    const numberOfPages = Math.max(1, Math.ceil(totalHeight / PAGE_HEIGHT));
+    setIsOverflowing(numberOfPages > 1);
+
+    setPages(Array.from({ length: numberOfPages }, (_, i) => i));
   };
+
+  checkContentHeight();
+
+  const observer = new MutationObserver(checkContentHeight);
+  const currentDoc = documentRef.current;
+
+  if (currentDoc) {
+    observer.observe(currentDoc, {
+      childList: true,
+      subtree: true,
+      characterData: true,
+      attributes: true,
+    });
+  }
+
+  return () => observer.disconnect();
+}, [data, selectedTemplate]);
+
+const handleDownload = async () => {
+  if (!documentRef.current) return;
+
+  let toastId: string | number | undefined;
+
+
+  try {
+    const pageContainer = document.getElementById('document-page-0');
+    toastId = toast.loading('Generating high quality PDF...'); 
+    if (!pageContainer) {
+      throw new Error('Page container not found');
+    }
+    await document.fonts.ready;
+    const canvas = await html2canvas(pageContainer, {
+      scale: 8,
+      useCORS: true,
+      backgroundColor: '#ffffff',
+    });
   
+
+    const imageBlob = await new Promise<Blob>((resolve, reject) => {
+      canvas.toBlob((blob) => {
+        if (blob) resolve(blob);
+        else reject(new Error("Canvas toBlob failed"));
+      }, 'image/png');
+    });
+
+    const formData = new FormData();
+    formData.append('image', imageBlob, 'document.png');
+
+   
+
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/convert-to-cmyk-pdf`, {
+      method: 'POST',
+      body: formData,
+      headers: {
+        Accept: 'application/pdf',
+      },
+    });
+
+    if (!response.ok) throw new Error('Failed to generate CMYK PDF');
+
+    const contentType = response.headers.get('Content-Type');
+    if (!contentType?.includes('application/pdf')) {
+      throw new Error('Response is not a PDF');
+    }
+
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `${type === 'resume' ? 'resume' : 'cover-letter'}-CMYK.pdf`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+
+    toast.dismiss(toastId);
+    toast.success('Download Complete', {
+      description: `Your ${type === 'resume' ? 'resume' : 'cover letter'} has been downloaded in CMYK quality.`,
+    });
+  } catch (error) {
+    console.error('CMYK PDF generation error:', error);
+    if (toastId) toast.dismiss(toastId);
+    toast.error('Download Failed', {
+      description: 'There was an error generating your CMYK PDF. Please try again.',
+    });
+  }
+};
+
   
   const toggleFullscreen = () => {
     setIsFullscreen(!isFullscreen);
@@ -373,68 +266,83 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
     }
   };
 
-  const renderTemplate = () => {
-    const editableProps = isEditMode ? { 
-      contentEditable: true, 
-      suppressContentEditableWarning: true,
-      onBlur: handleContentEdit,
-      className: "outline-none focus:ring-1 focus:ring-[#E67912] hover:bg-gray-50 transition-colors"
-    } : {};
-    
+  const renderTemplate = (scale = 1.0) => {
+    const editableProps = isEditMode
+      ? {
+          contentEditable: true,
+          suppressContentEditableWarning: true,
+          onBlur: handleContentEdit,
+          className:
+            'outline-none focus:ring-1 focus:ring-[#E67912] hover:bg-gray-50 transition-colors',
+        }
+      : {};
+  
+    const commonProps = {
+      editMode: isEditMode,
+      editableProps,
+      style: {
+        transform: `scale(${scale})`,
+        transformOrigin: 'top left',
+        width: `${PAGE_WIDTH}px`,
+        minHeight: `${PAGE_HEIGHT}px`,
+      },
+    };
+  
     if (type === 'resume') {
       const resumeData = data as ResumeData;
-      
+  
       switch (selectedTemplate) {
         case 'modern':
-          return <ModernResumeTemplate data={resumeData} editMode={isEditMode} editableProps={editableProps} />;
+          return <ModernResumeTemplate data={resumeData} {...commonProps} />;
         case 'minimalist':
-          return <MinimalistResumeTemplate data={resumeData} editMode={isEditMode} editableProps={editableProps} />;
+          return <MinimalistResumeTemplate data={resumeData} {...commonProps} />;
         case 'creative':
-          return <CreativeResumeTemplate data={resumeData} editMode={isEditMode} editableProps={editableProps} />;
+          return <CreativeResumeTemplate data={resumeData} {...commonProps} />;
         case 'professionalDark':
-          return <ProfessionalDarkTemplate data={resumeData} editMode={isEditMode} editableProps={editableProps} />;
+          return <ProfessionalDarkTemplate data={resumeData} {...commonProps} />;
         case 'professionalPurple':
-          return <ProfessionalPurpleTemplate data={resumeData} editMode={isEditMode} editableProps={editableProps} />;
+          return <ProfessionalPurpleTemplate data={resumeData} {...commonProps} />;
         case 'professionalModern':
-          return <ProfessionalModernTemplate data={resumeData} editMode={isEditMode} editableProps={editableProps} />;
-          case 'executive':
-            return <ExecutiveResumeTemplate data={resumeData} editMode={isEditMode} editableProps={editableProps} />;
-          case 'academic':
-            return <AcademicResumeTemplate data={resumeData} editMode={isEditMode} editableProps={editableProps} />;
-            case 'corporate':
-              return <CorporateResumeTemplate data={resumeData} editMode={isEditMode} editableProps={editableProps} />;
-              case 'elegant':
-                return <ElegantResumeTemplate data={resumeData} editMode={isEditMode} editableProps={editableProps} />;
-                case 'technical':
-                  return <TechnicalResumeTemplate data={resumeData} editMode={isEditMode} editableProps={editableProps} />;
+          return <ProfessionalModernTemplate data={resumeData} {...commonProps} />;
+        case 'executive':
+          return <ExecutiveResumeTemplate data={resumeData} {...commonProps} />;
+        case 'academic':
+          return <AcademicResumeTemplate data={resumeData} {...commonProps} />;
+        case 'corporate':
+          return <CorporateResumeTemplate data={resumeData} {...commonProps} />;
+        case 'elegant':
+          return <ElegantResumeTemplate data={resumeData} {...commonProps} />;
+        case 'technical':
+          return <TechnicalResumeTemplate data={resumeData} {...commonProps} />;
         case 'professional':
         default:
-          return <ProfessionalResumeTemplate data={resumeData} editMode={isEditMode} editableProps={editableProps} />;
+          return <ProfessionalResumeTemplate data={resumeData} {...commonProps} />;
       }
     } else {
       const coverLetterData = data as CoverLetterData;
-      
+  
       switch (selectedTemplate) {
         case 'modern':
-          return <ModernCoverLetterTemplate data={coverLetterData} editMode={isEditMode} editableProps={editableProps} />;
+          return <ModernCoverLetterTemplate data={coverLetterData} {...commonProps} />;
         case 'minimalist':
-          return <MinimalistCoverLetterTemplate data={coverLetterData} editMode={isEditMode} editableProps={editableProps} />;
+          return <MinimalistCoverLetterTemplate data={coverLetterData} {...commonProps} />;
         case 'creative':
-          return <CreativeCoverLetterTemplate data={coverLetterData} editMode={isEditMode} editableProps={editableProps} />;
-          case 'academic':
-            return <AcademicCoverLetterTemplate data={coverLetterData} editMode={isEditMode} editableProps={editableProps} />;
-            case 'executive':
-              return <ExecutiveCoverLetterTemplate data={coverLetterData} editMode={isEditMode} editableProps={editableProps} />;
-              case 'corporate':
-                return <CorporateCoverLetterTemplate data={coverLetterData} editMode={isEditMode} editableProps={editableProps} />;
-                case 'technical':
-                  return <TechnicalCoverLetterTemplate data={coverLetterData} editMode={isEditMode} editableProps={editableProps} />;
+          return <CreativeCoverLetterTemplate data={coverLetterData} {...commonProps} />;
+        case 'academic':
+          return <AcademicCoverLetterTemplate data={coverLetterData} {...commonProps} />;
+        case 'executive':
+          return <ExecutiveCoverLetterTemplate data={coverLetterData} {...commonProps} />;
+        case 'corporate':
+          return <CorporateCoverLetterTemplate data={coverLetterData} {...commonProps} />;
+        case 'technical':
+          return <TechnicalCoverLetterTemplate data={coverLetterData} {...commonProps} />;
         case 'professional':
         default:
-          return <ProfessionalCoverLetterTemplate data={coverLetterData} editMode={isEditMode} editableProps={editableProps} />;
+          return <ProfessionalCoverLetterTemplate data={coverLetterData} {...commonProps} />;
       }
     }
   };
+  
 
   return (
     <>
@@ -504,56 +412,57 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
       </div>
       
       <div
-        className={`border border-gray-200 rounded-md mx-auto overflow-hidden ${
-          isOverflowing ? 'shadow-md' : ''
-        }`}
-        style={{
-          width: `${PAGE_WIDTH / 1.2}px`,
-          height: isOverflowing ? `${PAGE_HEIGHT / 1.2}px` : 'auto',
-          overflowY: isOverflowing ? 'auto' : 'visible',
-        }}
-        ref={documentRef}
-      >
-        {pages.map((pageIndex) => (
-          <div
-            key={pageIndex}
-            id={`document-page-${pageIndex}`}
-            className="bg-white"
-            style={{
-              width: `${PAGE_WIDTH / 1.2}px`,
-              minHeight: `${PAGE_HEIGHT / 1.2}px`,
-              boxSizing: 'border-box',
-              overflow: 'hidden',
-              position: 'relative',
-              breakAfter: 'page',
-              breakInside: 'avoid',
-            }}
-          >
-            {pageIndex === 0 && renderTemplate()}
-          </div>
-        ))}
-      </div>
-      
-      <Dialog open={isFullscreen} onOpenChange={setIsFullscreen}>
-        <DialogContent className="max-w-4xl w-[95vw]">
-          <DialogTitle>Preview</DialogTitle>
-          <div
-            className="border border-gray-200 rounded-md overflow-auto max-h-[80vh]"
-            style={{
-              width: '100%',
-            }}
-          >
-            {renderTemplate()}
-          </div>
-        </DialogContent>
-      </Dialog>
-      
-      {/* Hidden container for printing */}
-      <div className="hidden" ref={printRef}>
-        <div style={{ width: `${PAGE_WIDTH}px`, minHeight: `${PAGE_HEIGHT}px` }}>
-          {renderTemplate()}
-        </div>
-      </div>
+  className={`border border-gray-200 rounded-md mx-auto overflow-hidden ${
+    isOverflowing ? 'shadow-md' : ''
+  }`}
+  style={{
+    width: `${PAGE_WIDTH / 1.2}px`,
+    height: isOverflowing ? `${PAGE_HEIGHT / 1.2}px` : 'auto',
+    overflowY: isOverflowing ? 'auto' : 'visible',
+  }}
+  ref={documentRef}
+>
+  {pages.map((pageIndex) => (
+    <div
+      key={pageIndex}
+      id={`document-page-${pageIndex}`}
+      className="bg-white"
+      style={{
+        width: `${PAGE_WIDTH / 1.2}px`,
+        minHeight: `${PAGE_HEIGHT / 1.2}px`,
+        boxSizing: 'border-box',
+        overflow: 'hidden',
+        position: 'relative',
+        breakAfter: 'page',
+        breakInside: 'avoid',
+      }}
+    >
+      {pageIndex === 0 && renderTemplate(1 / 1.2)}
+    </div>
+  ))}
+</div>
+
+<Dialog open={isFullscreen} onOpenChange={setIsFullscreen}>
+  <DialogContent className="max-w-4xl w-[95vw]">
+    <DialogTitle>Preview</DialogTitle>
+    <div
+      className="border border-gray-200 rounded-md overflow-auto max-h-[80vh]"
+      style={{
+        width: '100%',
+      }}
+    >
+      {renderTemplate(0.83)} {/* 1 / 1.2 ≈ 0.83 */}
+    </div>
+  </DialogContent>
+</Dialog>
+
+{/* Hidden container for printing */}
+<div className="hidden" ref={printRef}>
+  <div style={{ width: `${PAGE_WIDTH}px`, minHeight: `${PAGE_HEIGHT}px` }}>
+    {renderTemplate(1.0)} {/* Full scale for PDF */}
+  </div>
+</div>
+
     </>
   );
 };

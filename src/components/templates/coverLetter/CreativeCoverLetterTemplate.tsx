@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { CoverLetterData } from '@/types/documents';
 
@@ -14,103 +13,140 @@ const CreativeCoverLetterTemplate: React.FC<CreativeCoverLetterTemplateProps> = 
   editableProps = {} 
 }) => {
   const today = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-  
+
   return (
-    <div className="font-sans p-8 max-w-[800px] mx-auto">
-      <div className="bg-purple-500 text-white p-8 rounded-lg mb-10">
+    <div className="font-sans p-4 max-w-[800px] mx-auto text-[10px] print:text-[9pt]">
+      <div className="bg-purple-500 text-white p-4 rounded-lg mb-6">
         <h1 
-          className="text-3xl font-bold mb-2 text-white"
+          className="text-xl font-bold mb-1 text-white"
           data-field="name"
           {...(editMode ? editableProps : {})}
         >
           {data.personalInfo.name || 'Your Name'}
         </h1>
         <p 
-          className="text-purple-100 mb-1"
+          className="text-purple-100 mb-0.5"
           data-field="location"
           {...(editMode ? editableProps : {})}
         >
           {data.personalInfo.location || 'Your Location'}
         </p>
-        <div className="flex flex-wrap gap-3 mt-4">
-          {data.personalInfo.email && (
-            <a 
-              href={`mailto:${data.personalInfo.email}`} 
-              className="bg-purple-400 bg-opacity-30 px-3 py-1 rounded-full text-sm hover:bg-opacity-50"
-              data-field="email"
-              {...(editMode ? {...editableProps, href: undefined} : {})}
-            >
-              {data.personalInfo.email}
-            </a>
-          )}
-          {data.personalInfo.phone && (
-            <span 
-              className="bg-purple-400 bg-opacity-30 px-3 py-1 rounded-full text-sm"
-              data-field="phone"
-              {...(editMode ? editableProps : {})}
-            >
-              {data.personalInfo.phone}
-            </span>
-          )}
-        </div>
+        <p 
+          className="text-purple-100 mb-0.5"
+          data-field="phone"
+          {...(editMode ? editableProps : {})}
+        >
+          {data.personalInfo.phone || 'Your Phone'}
+        </p>
+        <p 
+          className="text-purple-100"
+          data-field="email"
+          {...(editMode ? editableProps : {})}
+        >
+          {data.personalInfo.email || 'Your Email'}
+        </p>
       </div>
-      
-      <div className="mb-8 flex justify-between items-start">
+
+      <div className="flex justify-between items-start mb-4">
         <div>
           {data.recipientInfo.name && (
-            <p className="text-lg font-bold mb-1">{data.recipientInfo.name}</p>
+            <p 
+              className="font-bold mb-0.5"
+              data-field="recipientName"
+              {...(editMode ? editableProps : {})}
+            >
+              {data.recipientInfo.name}
+            </p>
           )}
           {data.recipientInfo.title && (
-            <p className="text-gray-600 mb-1">{data.recipientInfo.title}</p>
+            <p 
+              className="text-gray-700 mb-0.5"
+              data-field="recipientTitle"
+              {...(editMode ? editableProps : {})}
+            >
+              {data.recipientInfo.title}
+            </p>
           )}
           {data.recipientInfo.company && (
-            <p className="text-purple-600 font-medium">{data.recipientInfo.company}</p>
+            <p 
+              className="text-purple-600 font-medium"
+              data-field="recipientCompany"
+              {...(editMode ? editableProps : {})}
+            >
+              {data.recipientInfo.company}
+            </p>
           )}
         </div>
         <p className="text-gray-500 italic">{today}</p>
       </div>
-      
-      <div className="space-y-6">
-        <p className="text-xl font-semibold mb-6">
+
+      <div className="mb-2">
+        <p className="mb-1.5 text-[10px] font-semibold">
           Dear {data.recipientInfo.name || 'Hiring Manager'},
         </p>
-        
-        <div className="bg-purple-50 p-6 border-l-4 border-purple-400 rounded-r-lg mb-6">
-          <p className="text-gray-800">
-            I am writing to express my interest in the 
-            <span className="text-purple-600 font-semibold"> {data.jobInfo.title || 'position'}</span> 
-            at {data.recipientInfo.company || 'your company'}
-            {data.jobInfo.reference ? ` (Reference: ${data.jobInfo.reference})` : ''}.
-          </p>
-        </div>
-        
+
+        <p className="mb-1.5 text-[9px] leading-tight">
+          I am writing to express my interest in the{' '}
+          <span
+            data-field="jobTitle"
+            {...(editMode ? editableProps : {})}
+          >
+            {data.jobInfo.title || 'position'}
+          </span>{' '}
+          at {data.recipientInfo.company || 'your company'}
+          {data.jobInfo.reference ? (
+            <span
+              data-field="jobReference"
+              {...(editMode ? editableProps : {})}
+            >
+              {` (Reference: ${data.jobInfo.reference})`}
+            </span>
+          ) : ''}.
+        </p>
+
         {data.experience && (
-          <div className="relative pl-6 before:absolute before:left-0 before:top-2 before:w-3 before:h-3 before:bg-purple-400 before:rounded-full">
-            <p className="text-gray-700">{data.experience}</p>
-          </div>
+          <p 
+            className="mb-1.5 text-[9px] leading-tight"
+            data-field="experience"
+            {...(editMode ? editableProps : {})}
+          >
+            {data.experience}
+          </p>
         )}
-        
+
         {data.skills && (
-          <div className="relative pl-6 before:absolute before:left-0 before:top-2 before:w-3 before:h-3 before:bg-purple-400 before:rounded-full">
-            <p className="text-gray-700">{data.skills}</p>
-          </div>
+          <p 
+            className="mb-1.5 text-[9px] leading-tight"
+            data-field="skills"
+            {...(editMode ? editableProps : {})}
+          >
+            {data.skills}
+          </p>
         )}
-        
+
         {data.motivation && (
-          <div className="relative pl-6 before:absolute before:left-0 before:top-2 before:w-3 before:h-3 before:bg-purple-400 before:rounded-full">
-            <p className="text-gray-700">{data.motivation}</p>
-          </div>
+          <p 
+            className="mb-1.5 text-[9px] leading-tight"
+            data-field="motivation"
+            {...(editMode ? editableProps : {})}
+          >
+            {data.motivation}
+          </p>
         )}
-        
+
         {data.closing && (
-          <div className="relative pl-6 before:absolute before:left-0 before:top-2 before:w-3 before:h-3 before:bg-purple-400 before:rounded-full">
-            <p className="text-gray-700">{data.closing}</p>
-          </div>
+          <p 
+            className="mb-1.5 text-[9px] leading-tight"
+            data-field="closing"
+            {...(editMode ? editableProps : {})}
+          >
+            {data.closing}
+          </p>
         )}
-        
-        <div className="mt-12 border-t border-purple-200 pt-6">
-          <p className="mb-4">Sincerely,</p>
-          <p className="text-xl font-bold text-purple-600">{data.personalInfo.name || 'Your Name'}</p>
+
+        <div className="mt-4">
+          <p className="mb-2">Sincerely,</p>
+          <p className="text-[11px] font-semibold">{data.personalInfo.name || 'Your Name'}</p>
         </div>
       </div>
     </div>

@@ -14,16 +14,17 @@ const ElegantResumeTemplate: React.FC<ElegantResumeTemplateProps> = ({
   editableProps = {} 
 }) => {
   return (
-    <div className="font-serif p-6 max-w-[800px] mx-auto bg-white">
+    <div className="font-serif p-2 max-w-[800px] mx-auto bg-white">
       {/* Header with elegant styling */}
-      <div className="text-center mb-8 border-b-2 border-amber-700 pb-6">
+      <div className="text-center mb-2 border-b-2 border-amber-700 pb-6">
          {/* Profile photo */}
-         <div className="mb-4 flex justify-center">
+         <div className="mb-2 flex justify-center">
           {data.personalInfo.photo ? (
             <img 
               src={data.personalInfo.photo} 
               alt={data.personalInfo.name} 
-              className="rounded-full w-24 h-24 object-cover border-4 border-white"
+              className="rounded-full w-full max-w-[100px] h-auto object-cover border-4 border-white"
+
             />
           ) : (
             <div className="rounded-full w-24 h-24 bg-slate-600 flex items-center justify-center text-xl font-bold">
@@ -57,8 +58,8 @@ const ElegantResumeTemplate: React.FC<ElegantResumeTemplateProps> = ({
       
       {/* Summary Section */}
       {data.summary && (
-        <div className="mb-8">
-          <h2 className="text-lg font-semibold text-amber-800 text-center mb-3">
+        <div className="mb-2">
+          <h2 className="text-sm font-semibold text-amber-800 text-center mb-3">
             PROFILE
           </h2>
           <p 
@@ -76,8 +77,8 @@ const ElegantResumeTemplate: React.FC<ElegantResumeTemplateProps> = ({
         <div className="md:col-span-2">
           {/* Experience Section */}
           {data.experience && data.experience.length > 0 && data.experience.some(exp => exp.company || exp.position) && (
-            <div className="mb-8">
-              <h2 className="text-lg font-semibold text-amber-800 border-b border-amber-300 pb-1 mb-4">
+            <div className="mb-2">
+              <h2 className="text-sm font-semibold text-amber-800 border-b border-amber-300 pb-1 mb-2">
                 PROFESSIONAL EXPERIENCE
               </h2>
               {data.experience.filter(exp => exp.company || exp.position).map((exp, index) => (
@@ -104,8 +105,8 @@ const ElegantResumeTemplate: React.FC<ElegantResumeTemplateProps> = ({
           
           {/* Education Section */}
           {data.education && data.education.length > 0 && data.education.some(edu => edu.institution || edu.degree) && (
-            <div className="mb-8">
-              <h2 className="text-lg font-semibold text-amber-800 border-b border-amber-300 pb-1 mb-4">
+            <div className="mb-2">
+              <h2 className="text-sm font-semibold text-amber-800 border-b border-amber-300 pb-1 mb-2">
                 EDUCATION
               </h2>
               {data.education.filter(edu => edu.institution || edu.degree).map((edu, index) => (
@@ -126,8 +127,8 @@ const ElegantResumeTemplate: React.FC<ElegantResumeTemplateProps> = ({
           
           {/* Projects Section */}
           {data.projects && data.projects.length > 0 && data.projects.some(project => project.name) && (
-            <div className="mb-8">
-              <h2 className="text-lg font-semibold text-amber-800 border-b border-amber-300 pb-1 mb-4">
+            <div className="mb-2">
+              <h2 className="text-sm font-semibold text-amber-800 border-b border-amber-300 pb-1 mb-2">
                 NOTEWORTHY PROJECTS
               </h2>
               {data.projects.filter(project => project.name).map((project, index) => (
@@ -161,8 +162,8 @@ const ElegantResumeTemplate: React.FC<ElegantResumeTemplateProps> = ({
               {data.customSections.slice(0, Math.ceil(data.customSections.length / 2))
                 .filter(section => section.title && section.content)
                 .map((section, index) => (
-                <div key={index} className="mb-8">
-                  <h2 className="text-lg font-semibold text-amber-800 border-b border-amber-300 pb-1 mb-4">
+                <div key={index} className="mb-2">
+                  <h2 className="text-sm font-semibold text-amber-800 border-b border-amber-300 pb-1 mb-2">
                     {section.title.toUpperCase()}
                   </h2>
                   <p className="text-sm text-gray-700">{section.content}</p>
@@ -176,8 +177,8 @@ const ElegantResumeTemplate: React.FC<ElegantResumeTemplateProps> = ({
         <div className="space-y-8">
           {/* Skills Section */}
           {data.skills && data.skills.length > 0 && data.skills.some(skill => skill.skills) && (
-            <div className="bg-amber-50 p-4 rounded-lg">
-              <h2 className="text-lg font-semibold text-amber-800 border-b border-amber-200 pb-1 mb-4">
+            <div className="bg-amber-50 p-2 rounded-lg">
+              <h2 className="text-sm font-semibold text-amber-800 border-b border-amber-200 pb-1 mb-2">
                 EXPERTISE
               </h2>
               {data.skills.filter(skillCategory => skillCategory.skills).map((skillCategory, categoryIndex) => (
@@ -198,8 +199,8 @@ const ElegantResumeTemplate: React.FC<ElegantResumeTemplateProps> = ({
           
           {/* Certifications Section */}
           {data.certifications && data.certifications.length > 0 && data.certifications.some(cert => cert.name) && (
-            <div className="bg-amber-50 p-4 rounded-lg">
-              <h2 className="text-lg font-semibold text-amber-800 border-b border-amber-200 pb-1 mb-4">
+            <div className="bg-amber-50 p-2 rounded-lg">
+              <h2 className="text-sm font-semibold text-amber-800 border-b border-amber-200 pb-1  mb-2">
                 CERTIFICATIONS
               </h2>
               {data.certifications.filter(cert => cert.name).map((cert, index) => (
@@ -218,8 +219,8 @@ const ElegantResumeTemplate: React.FC<ElegantResumeTemplateProps> = ({
           
           {/* Languages Section */}
           {data.languages && data.languages.length > 0 && (
-            <div className="bg-amber-50 p-4 rounded-lg">
-              <h2 className="text-lg font-semibold text-amber-800 border-b border-amber-200 pb-1 mb-4">
+            <div className="bg-amber-50 p-2 rounded-lg">
+              <h2 className="text-sm font-semibold text-amber-800 border-b border-amber-200 pb-1 mb-2">
                 LANGUAGES
               </h2>
               {data.languages.map((lang, index) => (
@@ -240,8 +241,8 @@ const ElegantResumeTemplate: React.FC<ElegantResumeTemplateProps> = ({
           
           {/* Interests Section */}
           {data.interests && data.interests.length > 0 && (
-            <div className="bg-amber-50 p-4 rounded-lg">
-              <h2 className="text-lg font-semibold text-amber-800 border-b border-amber-200 pb-1 mb-4">
+            <div className="bg-amber-50 p-2 rounded-lg">
+              <h2 className="text-sm font-semibold text-amber-800 border-b border-amber-200 pb-1 mb-2">
                 INTERESTS
               </h2>
               <div className="flex flex-wrap gap-2">
@@ -263,8 +264,8 @@ const ElegantResumeTemplate: React.FC<ElegantResumeTemplateProps> = ({
               {data.customSections.slice(Math.ceil(data.customSections.length / 2))
                 .filter(section => section.title && section.content)
                 .map((section, index) => (
-                <div key={index} className="bg-amber-50 p-4 rounded-lg">
-                  <h2 className="text-lg font-semibold text-amber-800 border-b border-amber-200 pb-1 mb-4">
+                <div key={index} className="bg-amber-50 p-2 rounded-lg">
+                  <h2 className="text-sm font-semibold text-amber-800 border-b border-amber-200 pb-1 mb-2">
                     {section.title.toUpperCase()}
                   </h2>
                   <p className="text-sm">{section.content}</p>

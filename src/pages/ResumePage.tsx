@@ -147,8 +147,8 @@ const ResumePage = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
-      <main className="flex-1 py-10 bg-muted/30">
-        <div className="container-xl">
+      <main className="flex-1 pt-4 bg-muted/30">
+        <div className="container">
           <div className="mb-8 flex items-center justify-between">
             <div className="flex items-center">
             <Link
@@ -185,7 +185,7 @@ const ResumePage = () => {
               </Tabs>
             </div>
             
-            <div className=" lg:block lg:sticky lg:top-10 h-[calc(100vh-160px)]">
+            <div className=" lg:block lg:sticky lg:top-10 h-[calc(100vh-160px)] ">
               <div className="bg-white rounded-lg shadow-sm border h-full flex flex-col">
                 <h2 className="text-lg font-medium p-4 border-b">Preview</h2>
                 <div className="flex-1 overflow-auto">

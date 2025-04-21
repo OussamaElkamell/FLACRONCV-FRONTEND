@@ -13,26 +13,27 @@ const ProfessionalModernTemplate: React.FC<ProfessionalModernTemplateProps> = ({
   editableProps = {},
 }) => {
   return (
-    <div className="font-sans text-[11px] leading-snug max-w-[794px] mx-auto bg-white text-gray-900 p-4 overflow-hidden">
+    <div className="font-serif text-[9px] print:text-[8pt] leading-tight p-0 max-w-[800px] mx-auto print:p-4">
       {/* Header */}
       <div className="pb-2 border-b border-purple-700">
-        <div className="flex justify-between items-start">
+        <div className="flex justify-between items-start px-6 pt-4">
           <h1
-            className="text-xl font-bold text-purple-900 uppercase tracking-wide break-words"
+            className="text-3xl font-bold text-purple-900 uppercase tracking-wider"
             data-field="name"
             {...(editMode ? editableProps : {})}
           >
             {data.personalInfo.name || ''}
           </h1>
+
           {data.personalInfo.photo ? (
             <img
               src={data.personalInfo.photo}
               alt={data.personalInfo.name}
-              className="w-16 h-16 object-cover rounded"
+              className="rounded-full w-full max-w-[100px] h-auto object-cover border-4 border-white"
             />
           ) : (
-            <div className="w-16 h-16 bg-purple-100 flex items-center justify-center rounded">
-              <span className="text-lg font-bold text-purple-700">
+            <div className="w-20 h-20 bg-purple-100 flex items-center justify-center rounded">
+              <span className="text-xl font-bold text-purple-700">
                 {data.personalInfo.name?.charAt(0).toUpperCase() || ''}
               </span>
             </div>
@@ -41,7 +42,8 @@ const ProfessionalModernTemplate: React.FC<ProfessionalModernTemplateProps> = ({
       </div>
 
       {/* Personal Info */}
-      <section className="bg-purple-100 py-2 px-3 mt-2 mb-3">
+      <section className="bg-purple-100 py-2 px-6 mb-4 text-[9px]">
+        <h2 className="text-xs font-bold text-purple-900 uppercase mb-1">Informations Personnelles</h2>
         <div className="flex flex-wrap gap-x-4 gap-y-1">
           {data.personalInfo.location && <div>{data.personalInfo.location}</div>}
           {data.personalInfo.email && <div>{data.personalInfo.email}</div>}
@@ -50,14 +52,14 @@ const ProfessionalModernTemplate: React.FC<ProfessionalModernTemplateProps> = ({
         </div>
       </section>
 
-      {/* Summary */}
+      {/* Section Template */}
       {data.summary && (
-        <Section title="Profile">
+        <Section title="Profil">
           <div
-            className="text-xs mt-1 space-y-0.5 break-words"
+            className="text-[9px] space-y-1"
             data-field="summary"
             {...(editMode ? editableProps : {})}
-          
+            style={{ wordWrap: 'break-word', overflowWrap: 'break-word' }}
           >
             {data.summary.split(/(?<=[.?!])\s+/).map((line, idx) => (
               <p key={idx}>{line}</p>
@@ -66,9 +68,8 @@ const ProfessionalModernTemplate: React.FC<ProfessionalModernTemplateProps> = ({
         </Section>
       )}
 
-      {/* Experience */}
       {data.experience?.some(exp => exp.company || exp.position) && (
-        <Section title="Expérience">
+        <Section title="Expérience Professionnelle">
           {data.experience
             .filter(exp => exp.company || exp.position)
             .map((exp, idx) => (
@@ -82,7 +83,6 @@ const ProfessionalModernTemplate: React.FC<ProfessionalModernTemplateProps> = ({
         </Section>
       )}
 
-      {/* Education */}
       {data.education?.some(edu => edu.institution || edu.degree) && (
         <Section title="Formation">
           {data.education
@@ -98,13 +98,43 @@ const ProfessionalModernTemplate: React.FC<ProfessionalModernTemplateProps> = ({
         </Section>
       )}
 
-      {/* Skills */}
+      {data.projects?.some(proj => proj.name) && (
+        <Section title="Projets">
+          {data.projects
+            .filter(proj => proj.name)
+            .map((proj, idx) => (
+              <Entry
+                key={idx}
+                title={
+                  <>
+                    {proj.name}
+                    {proj.technologies && (
+                      <span className="font-normal text-purple-700"> • {proj.technologies}</span>
+                    )}
+                  </>
+                }
+                date={proj.date}
+                description={
+                  <>
+                    {proj.description && <p className="mb-1">{proj.description}</p>}
+                    {proj.link && (
+                      <a href={proj.link} target="_blank" rel="noopener noreferrer" className="text-purple-700 underline">
+                        {proj.link}
+                      </a>
+                    )}
+                  </>
+                }
+              />
+            ))}
+        </Section>
+      )}
+
       {data.skills?.some(skill => skill.skills) && (
         <Section title="Compétences">
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-3">
             {data.skills.map((category, idx) => (
               <div key={idx}>
-                <h3 className="font-semibold mb-1">{category.category}</h3>
+                <h3 className="text-xs font-semibold mb-1">{category.category}</h3>
                 <div className="flex flex-wrap gap-2">
                   {category.skills.split(',').map((skill, i) => (
                     <SkillItem key={i} skill={skill} />
@@ -116,18 +146,17 @@ const ProfessionalModernTemplate: React.FC<ProfessionalModernTemplateProps> = ({
         </Section>
       )}
 
-      {/* Languages */}
       {data.languages?.length > 0 && (
         <Section title="Langues">
           <div className="space-y-1">
             {data.languages.map((lang, idx) => (
               <div key={idx} className="flex items-center justify-between">
-                <span>{lang.language}</span>
+                <span className="text-[9px]">{lang.language}</span>
                 <div className="flex">
                   {[...Array(5)].map((_, i) => (
                     <div
                       key={i}
-                      className={`w-2 h-2 mx-[1px] rounded-full ${
+                      className={`w-2.5 h-2.5 mx-0.5 rounded-full ${
                         i < lang.proficiency ? 'bg-purple-800' : 'bg-purple-200'
                       }`}
                     />
@@ -138,14 +167,52 @@ const ProfessionalModernTemplate: React.FC<ProfessionalModernTemplateProps> = ({
           </div>
         </Section>
       )}
+
+      {data.certifications?.some(cert => cert.name) && (
+        <Section title="Certificats">
+          <div className="space-y-1">
+            {data.certifications.map((cert, idx) => (
+              <div key={idx} className="flex justify-between text-[9px]">
+                <span>
+                  {cert.title && typeof cert.title === 'string' ? `${cert.title}: ${cert.name}` : cert.name}
+                </span>
+                <span>{cert.date || ''}</span>
+              </div>
+            ))}
+          </div>
+        </Section>
+      )}
+
+      {data.interests?.length > 0 && (
+        <Section title="Centres d'intérêt">
+          <div className="flex flex-wrap gap-3">
+            {data.interests.map((interest, idx) => (
+              <SkillItem key={idx} skill={interest} />
+            ))}
+          </div>
+        </Section>
+      )}
+
+      {data.customSections?.length > 0 &&
+        data.customSections
+          .filter(section => section.title && section.content)
+          .map((section, idx) => (
+            <Section key={idx} title={section.title}>
+              <div className="text-[9px] space-y-1">
+                {section.content.split(/(?<=[.?!])\s+/).map((line, idx) => (
+                  <p key={idx}>{line}</p>
+                ))}
+              </div>
+            </Section>
+          ))}
     </div>
   );
 };
 
 // Section Component
 const Section: React.FC<{ title: string; children: React.ReactNode }> = ({ title, children }) => (
-  <section className="mb-3">
-    <h2 className="text-xs font-bold text-purple-900 bg-purple-100 px-2 py-1 uppercase mb-1">
+  <section className="px-6 mb-4">
+    <h2 className="text-xs font-bold text-purple-900 bg-purple-100 py-0.5 px-2 uppercase mb-2">
       {title}
     </h2>
     {children}
@@ -158,13 +225,13 @@ const Entry: React.FC<{ title: React.ReactNode; date?: string; description?: Rea
   date,
   description,
 }) => (
-  <div className="mb-2">
-    <div className="flex justify-between items-baseline">
-      <h3 className="font-semibold">{title}</h3>
-      {date && <span className="text-[10px] text-gray-600">{date}</span>}
+  <div className="mb-4">
+    <div className="flex justify-between items-baseline mb-0.5">
+      <h3 className="font-bold text-xs">{title}</h3>
+      {date && <span className="text-[8px] text-gray-600">{date}</span>}
     </div>
     {description && (
-      <div className="ml-3 space-y-1 break-words">
+      <div className="ml-3 text-[9px] space-y-1">
         {typeof description === 'string'
           ? description.split(/(?<=[.?!])\s+/).map((line, idx) => <p key={idx}>{line}</p>)
           : description}
@@ -177,7 +244,7 @@ const Entry: React.FC<{ title: React.ReactNode; date?: string; description?: Rea
 const SkillItem: React.FC<{ skill: string }> = ({ skill }) => (
   <div className="flex items-center gap-1">
     <span className="w-2 h-2 bg-purple-800 rounded-full" />
-    <span>{skill.trim()}</span>
+    <span className="text-[9px]">{skill.trim()}</span>
   </div>
 );
 

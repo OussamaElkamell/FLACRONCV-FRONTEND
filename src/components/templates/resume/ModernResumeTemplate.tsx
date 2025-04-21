@@ -23,7 +23,7 @@ const ModernResumeTemplate: React.FC<ModernResumeTemplateProps> = ({
             <img 
               src={data.personalInfo.photo} 
               alt={data.personalInfo.name} 
-              className="rounded-full w-24 h-24 object-cover border-4 border-white"
+            className="rounded-full w-full max-w-[100px] h-auto object-cover border-4 border-white"
             />
           ) : (
             <div className="rounded-full w-24 h-24 bg-slate-600 flex items-center justify-center text-xl font-bold">
@@ -242,7 +242,39 @@ const ModernResumeTemplate: React.FC<ModernResumeTemplateProps> = ({
                 ) : null
               ))}
             </div>
+
           )}
+          {data.customSections && data.customSections.length > 0 && data.customSections.some(sec => sec.title || sec.content) && (
+  <div className="mb-4">
+  
+    {data.customSections.map((section, index) => (
+      (section.title || section.content) ? (
+ <div>
+          <h2 
+          
+            className="text-base text-blue-500 font-bold mb-2"
+            data-field={`customSections.title`}
+            data-index={index.toString()}
+            {...(editMode ? editableProps : {})}
+          >
+            {section.title || 'Custom Title'}
+          </h2>
+                 <div key={index} className="mb-3 border-l-2 border-blue-300 pl-2">
+          <p 
+            className="text-sm font-semibold mt-1 break-words"
+            data-field={`customSections.content`}
+            data-index={index.toString()}
+            {...(editMode ? editableProps : {})}
+          >
+            {section.content || 'Custom content goes here.'}
+          </p>
+        </div>
+        </div>
+      ) : null
+    ))}
+  </div>
+)}
+
         </div>
         
         <div>
@@ -336,16 +368,7 @@ const ModernResumeTemplate: React.FC<ModernResumeTemplateProps> = ({
           )}
           
           {/* Custom Sections */}
-          {data.customSections && data.customSections.length > 0 && (
-            <>
-              {data.customSections.map((section, index) => (
-                <div key={index} className="bg-gray-50 p-3 rounded-lg mt-4">
-                  <h2 className="text-base text-blue-500 font-bold mb-2">{section.title}</h2>
-                  <p className="text-sm text-gray-700">{section.content}</p>
-                </div>
-              ))}
-            </>
-          )}
+          
         </div>
       </div>
     </div>

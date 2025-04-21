@@ -14,9 +14,9 @@ const CorporateResumeTemplate: React.FC<CorporateResumeTemplateProps> = ({
   editableProps = {} 
 }) => {
   return (
-    <div className="font-sans p-0 max-w-[800px] mx-auto bg-white">
+    <div className="font-serif p-0 max-w-[800px] mx-auto text-[10px] print:text-[9pt]">
       {/* Header with corporate blue styling */}
-      <div className="bg-blue-800 text-white p-8">
+      <div className="bg-blue-800 text-white p-4 ">
         <div className="flex justify-between items-center">
           <div>
             <h1 
@@ -51,18 +51,19 @@ const CorporateResumeTemplate: React.FC<CorporateResumeTemplateProps> = ({
               <img 
                 src={data.personalInfo.photo} 
                 alt={data.personalInfo.name} 
-                className="w-20 h-20 object-cover rounded-full ml-4"
+                className="rounded-full w-full max-w-[100px] h-auto object-cover border-4 border-white ml-4 mr-4"
+
               />
             )}
           </div>
         </div>
       </div>
       
-      <div className="p-8">
+      <div className="p-4">
         {/* Summary Section */}
         {data.summary && (
-          <div className="mb-8">
-            <h2 className="text-lg font-bold text-blue-800 border-b-2 border-blue-800 pb-2 mb-3">
+          <div className="mb-4">
+            <h2 className="text-base font-bold text-blue-800 border-b-2 border-blue-800 pb-2 mb-3">
               PROFESSIONAL SUMMARY
             </h2>
             <p 
@@ -77,15 +78,15 @@ const CorporateResumeTemplate: React.FC<CorporateResumeTemplateProps> = ({
         
         {/* Experience Section */}
         {data.experience && data.experience.length > 0 && data.experience.some(exp => exp.company || exp.position) && (
-          <div className="mb-8">
-            <h2 className="text-lg font-bold text-blue-800 border-b-2 border-blue-800 pb-2 mb-4">
+          <div className="mb-4">
+            <h2 className="text-base font-bold text-blue-800 border-b-2 border-blue-800 pb-2 mb-4">
               PROFESSIONAL EXPERIENCE
             </h2>
             {data.experience.filter(exp => exp.company || exp.position).map((exp, index) => (
-              <div key={index} className="mb-6">
+              <div key={index} className="mb-4">
                 <div className="flex justify-between items-baseline mb-1">
                   <h3 className="font-bold">{exp.position || ''}</h3>
-                  <span className="text-sm text-gray-600 font-medium">{exp.date || ''}</span>
+                  <span className="text-xs text-gray-600 font-medium">{exp.date || ''}</span>
                 </div>
                 <h4 className="text-blue-800 font-semibold mb-2">{exp.company || ''}</h4>
                 
@@ -105,8 +106,8 @@ const CorporateResumeTemplate: React.FC<CorporateResumeTemplateProps> = ({
         
         {/* Education Section */}
         {data.education && data.education.length > 0 && data.education.some(edu => edu.institution || edu.degree) && (
-          <div className="mb-8">
-            <h2 className="text-lg font-bold text-blue-800 border-b-2 border-blue-800 pb-2 mb-4">
+          <div className="mb-4">
+            <h2 className="text-base font-bold text-blue-800 border-b-2 border-blue-800 pb-2 mb-4">
               EDUCATION
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -114,7 +115,7 @@ const CorporateResumeTemplate: React.FC<CorporateResumeTemplateProps> = ({
                 <div key={index} className="bg-blue-50 p-4 rounded-md">
                   <h3 className="font-bold">{edu.degree || ''}</h3>
                   <h4 className="text-blue-800 font-medium">{edu.institution || ''}</h4>
-                  <div className="text-sm text-gray-600 mt-1 mb-2">{edu.date || ''}</div>
+                  <div className=" text-gray-600 mt-1 mb-2 text-xs">{edu.date || ''}</div>
                   
                   {edu.description && (
                     <p className="text-xs mt-1 space-y-0.5 break-words">{edu.description}</p>
@@ -127,19 +128,19 @@ const CorporateResumeTemplate: React.FC<CorporateResumeTemplateProps> = ({
         
         {/* Skills Section */}
         {data.skills && data.skills.length > 0 && data.skills.some(skill => skill.skills) && (
-          <div className="mb-8">
-            <h2 className="text-lg font-bold text-blue-800 border-b-2 border-blue-800 pb-2 mb-4">
+          <div className="mb-4">
+            <h2 className="text-base font-bold text-blue-800 border-b-2 border-blue-800 pb-2 mb-4">
               KEY COMPETENCIES
             </h2>
             <div className="grid grid-cols-2 gap-4">
               {data.skills.filter(skillCategory => skillCategory.skills).map((skillCategory, categoryIndex) => (
                 <div key={categoryIndex} className="bg-blue-50 p-4 rounded-md">
                   <h3 className="font-bold text-blue-800 mb-2">{skillCategory.category}</h3>
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap ">
                     {skillCategory.skills.split(',').map((skill, index) => (
                       <span 
                         key={index} 
-                        className="bg-white border border-blue-200 text-blue-800 px-2 py-1 rounded text-sm"
+                        className="bg-white border border-blue-200 text-blue-800 px-2 py-1 "
                       >
                         {skill.trim()}
                       </span>
@@ -153,15 +154,15 @@ const CorporateResumeTemplate: React.FC<CorporateResumeTemplateProps> = ({
         
         {/* Projects Section */}
         {data.projects && data.projects.length > 0 && data.projects.some(project => project.name) && (
-          <div className="mb-8">
-            <h2 className="text-lg font-bold text-blue-800 border-b-2 border-blue-800 pb-2 mb-4">
+          <div className="mb-4">
+            <h2 className="text-base font-bold text-blue-800 border-b-2 border-blue-800 pb-2 mb-4">
               KEY PROJECTS
             </h2>
             {data.projects.filter(project => project.name).map((project, index) => (
               <div key={index} className="mb-4">
                 <div className="flex justify-between items-baseline mb-1">
                   <h3 className="font-bold">{project.name}</h3>
-                  <span className="text-sm text-gray-600 font-medium">{project.date || ''}</span>
+                  <span className="text-xs text-gray-600 font-medium">{project.date || ''}</span>
                 </div>
                 
                 {project.technologies && (
@@ -173,7 +174,7 @@ const CorporateResumeTemplate: React.FC<CorporateResumeTemplateProps> = ({
                 )}
                 
                 {project.link && (
-                  <a href={project.link} target="_blank" rel="noreferrer" className="text-blue-600 hover:underline text-sm">
+                  <a href={project.link} target="_blank" rel="noreferrer" className="hover:underline text-xs">
                     {project.link}
                   </a>
                 )}
@@ -187,8 +188,8 @@ const CorporateResumeTemplate: React.FC<CorporateResumeTemplateProps> = ({
           <div>
             {/* Certifications Section */}
             {data.certifications && data.certifications.length > 0 && data.certifications.some(cert => cert.name) && (
-              <div className="mb-6">
-                <h2 className="text-lg font-bold text-blue-800 border-b-2 border-blue-800 pb-2 mb-3">
+              <div className="mb-4">
+                <h2 className="text-base font-bold text-blue-800 border-b-2 border-blue-800 pb-2 mb-3">
                   CERTIFICATIONS
                 </h2>
                 <div className="bg-blue-50 p-4 rounded-md">
@@ -198,7 +199,7 @@ const CorporateResumeTemplate: React.FC<CorporateResumeTemplateProps> = ({
                         <span className="font-medium">
                           {cert.title && typeof cert.title === 'string' ? `${cert.title}: ${cert.name}` : cert.name}
                         </span>
-                        <span className="text-sm text-gray-600">{cert.date || ''}</span>
+                        <span className="text-xs text-gray-600">{cert.date || ''}</span>
                       </div>
                     </div>
                   ))}
@@ -208,8 +209,8 @@ const CorporateResumeTemplate: React.FC<CorporateResumeTemplateProps> = ({
             
             {/* Languages Section */}
             {data.languages && data.languages.length > 0 && (
-              <div className="mb-6">
-                <h2 className="text-lg font-bold text-blue-800 border-b-2 border-blue-800 pb-2 mb-3">
+              <div className="mb-4">
+                <h2 className="text-base font-bold text-blue-800 border-b-2 border-blue-800 pb-2 mb-3">
                   LANGUAGES
                 </h2>
                 <div className="bg-blue-50 p-4 rounded-md">
@@ -234,8 +235,8 @@ const CorporateResumeTemplate: React.FC<CorporateResumeTemplateProps> = ({
           <div>
             {/* Interests Section */}
             {data.interests && data.interests.length > 0 && (
-              <div className="mb-6">
-                <h2 className="text-lg font-bold text-blue-800 border-b-2 border-blue-800 pb-2 mb-3">
+              <div className="mb-4">
+                <h2 className="text-base font-bold text-blue-800 border-b-2 border-blue-800 pb-2 mb-3">
                   INTERESTS
                 </h2>
                 <div className="bg-blue-50 p-4 rounded-md">
@@ -257,8 +258,8 @@ const CorporateResumeTemplate: React.FC<CorporateResumeTemplateProps> = ({
             {data.customSections && data.customSections.length > 0 && data.customSections.some(section => section.title && section.content) && (
               <>
                 {data.customSections.filter(section => section.title && section.content).map((section, index) => (
-                  <div key={index} className="mb-6">
-                    <h2 className="text-lg font-bold text-blue-800 border-b-2 border-blue-800 pb-2 mb-3">
+                  <div key={index} className="mb-4">
+                    <h2 className="text-base font-bold text-blue-800 border-b-2 border-blue-800 pb-2 mb-3">
                       {section.title.toUpperCase()}
                     </h2>
                     <div className="bg-blue-50 p-4 rounded-md">

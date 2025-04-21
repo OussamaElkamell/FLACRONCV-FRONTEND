@@ -10,7 +10,7 @@ import { authService } from '@/services/firebaseClient';
 import { useToast } from '@/hooks/use-toast';
 import { FileUp, Mail, Lock } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
-import Logo from "../Assets/images/FlacroncvLogo.jpeg"
+import Logo from "../Assets/images/FlacroncvLogo.png"
 const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

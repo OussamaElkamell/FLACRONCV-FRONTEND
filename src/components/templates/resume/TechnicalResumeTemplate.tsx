@@ -61,7 +61,7 @@ const TechnicalResumeTemplate: React.FC<TechnicalResumeTemplateProps> = ({
             <img 
               src={data.personalInfo.photo} 
               alt={data.personalInfo.name} 
-              className="w-24 h-24 object-cover rounded-full border-4 border-indigo-200"
+              className="w-full max-w-[100px] h-auto  object-cover rounded-full border-4 border-indigo-200"
             />
           ) : null}
         </div>

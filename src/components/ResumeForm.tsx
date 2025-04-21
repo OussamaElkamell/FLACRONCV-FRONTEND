@@ -6,6 +6,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Plus, Trash2, Sparkles, Loader2, Upload, X, Link2, FileText } from 'lucide-react';
 import { CalendarIcon } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { 
   Card,
   CardContent,
@@ -16,6 +17,7 @@ import {
 } from '@/components/ui/card';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { format } from 'date-fns';
+import dayjs from 'dayjs';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
@@ -244,7 +246,7 @@ useEffect(() => {
         const handleEducationDateChange = (date: Date | undefined, index: number) => {
           if (!date) return;
           
-          const formattedDate = format(date, 'MMMM yyyy');
+          const formattedDate = format(date, 'MMMM dd yyyy');
           const updatedEducation = [...formData.education];
           updatedEducation[index] = { ...updatedEducation[index], date: formattedDate };
       
@@ -257,7 +259,7 @@ useEffect(() => {
         const handleProjectDateChange = (date: Date | undefined, index: number) => {
           if (!date) return;
           
-          const formattedDate = format(date, 'MMMM yyyy');
+          const formattedDate = format(date, 'MMMM dd yyyy');
           const updatedProjects = [...formData.projects];
           updatedProjects[index] = { ...updatedProjects[index], date: formattedDate };
           
@@ -276,7 +278,7 @@ useEffect(() => {
           
           updatedExperience[index] = { 
             ...updatedExperience[index], 
-            date: `${format(date, 'MMMM yyyy')} - ${endDate}` 
+            date: `${format(date, 'MMMM dd yyyy')} - ${endDate}` 
           };
           
           setFormData({
@@ -294,7 +296,7 @@ useEffect(() => {
     
     updatedExperience[index] = { 
       ...updatedExperience[index], 
-      date: `${startDate} - ${format(date, 'MMMM yyyy')}` 
+      date: `${startDate} - ${format(date, 'MMMM dd yyyy')}` 
     };
     
     setFormData({
@@ -545,13 +547,38 @@ useEffect(() => {
                     placeholder="Bachelor of Science"
                   />
                 </div>
-                <CustomDatePicker
-  id={`edu-date-${index}`}
-  date={edu.date}
-  onSelect={(date) => handleEducationDateChange(date, index)}
+                <DatePicker
   label="Graduation Date"
-  placeholder="Pick graduation date"
+  value={edu.date ? dayjs(edu.date) : null}
+  onChange={(newValue) => {
+    if (newValue) {
+      handleEducationDateChange(newValue.toDate(), index);
+    }
+  }}
+  slotProps={{
+    textField: {
+      id: `edu-date-${index}`,
+      placeholder: 'Pick graduation date',
+      fullWidth: true,
+      sx: {
+        '& .MuiInputBase-root': {
+          height: 36,
+          fontSize: 14,
+        },
+        '& .MuiInputLabel-root': {
+          fontSize: 13,
+        },
+        '& .MuiOutlinedInput-root': {
+          '&.Mui-focused fieldset': {
+            borderColor: '#E67912',
+          },
+        },
+      },
+    },
+  }}
 />
+
+
 
                 <div className="space-y-2 sm:col-span-2">
                   <Label htmlFor={`edu-description-${index}`}>Description (Optional)</Label>
@@ -624,25 +651,76 @@ useEffect(() => {
                 <div className="space-y-2 sm:col-span-2">
   <Label>Date Range</Label>
   <div className="flex flex-wrap gap-2">
-    <div className="flex-1">
-      <CustomDatePicker
-        id={`start-date-${index}`}
-        label="Start Date"
-        date={exp.date.split(" - ")[0]} // e.g. "Jan 2020"
-        onSelect={(date) => handleExperienceStartDateChange(date, index)}
-        placeholder="Start Date"
-      />
-    </div>
+  <div className="flex-1">
+  <DatePicker
+    label="Start Date"
+    value={exp.date.split(" - ")[0] ? dayjs(exp.date.split(" - ")[0]) : null}
+    onChange={(newValue) => {
+      if (newValue) {
+        handleExperienceStartDateChange(newValue.toDate(), index);
+      }
+    }}
+    slotProps={{
+      textField: {
+        id: `start-date-${index}`,
+        placeholder: 'Start Date',
+        fullWidth: true,
+        sx: {
+          '& .MuiInputBase-root': {
+            height: 36,
+            fontSize: 14,
+          },
+          '& .MuiInputLabel-root': {
+            fontSize: 13,
+          },
+          '& .MuiOutlinedInput-root': {
+            '&.Mui-focused fieldset': {
+              borderColor: '#E67912',
+            },
+          },
+        },
+      },
+    }}
+  />
+</div>
 
-    <div className="flex-1">
-      <CustomDatePicker
-        id={`end-date-${index}`}
-        label="End Date"
-        date={exp.date.split(" - ")[1] !== "Present" ? exp.date.split(" - ")[1] : ""}
-        onSelect={(date) => handleExperienceEndDateChange(date, index)}
-        placeholder="End Date"
-      />
-    </div>
+<div className="flex-1">
+  <DatePicker
+    label="End Date"
+    value={
+      exp.date.split(" - ")[1] && exp.date.split(" - ")[1] !== "Present"
+        ? dayjs(exp.date.split(" - ")[1])
+        : null
+    }
+    onChange={(newValue) => {
+      if (newValue) {
+        handleExperienceEndDateChange(newValue.toDate(), index);
+      }
+    }}
+    slotProps={{
+      textField: {
+        id: `end-date-${index}`,
+        placeholder: 'End Date',
+        fullWidth: true,
+        sx: {
+          '& .MuiInputBase-root': {
+            height: 36,
+            fontSize: 14,
+          },
+          '& .MuiInputLabel-root': {
+            fontSize: 13,
+          },
+          '& .MuiOutlinedInput-root': {
+            '&.Mui-focused fieldset': {
+              borderColor: '#E67912',
+            },
+          },
+        },
+      },
+    }}
+  />
+</div>
+
 
     <Button
       type="button"
@@ -732,11 +810,38 @@ useEffect(() => {
                 <div className="space-y-2">
   <Label htmlFor={`project-date-${index}`}>Date</Label>
   <div className="flex-1">
-    <CustomDatePicker
-                      id={`project-date-${index}`}
-                      date={project.date}
-                      onSelect={(date) => handleProjectDateChange(date, index)}
-                      placeholder="Pick project date" label={undefined}    />
+  <DatePicker
+  label="Project Date"
+  value={project.date ? dayjs(project.date) : null}
+  onChange={(newValue) => {
+    if (newValue) {
+      handleProjectDateChange(newValue.toDate(), index);
+    }
+  }}
+  views={['year', 'month']}
+  slotProps={{
+    textField: {
+      id: `project-date-${index}`,
+      placeholder: 'Pick project date',
+      fullWidth: true,
+      sx: {
+        '& .MuiInputBase-root': {
+          height: 36,
+          fontSize: 14,
+        },
+        '& .MuiInputLabel-root': {
+          fontSize: 13,
+        },
+        '& .MuiOutlinedInput-root': {
+          '&.Mui-focused fieldset': {
+            borderColor: '#E67912',
+          },
+        },
+      },
+    },
+  }}
+/>
+
   </div>
 </div>
 
@@ -833,14 +938,46 @@ useEffect(() => {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor={`cert-date-${index}`}>Date</Label>
-                  <Input 
-                    id={`cert-date-${index}`} 
-                    name="date" 
-                    value={cert.date} 
-                    onChange={(e) => handleArrayChange(e, index, 'certifications')}
-                    placeholder="June 2022"
-                    className="text-sm"
-                  />
+                  <DatePicker
+  label="Certification Date"
+  value={cert.date ? dayjs(cert.date) : null}
+  onChange={(newValue) => {
+    if (newValue) {
+      const event = {
+        target: {
+          name: 'date',
+          value: newValue.format('MMMM D, YYYY'), // e.g., June 21, 2023
+          id: `cert-date-${index}`,
+        },
+      };
+      handleArrayChange(event as React.ChangeEvent<HTMLInputElement>, index, 'certifications');
+    }
+  }}
+  slotProps={{
+    textField: {
+      id: `cert-date-${index}`,
+      placeholder: 'June 21, 2023',
+      fullWidth: true,
+      className: 'text-sm',
+      sx: {
+        '& .MuiInputBase-root': {
+          height: 36,
+          fontSize: 14,
+        },
+        '& .MuiInputLabel-root': {
+          fontSize: 13,
+        },
+        '& .MuiOutlinedInput-root': {
+          '&.Mui-focused fieldset': {
+            borderColor: '#E67912',
+          },
+        },
+      },
+    },
+  }}
+/>
+
+
                 </div>
               </div>
             </div>
