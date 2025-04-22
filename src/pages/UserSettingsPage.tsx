@@ -23,11 +23,16 @@ import { CreditCard, AlertTriangle, UserCog, UserX } from 'lucide-react';
 import useFirebaseAuth from '@/hooks/useFirebaseAuth';
 import { paymentApi } from '@/services/apiClient';
 import { toast } from 'sonner';
+import { deleteUser } from 'firebase/auth';
+import { auth } from '@/services/firebase';
 
 const UserSettingsPage = () => {
   const { user, refreshUserData } = useFirebaseAuth();
   const [showUnsubscribeDialog, setShowUnsubscribeDialog] = useState(false);
   const [unsubscribeLoading, setUnsubscribeLoading] = useState(false);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+const [deleteLoading, setDeleteLoading] = useState(false);
+const [deletingUser, setDeletingUser] = useState(false);
   const navigate = useNavigate();
   
   const handleUnsubscribe = async () => {
@@ -84,6 +89,26 @@ const UserSettingsPage = () => {
       return 'Free plan with limited features';
     }
   };
+  const handleDeleteAccount = async () => {
+    if (!auth.currentUser) return;
+  
+    setDeleteLoading(true);
+    try {
+      await deleteUser(auth.currentUser);
+      toast.success("Account deleted", {
+        description: "Your account has been permanently removed.",
+      });
+      navigate('/'); // or redirect to a goodbye page
+    } catch (error) {
+      console.error("Delete account error:", error);
+      toast.error("Deletion failed", {
+        description: error.message || "Could not delete your account. Try again.",
+      });
+    } finally {
+      setDeleteLoading(false);
+    }
+  };
+  
   
   return (
     <div className="min-h-screen flex flex-col">
@@ -129,7 +154,7 @@ const UserSettingsPage = () => {
                 {user?.subscription && user.subscription.plan !== 'free' ? (
                   <Button 
                     variant="outline" 
-                    className="w-full sm:w-auto bg-[#E67912] hover:bg-[#fb9d44] hover:text-white" 
+                    className="w-full sm:w-auto bg-[#E67912] hover:bg-[#fb9d44] text-white " 
                     onClick={() => setShowUnsubscribeDialog(true)}
                   >
                     <UserX className="mr-2 h-4 w-4 " />
@@ -137,7 +162,7 @@ const UserSettingsPage = () => {
                   </Button>
                 ) : (
                   <Button 
-                    className="w-full sm:w-auto bg-[#E67912] hover:bg-[#fb9d44] hover:text-white" 
+                    className="w-full sm:w-auto bg-[#E67912] hover:bg-[#fb9d44]text-white" 
                     onClick={() => navigate('/plans')}
                   >
                     <CreditCard className="mr-2 h-4 w-4" />
@@ -146,6 +171,27 @@ const UserSettingsPage = () => {
                 )}
               </CardFooter>
             </Card>
+            <Card>
+  <CardHeader>
+    <CardTitle className="flex items-center gap-2">
+      <UserX className="h-5 w-5 text-red-500" />
+      Danger Zone
+    </CardTitle>
+    <CardDescription>
+      Permanently delete your account
+    </CardDescription>
+  </CardHeader>
+  <CardFooter>
+    <Button 
+      variant="destructive" 
+      className="w-full sm:w-auto" 
+      onClick={() => setShowDeleteDialog(true)}
+    >
+      Delete Account
+    </Button>
+  </CardFooter>
+</Card>
+
           </div>
         </div>
       </main>
@@ -203,6 +249,53 @@ const UserSettingsPage = () => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+      <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+  <DialogContent>
+    <DialogHeader>
+      <DialogTitle className="flex items-center gap-2">
+        <AlertTriangle className="h-5 w-5 text-red-600" />
+        Confirm Account Deletion
+      </DialogTitle>
+      <DialogDescription>
+        Are you absolutely sure you want to delete your account? This action is irreversible.
+      </DialogDescription>
+    </DialogHeader>
+
+    <div className="bg-red-50 border border-red-200 rounded-md p-4 my-4">
+      <p className="text-sm text-red-800">
+        This will delete all your data, subscription details, and access to templates.
+      </p>
+    </div>
+
+    <DialogFooter>
+      <Button 
+        variant="outline" 
+        onClick={() => setShowDeleteDialog(false)}
+        disabled={deletingUser}
+      >
+        Cancel
+      </Button>
+      <Button 
+        variant="destructive" 
+        onClick={handleDeleteAccount}
+        disabled={deletingUser}
+      >
+        {deletingUser ? (
+          <>
+            <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            Deleting...
+          </>
+        ) : (
+          'Delete Account'
+        )}
+      </Button>
+    </DialogFooter>
+  </DialogContent>
+</Dialog>
+
     </div>
   );
 };
