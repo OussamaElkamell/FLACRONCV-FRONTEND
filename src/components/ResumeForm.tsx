@@ -818,7 +818,7 @@ useEffect(() => {
       handleProjectDateChange(newValue.toDate(), index);
     }
   }}
-  views={['year', 'month']}
+
   slotProps={{
     textField: {
       id: `project-date-${index}`,
