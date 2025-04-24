@@ -206,7 +206,21 @@ const CorporateResumeTemplate: React.FC<CorporateResumeTemplateProps> = ({
                 </div>
               </div>
             )}
-            
+             {/* Custom Sections */}
+             {data.customSections && data.customSections.length > 0 && data.customSections.some(section => section.title && section.content) && (
+              <>
+                {data.customSections.filter(section => section.title && section.content).map((section, index) => (
+                  <div key={index} className="mb-4">
+                    <h2 className="text-base font-bold text-blue-800 border-b-2 border-blue-800 pb-2 mb-3">
+                      {section.title.toUpperCase()}
+                    </h2>
+                    <div className="bg-blue-50 p-4 rounded-md">
+                      <p>{section.content}</p>
+                    </div>
+                  </div>
+                ))}
+              </>
+            )}
             {/* Languages Section */}
             {data.languages && data.languages.length > 0 && (
               <div className="mb-4">
@@ -254,21 +268,7 @@ const CorporateResumeTemplate: React.FC<CorporateResumeTemplateProps> = ({
               </div>
             )}
             
-            {/* Custom Sections */}
-            {data.customSections && data.customSections.length > 0 && data.customSections.some(section => section.title && section.content) && (
-              <>
-                {data.customSections.filter(section => section.title && section.content).map((section, index) => (
-                  <div key={index} className="mb-4">
-                    <h2 className="text-base font-bold text-blue-800 border-b-2 border-blue-800 pb-2 mb-3">
-                      {section.title.toUpperCase()}
-                    </h2>
-                    <div className="bg-blue-50 p-4 rounded-md">
-                      <p>{section.content}</p>
-                    </div>
-                  </div>
-                ))}
-              </>
-            )}
+           
           </div>
         </div>
       </div>

@@ -171,7 +171,7 @@ const CreativeResumeTemplate: React.FC<CreativeResumeTemplateProps> = ({
                     <span className="text-sm text-gray-500 italic">{cert.date}</span>
                   </div>
                   {cert.title && (
-                    <p className="text-purple-600">{cert.title}</p>
+                    <p className="text-purple-600 font-normal text-xs">{cert.title}</p>
                   )}
                 </div>
               ))}
@@ -211,7 +211,7 @@ const CreativeResumeTemplate: React.FC<CreativeResumeTemplateProps> = ({
                     <h3 className="text-sm font-bold mb-2">{skill.category}</h3>
                     <div>
                       {skill.skills.split(',').map((s, i) => (
-                        <span key={i} className="inline-block bg-purple-200 text-purple-800 rounded-full px-3 py-1 text-sm mr-2 mb-2">
+                        <span key={i} className="inline-block  text-purple-800 rounded-full px-2 py-0 text-sm mr-1 mb-2">
                           {s.trim()}
                         </span>
                       ))}

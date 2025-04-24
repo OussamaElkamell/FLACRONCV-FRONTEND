@@ -94,7 +94,7 @@ const ProfessionalDarkTemplate: React.FC<ProfessionalDarkTemplateProps> = ({
                           {[...Array(5)].map((_, j) => (
                             <div 
                               key={j}
-                              className={`w-2 h-2 rounded-full mx-0.5 ${j < level ? 'bg-slate-400' : 'bg-slate-600'}`}
+                              className="w-2 h-2 rounded-full mx-0.5"
                             />
                           ))}
                         </div>
@@ -164,24 +164,26 @@ const ProfessionalDarkTemplate: React.FC<ProfessionalDarkTemplateProps> = ({
       {/* Right content */}
       <div className="w-2/3 bg-white p-3 max-h-screen overflow-y-auto">
 
-        {/* Summary */}
-        {data.summary && (
-          <div className="mb-4">
-            <h1 className="text-base font-semibold mb-1">Profile</h1>
-            <p 
-              className="text-xs mt-1 space-y-0.5 break-words"
-              data-field="summary"
-              {...(editMode ? editableProps : {})}
-              style={{
-                wordWrap: 'break-word',
-                overflowWrap: 'break-word',
-                hyphens: 'auto',
-              }}
-            >
-              {data.summary}
-            </p>
-          </div>
-        )}
+{/* Summary */}
+{data.summary && (
+  <div className="mb-4">
+    <h1 className="text-base font-semibold mb-1">Profile</h1>
+    <p 
+      className="text-xs mt-1 space-y-0.5 break-words"
+      data-field="summary"
+      {...(editMode ? editableProps : {})}
+      style={{
+        textAlign: 'justify',
+        wordWrap: 'break-word',
+        overflowWrap: 'break-word',
+    
+      }}
+    >
+      {data.summary}
+    </p>
+  </div>
+)}
+
 
         {/* Experience */}
         {data.experience?.some(exp => exp.company || exp.position) && (

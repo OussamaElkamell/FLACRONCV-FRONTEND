@@ -169,7 +169,7 @@ const ModernResumeTemplate: React.FC<ModernResumeTemplateProps> = ({
                     </div>
                     
                     {project.technologies && (
-                      <p className="text-xs text-blue-600 mt-1">
+                      <p className="text-gray-600 text-xs font-semibold">
                         {project.technologies}
                       </p>
                     )}
@@ -296,7 +296,7 @@ const ModernResumeTemplate: React.FC<ModernResumeTemplateProps> = ({
                       {skill.skills.split(',').map((s, i) => (
                         <span 
                           key={i} 
-                          className="inline-block bg-blue-100 text-blue-800 rounded-full px-2 py-0.5 text-xs mr-1 mb-1"
+                          className="inline-block  text-blue-800  px-2 py-0.5 text-xs mr-1 mb-1"
                         >
                           {s.trim()}
                         </span>
@@ -317,11 +317,11 @@ const ModernResumeTemplate: React.FC<ModernResumeTemplateProps> = ({
                   <div className="flex justify-between items-baseline">
                     <div>
                       {cert.title && (
-                        <div className="text-xs text-gray-600 mb-0.5">
+                        <div className=" mb-0.5 font-medium">
                           {typeof cert.title === 'string' ? cert.title : 'Certification'}
                         </div>
                       )}
-                      <div className="font-medium">{cert.name}</div>
+                      <div className="text-xs text-gray-600">{cert.name}</div>
                     </div>
                     <span className="text-xs text-gray-500">{cert.date}</span>
                   </div>

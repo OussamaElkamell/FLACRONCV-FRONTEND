@@ -557,21 +557,34 @@ useEffect(() => {
   }}
   slotProps={{
     textField: {
-      id: `edu-date-${index}`,
-      placeholder: 'Pick graduation date',
+      id: `project-date-${index}`,
+      placeholder: 'Pick project date',
       fullWidth: true,
       sx: {
         '& .MuiInputBase-root': {
-          height: 36,
+          height: 40, // bigger height
           fontSize: 14,
         },
         '& .MuiInputLabel-root': {
           fontSize: 13,
+        
+          '&.Mui-focused': {
+            color: '#E67912', // label when focused
+          },
         },
         '& .MuiOutlinedInput-root': {
+          '& fieldset': {
+            borderColor: '#E67912',
+          },
+          '&:hover fieldset': {
+            borderColor: '#E67912',
+          },
           '&.Mui-focused fieldset': {
             borderColor: '#E67912',
           },
+        },
+        '& .MuiSvgIcon-root': {
+          color: '#E67912', // icon color
         },
       },
     },
@@ -662,21 +675,34 @@ useEffect(() => {
     }}
     slotProps={{
       textField: {
-        id: `start-date-${index}`,
-        placeholder: 'Start Date',
+        id: `project-date-${index}`,
+        placeholder: 'Pick project date',
         fullWidth: true,
         sx: {
           '& .MuiInputBase-root': {
-            height: 36,
+            height: 40, // bigger height
             fontSize: 14,
           },
           '& .MuiInputLabel-root': {
             fontSize: 13,
+          
+            '&.Mui-focused': {
+              color: '#E67912', // label when focused
+            },
           },
           '& .MuiOutlinedInput-root': {
+            '& fieldset': {
+              borderColor: '#E67912',
+            },
+            '&:hover fieldset': {
+              borderColor: '#E67912',
+            },
             '&.Mui-focused fieldset': {
               borderColor: '#E67912',
             },
+          },
+          '& .MuiSvgIcon-root': {
+            color: '#E67912', // icon color
           },
         },
       },
@@ -699,21 +725,34 @@ useEffect(() => {
     }}
     slotProps={{
       textField: {
-        id: `end-date-${index}`,
-        placeholder: 'End Date',
+        id: `project-date-${index}`,
+        placeholder: 'Pick project date',
         fullWidth: true,
         sx: {
           '& .MuiInputBase-root': {
-            height: 36,
+            height: 40, // bigger height
             fontSize: 14,
           },
           '& .MuiInputLabel-root': {
             fontSize: 13,
+          
+            '&.Mui-focused': {
+              color: '#E67912', // label when focused
+            },
           },
           '& .MuiOutlinedInput-root': {
+            '& fieldset': {
+              borderColor: '#E67912',
+            },
+            '&:hover fieldset': {
+              borderColor: '#E67912',
+            },
             '&.Mui-focused fieldset': {
               borderColor: '#E67912',
             },
+          },
+          '& .MuiSvgIcon-root': {
+            color: '#E67912', // icon color
           },
         },
       },
@@ -722,15 +761,15 @@ useEffect(() => {
 </div>
 
 
-    <Button
-      type="button"
-      variant="outline"
-      size="sm"
-      onClick={() => handleSetPresentDate(index)}
-      className="whitespace-nowrap text-[#E67912] hover:bg-[#E67912] hover:text-white"
-    >
-      Set as Present
-    </Button>
+<Button
+  type="button"
+  variant="outline"
+  onClick={() => handleSetPresentDate(index)}
+  className="py-4 px-4 text-sm whitespace-nowrap text-[#E67912] hover:bg-[#E67912] hover:text-white border-[#E67912]"
+>
+  Set as Present
+</Button>
+
   </div>
 
   <div className="mt-2">
@@ -810,7 +849,7 @@ useEffect(() => {
                 <div className="space-y-2">
   <Label htmlFor={`project-date-${index}`}>Date</Label>
   <div className="flex-1">
-  <DatePicker
+  <DatePicker 
   label="Project Date"
   value={project.date ? dayjs(project.date) : null}
   onChange={(newValue) => {
@@ -818,7 +857,6 @@ useEffect(() => {
       handleProjectDateChange(newValue.toDate(), index);
     }
   }}
-
   slotProps={{
     textField: {
       id: `project-date-${index}`,
@@ -826,21 +864,35 @@ useEffect(() => {
       fullWidth: true,
       sx: {
         '& .MuiInputBase-root': {
-          height: 36,
+          height: 40, // bigger height
           fontSize: 14,
         },
         '& .MuiInputLabel-root': {
           fontSize: 13,
+        
+          '&.Mui-focused': {
+            color: '#E67912', // label when focused
+          },
         },
         '& .MuiOutlinedInput-root': {
+          '& fieldset': {
+            borderColor: '#E67912',
+          },
+          '&:hover fieldset': {
+            borderColor: '#E67912',
+          },
           '&.Mui-focused fieldset': {
             borderColor: '#E67912',
           },
+        },
+        '& .MuiSvgIcon-root': {
+          color: '#E67912', // icon color
         },
       },
     },
   }}
 />
+
 
   </div>
 </div>
@@ -955,22 +1007,34 @@ useEffect(() => {
   }}
   slotProps={{
     textField: {
-      id: `cert-date-${index}`,
-      placeholder: 'June 21, 2023',
+      id: `project-date-${index}`,
+      placeholder: 'Pick project date',
       fullWidth: true,
-      className: 'text-sm',
       sx: {
         '& .MuiInputBase-root': {
-          height: 36,
+          height: 40, // bigger height
           fontSize: 14,
         },
         '& .MuiInputLabel-root': {
           fontSize: 13,
+        
+          '&.Mui-focused': {
+            color: '#E67912', // label when focused
+          },
         },
         '& .MuiOutlinedInput-root': {
+          '& fieldset': {
+            borderColor: '#E67912',
+          },
+          '&:hover fieldset': {
+            borderColor: '#E67912',
+          },
           '&.Mui-focused fieldset': {
             borderColor: '#E67912',
           },
+        },
+        '& .MuiSvgIcon-root': {
+          color: '#E67912', // icon color
         },
       },
     },

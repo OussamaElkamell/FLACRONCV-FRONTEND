@@ -212,9 +212,17 @@ const ProfessionalModernTemplate: React.FC<ProfessionalModernTemplateProps> = ({
 // Section Component
 const Section: React.FC<{ title: string; children: React.ReactNode }> = ({ title, children }) => (
   <section className="px-6 mb-4">
-    <h2 className="text-xs font-bold text-purple-900 bg-purple-100 py-0.5 px-2 uppercase mb-2">
-      {title}
-    </h2>
+<h2
+  className="text-xs font-bold text-purple-900 bg-purple-100 px-2 uppercase mb-2"
+  style={{
+    height: '24px', // background height
+    lineHeight: '14px', // text sits slightly higher than center
+    paddingTop: '1px', // optional fine-tune
+  }}
+>
+  {title}
+</h2>
+
     {children}
   </section>
 );

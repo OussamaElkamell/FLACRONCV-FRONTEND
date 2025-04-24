@@ -209,7 +209,7 @@ const ProfessionalPurpleTemplate: React.FC<ProfessionalPurpleTemplateProps> = ({
                             {[...Array(5)].map((_, j) => (
                               <div 
                                 key={j} 
-                                className={`w-3 h-3 rounded-full mx-0.5 ${j < level ? 'bg-purple-400' : 'bg-purple-200'}`}
+                                className="w-3 h-3 rounded-full mx-0.5 "
                               />
                             ))}
                           </div>

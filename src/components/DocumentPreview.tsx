@@ -108,7 +108,7 @@ const handleDownload = async () => {
     }
     await document.fonts.ready;
     const canvas = await html2canvas(pageContainer, {
-      scale: 4,
+      scale: 8,
       useCORS: true,
       backgroundColor: '#ffffff',
     });
