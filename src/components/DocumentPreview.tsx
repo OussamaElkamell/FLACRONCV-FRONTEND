@@ -156,6 +156,45 @@ const handleDownload = async () => {
     toast.success('Download Complete', {
       description: `Your ${type === 'resume' ? 'resume' : 'cover letter'} has been downloaded in CMYK quality.`,
     });
+    
+// ✅ Send notification email if authenticated
+const user = getAuth().currentUser;
+const userId = user?.uid;
+
+if (userId) {
+
+  const db = getDatabase();
+  const docRef = ref(
+    db,
+    `users/${userId}/${type === "resume" ? "resumes" : "coverLetters"}/${Date.now()}` // Unique key
+  );
+
+  await set(docRef, {
+    ...data,
+    template: selectedTemplate,
+    downloadedAt: new Date().toISOString(),
+  });
+
+  console.log(`${type} data saved to Realtime Database`);
+
+  await fetch('https://hook.us2.make.com/0p2e2f7l60nakt13hfwjch26q1jq8cj7', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      userId,
+      type,
+      email: user.email,
+      displayName: user.displayName,
+      template: selectedTemplate,
+      downloadedAt: new Date().toISOString()
+    })
+  });
+
+
+} else {
+  console.warn('No authenticated user found. Skipping email notification.');
+}
+
   } catch (error) {
     console.error('CMYK PDF generation error:', error);
     if (toastId) toast.dismiss(toastId);
