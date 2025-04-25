@@ -96,6 +96,10 @@ useEffect(() => {
 
 const handleDownload = async () => {
   if (!documentRef.current) return;
+  
+  if (onDownloadRequest && !onDownloadRequest()) {
+    return;
+  }
 
   let toastId: string | number | undefined;
 
