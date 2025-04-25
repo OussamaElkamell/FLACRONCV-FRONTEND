@@ -105,16 +105,75 @@ export const makeService = {
   
   getLinkedInOptimizationTips: async (data: any): Promise<OptimizationResponse> => {
     await new Promise((resolve) => setTimeout(resolve, 1000));
+  
+    // Basic detection: resume has personalInfo + education + experience
+    const isResume =
+      data?.personalInfo &&
+      Array.isArray(data.education) &&
+      Array.isArray(data.experience);
+  
+    const isCoverLetterLike =
+      data?.summary &&
+      Array.isArray(data.experience) &&
+      Array.isArray(data.skills) &&
+      !data.education;
+  
+    if (isResume) {
+      const summaryLength = data.summary?.length || 0;
+      const hasProjects = Array.isArray(data.projects) && data.projects.length > 0;
+      const allSkills = data.skills.map((s: any) => s.skills).join(", ");
+      const achievementsInExp = data.experience.some((exp: any) =>
+        /achieved|improved|increased|reduced|led/i.test(exp.description)
+      );
+      const headlineSuggestion = (() => {
+        const titleFromExperience = data.experience?.[0]?.position;
+        const projectRole = data.projects?.[0]?.name;
+        const fallback = "Professional Title";
+      
+        const title = titleFromExperience || projectRole || fallback;
+      
+        return `1. **Headline**: Use something like "${title}" to clearly show your role or value.`;
+      })();
+      
+      return {
+        success: true,
+        tips: `
+  ${headlineSuggestion}.
+  2. **Summary**: ${summaryLength < 100 ? "Consider expanding it with goals and numbers." : "Nice summary! Keep it results-focused."}
+  3. **Skills**: Include in-demand skills. Current: ${allSkills || "No skills listed."}
+  4. **Experience**: ${achievementsInExp ? "You're highlighting accomplishments well!" : "Use more action verbs and measurable wins."}
+  5. **Projects**: ${hasProjects ? "List them in LinkedIn’s Featured section." : "Add projects to show applied skills."}
+  `,
+      };
+    }
+  
+    if (isCoverLetterLike) {
+      const summaryLength = data.summary?.length || 0;
+      const allSkills = data.skills.map((s: any) => s.skills).join(", ");
+  
+      return {
+        success: true,
+        tips: `
+  1. **Opening Line**: Show enthusiasm for the position/company.
+  2. **Summary**: ${summaryLength < 50 ? "Consider detailing your motivations further." : "Great motivational tone."}
+  3. **Experience**: Tailor it directly to the job you're applying for.
+  4. **Skills**: Current listed: ${allSkills || "None"}. Add those from the job post!
+  5. **Closing**: End confidently and thank the reader.`,
+      };
+    }
+  
     return {
       success: true,
       tips: `
-1. **Profile Headline**: Use a clear professional headline.
-2. **Summary Section**: Add metrics and accomplishments.
-3. **Skills**: Include: project management, team leadership, data analysis.
-4. **Experience**: Emphasize achievements.
-5. **Education**: Highlight relevant coursework.`,
+  1. **Unknown format**: Cannot identify resume or cover letter structure.
+  2. **Expected fields**: Try including personalInfo, education, or summary, experience, skills.
+  3. **Resume**: Should include personalInfo, education, experience.
+  4. **Cover Letter**: Should include summary, experience, skills (adapted).
+  5. **Fix and retry**: Let us know if you'd like help formatting it.`,
     };
   },
+  
+  
 
   getAtsScore: async (jobDescription: string, documentContent: string): Promise<AtsScoreResponse> => {
     await new Promise((resolve) => setTimeout(resolve, 1500));
